@@ -66,7 +66,16 @@ class SmartSearch extends CommonComponent {
 
 	handlerInputKeydown(evt) {
 
-		let currentChar = String.fromCharCode(evt.charCode);
+		let sQuery = String.fromCharCode(evt.charCode);
+		let sInputData = this.elInputField.value;
+
+		let url = "../jsonMock/"+ sInputData +".json";
+
+		let fnCallback = function(sData) {
+			console.log("print receive data ", sData);
+		}
+
+		this.sendAjax(url, fnCallback,sQuery);
 
 		//console.log("lodash test > ", _.indexOf([1,2,3,9,5], 39));
 
@@ -79,12 +88,28 @@ class SmartSearch extends CommonComponent {
 		// });
 	}
 
+	sendAjax(url, fnCallback, sQuery) {
+
+		var xhr = new XMLHttpRequest();
+
+		xhr.open('get', url);
+		xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.onload = function() {
+			if (xhr.status === 200) {
+				var sResult = JSON.parse(xhr.responseText);
+				fnCallback(sResult);
+			}
+		};
+
+		xhr.send(JSON.stringify({
+			sQuery : sQuery,
+			nTime : Date.now() 
+		}));
+
+		//xhr.send();
+	}
+
 }
-
-
-
-
-
 
 
 

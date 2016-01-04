@@ -231,7 +231,16 @@ var SmartSearch = (function (_CommonComponent) {
 		key: "handlerInputKeydown",
 		value: function handlerInputKeydown(evt) {
 
-			var currentChar = String.fromCharCode(evt.charCode);
+			var sQuery = String.fromCharCode(evt.charCode);
+			var sInputData = this.elInputField.value;
+
+			var url = "../jsonMock/" + sInputData + ".json";
+
+			var fnCallback = function fnCallback(sData) {
+				console.log("print receive data ", sData);
+			};
+
+			this.sendAjax(url, fnCallback, sQuery);
 
 			//console.log("lodash test > ", _.indexOf([1,2,3,9,5], 39));
 
@@ -242,6 +251,28 @@ var SmartSearch = (function (_CommonComponent) {
 			// }).catch(function(ex) {
 			// 	console.log('parsing failed', ex)
 			// });
+		}
+	}, {
+		key: "sendAjax",
+		value: function sendAjax(url, fnCallback, sQuery) {
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('get', url);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function () {
+				if (xhr.status === 200) {
+					var sResult = JSON.parse(xhr.responseText);
+					fnCallback(sResult);
+				}
+			};
+
+			xhr.send(JSON.stringify({
+				sQuery: sQuery,
+				nTime: Date.now()
+			}));
+
+			//xhr.send();
 		}
 	}]);
 
