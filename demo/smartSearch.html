@@ -12,24 +12,25 @@
     <div id="wrapper">
         <div class="search-form">
             <div class="search-form-heading"> Smart Search </div>
-            <form action="" method="post">
-                <div class="inputWrap">
-                    <input type="text" class="input-field" name="field1" value="" />
-                </div>
-                <div class="buttonWrap">
-                    <button type="submit" value="Submit" /> 검색
-                </div>
-            </form>
+            <div class="formContainer">
+                <form action="" method="post">
+                    <div class="inputWrap">
+                        <input type="text" class="input-field" name="field1" value="" />
+                    </div>
+                    <div class="buttonWrap">
+                        <button type="submit" value="Submit" /> 검색
+                    </div>
+                </form>
+            </div>
 
             <section class="auto-complete-wrap" style="display:none;">
                 <ul class="ul-wrap">
-                    
+                   
                 </ul>
             </section>
 
             <section class="recent-word-wrap" style="display:none;">
                 <ul class="ul-wrap">
-                    
                 </ul>
             </section>
         </div>
@@ -39,9 +40,30 @@
     <script src="../dist/ss_merge_es5.js"></script>
 
     <script>
+
+        // 서비스에 영향을 직접 받는 API parsing, templating 작업은 컴포넌트 단위에서 하지 않는다.
+        var fnInsertAutoCompleteWord = function(sData) {
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            var elAutoCompleteLayer = document.querySelector(".auto-complete-wrap");
+
+            sData.items[0].forEach( function(v) {
+                result = sTemplate.replace(/\[%sKeyword%\]/, v[0]);       
+                sHTML += result;
+            });
+
+            //append html
+            elAutoCompleteLayer.style.display = "block";
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+        }
     
-        oSS = new SmartSearch(document.querySelector(".search-form"), {
+        var oSS = new SmartSearch(document.querySelector(".search-form"), {
             //'nDuration' : 100,  //default 100
+        });
+
+        oSS.registerCallback({
+            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord
         });
 
         // service - code
