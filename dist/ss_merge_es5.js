@@ -175,9 +175,15 @@ var SmartSearch = (function (_CommonComponent) {
 	}, {
 		key: "_setInitValue",
 		value: function _setInitValue() {
+			//TODO. have to set to option value
 			this.elInputField = this.elTarget.querySelector(".input-field");
 			this.elAutoCompleteLayer = this.elTarget.querySelector(".auto-complete-wrap");
 			this.elRecentWordLayer = this.elTarget.querySelector(".recent-word-wrap");
+
+			this.elCloseButton = this.elAutoCompleteLayer.querySelector(".closeLayer");
+			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(".closeLayer");
+
+			this.elClearButton = this.elTarget.querySelector(".clearQuery");
 			this.htCachedData = {};
 		}
 	}, {
@@ -209,6 +215,11 @@ var SmartSearch = (function (_CommonComponent) {
 			this.elInputField.addEventListener("touchstart", function (evt) {
 				_this2.handlerInputTouchStart(evt);
 			});
+
+			this.elInputField.addEventListener("focus", function (evt) {
+				_this2.handlerInputFocus(evt);
+			});
+
 			this.elInputField.addEventListener("keypress", function (evt) {
 				_this2.handlerInputKeyPress(evt);
 			});
@@ -218,6 +229,17 @@ var SmartSearch = (function (_CommonComponent) {
 			this.elInputField.addEventListener("input", function (evt) {
 				_this2.handlerInputKeyInput(evt);
 			});
+
+			this.elCloseButton.addEventListener("touchend", function (evt) {
+				_this2.handlerCloseAllLayer(evt);
+			});
+			this.elCloseButtonRWL.addEventListener("touchend", function (evt) {
+				_this2.handlerCloseAllLayer(evt);
+			});
+
+			this.elClearButton.addEventListener("touchend", function (evt) {
+				_this2.handlerClearInputValue(evt);
+			});
 		}
 
 		/* start EVENT-HANDLER */
@@ -226,6 +248,12 @@ var SmartSearch = (function (_CommonComponent) {
 		key: "handlerInputTouchStart",
 		value: function handlerInputTouchStart(evt) {
 			this.elRecentWordLayer.style.display = "block";
+			//TODO. show recent word from DB.
+		}
+	}, {
+		key: "handlerInputFocus",
+		value: function handlerInputFocus(evt) {
+			this.elClearButton.style.display = "inline-block";
 		}
 
 		//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
@@ -295,6 +323,18 @@ var SmartSearch = (function (_CommonComponent) {
 				}
 			}).bind(this));
 			xhr.send(sData);
+		}
+	}, {
+		key: "handlerClearInputValue",
+		value: function handlerClearInputValue(evt) {
+			this.elInputField.value = "";
+			this.handlerCloseAllLayer();
+		}
+	}, {
+		key: "handlerCloseAllLayer",
+		value: function handlerCloseAllLayer(evt) {
+			this.elAutoCompleteLayer.style.display = "none";
+			this.elRecentWordLayer.style.display = "none";
 		}
 	}]);
 

@@ -17,9 +17,15 @@ class SmartSearch extends CommonComponent {
 	}
 
 	_setInitValue() {
+		//TODO. have to set to option value
 		this.elInputField 			= this.elTarget.querySelector(".input-field");
 		this.elAutoCompleteLayer 	= this.elTarget.querySelector(".auto-complete-wrap");
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
+
+		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(".closeLayer");
+		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
+
+		this.elClearButton 			= this.elTarget.querySelector(".clearQuery");
 		this.htCachedData 			= {};
 	}
 
@@ -43,15 +49,29 @@ class SmartSearch extends CommonComponent {
 
 	_registerEvents() {
 		this.elInputField.addEventListener("touchstart", (evt) => { this.handlerInputTouchStart(evt) });
+
+		this.elInputField.addEventListener("focus" , (evt) => { this.handlerInputFocus(evt) });
+
 		this.elInputField.addEventListener("keypress", (evt) => { this.handlerInputKeyPress(evt) });
 		this.elInputField.addEventListener("keydown", (evt) => { this.handlerInputKeydown(evt) });
 		this.elInputField.addEventListener("input", (evt) => { this.handlerInputKeyInput(evt) });
+
+		this.elCloseButton.addEventListener("touchend", (evt) => { this.handlerCloseAllLayer(evt)});
+		this.elCloseButtonRWL.addEventListener("touchend", (evt) => { this.handlerCloseAllLayer(evt)});
+
+		this.elClearButton.addEventListener("touchend", (evt) => { this.handlerClearInputValue(evt)});
+
 	}
 
 
 	/* start EVENT-HANDLER */ 
 	handlerInputTouchStart(evt) {
 		this.elRecentWordLayer.style.display = "block";
+		//TODO. show recent word from DB.
+	}
+
+	handlerInputFocus(evt) {
+		this.elClearButton.style.display = "inline-block";
 	}
 
 	//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
@@ -113,6 +133,16 @@ class SmartSearch extends CommonComponent {
 			}
 		}.bind(this));
 		xhr.send(sData);
+	}
+
+	handlerClearInputValue(evt) {
+		this.elInputField.value = "";
+		this.handlerCloseAllLayer();
+	}
+
+	handlerCloseAllLayer(evt) {
+		this.elAutoCompleteLayer.style.display = "none";
+		this.elRecentWordLayer.style.display = "none";
 	}
 
 
