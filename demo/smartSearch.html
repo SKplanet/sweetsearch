@@ -51,7 +51,9 @@
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
 
-        // 서비스에 영향을 직접 받는 API parsing, templating 작업은 컴포넌트 단위에서 하지 않는다.
+        oSS = new SmartSearch(document.querySelector(".search-form"), {
+        });
+
         var fnInsertAutoCompleteWord = function(sData) {
             var result  = "";
             var sHTML   = "";
@@ -62,17 +64,9 @@
                 sHTML += result;
             });
 
-            //TODO. 아래코드를 클래스의 메서드로 처리할지를 고민해야 한다.
-            elRecentWordLayer.style.display = "none";
-            //append html
-            elAutoCompleteLayer.style.display = "block";
-            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+            oSS.replaceHTML(sHTML);
         }
     
-        oSS = new SmartSearch(document.querySelector(".search-form"), {
-            //'nDuration' : 100,  //default 100
-        });
-
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord
         });

@@ -154,6 +154,12 @@ class SmartSearch extends CommonComponent {
 		this.elRecentWordLayer.style.display = "none";
 	}
 
+	replaceHTML(sHTML) {
+		this.elRecentWordLayer.style.display = "none";
+        this.elAutoCompleteLayer.style.display = "block";
+        this.elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+    }
+
 }
 
 

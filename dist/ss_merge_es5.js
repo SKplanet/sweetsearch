@@ -22,10 +22,6 @@ var LocalStorage = (function () {
 		value: function saveKeyword(sKeyword) {
 			if (this._validStorage()) return;
 
-			var aMergeData = [];
-
-			var newStr = sKeyword.trim();
-
 			var aLegacy = this.getKeywords();
 
 			//to Array
@@ -400,6 +396,13 @@ var SmartSearch = (function (_CommonComponent) {
 		value: function handlerCloseAllLayer(evt) {
 			this.elAutoCompleteLayer.style.display = "none";
 			this.elRecentWordLayer.style.display = "none";
+		}
+	}, {
+		key: "replaceHTML",
+		value: function replaceHTML(sHTML) {
+			this.elRecentWordLayer.style.display = "none";
+			this.elAutoCompleteLayer.style.display = "block";
+			this.elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
 		}
 	}]);
 
