@@ -1,14 +1,14 @@
 
 class  LocalStorage {
 	
-	constructor() {
+	constructor(sKey) {
+		this.sKey = sKey;
 	}
 
 	saveKeyword(sKeyword) {
 		if( typeof(Storage) === "undefined") return;
 
 		let aMergeData = []; 
-		let sKey = "searchQuery";
 
 		let newStr = sKeyword.trim();
 
@@ -21,27 +21,29 @@ class  LocalStorage {
 		//save data 
 		let nIndex = aLegacy.indexOf(sKeyword);
 		if( nIndex > -1) {
-			if(nIndex === (sKeyword.length-1)) return;
+			if(nIndex === (aLegacy.length-1)) return;
 			aLegacy.splice(nIndex, 1);
 		} 
 
 		aLegacy.push(sKeyword);
-		localStorage.setItem(sKey, JSON.stringify(aLegacy));
+		localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
 	}
 
 	getKeywords(){ 
 		if( typeof(Storage) === "undefined") return;
 
-		let sKey = "searchQuery";
-		let sResult = localStorage.getItem(sKey);
+		let sResult = localStorage.getItem(this.sKey);
 		return sResult;
 	}
 
 	removeKeywords() {
 		if( typeof(Storage) === "undefined") return;
 
-		let sKey = "searchQuery";
-		return localStorage.removeItem(sKey);
+		return localStorage.removeItem(this.sKey);
+	}
+
+	_validStorage() {
+
 	}
 
 }

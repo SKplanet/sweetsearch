@@ -28,7 +28,7 @@ class SmartSearch extends CommonComponent {
 		this.elClearButton 			= this.elTarget.querySelector(".clearQuery");
 		this.htCachedData 			= {};
 
-		this.oStorage = new LocalStorage();
+		this.oStorage = new LocalStorage("searchQuery");
 	}
 
 	_setDefaultOption () {
@@ -155,7 +155,6 @@ class SmartSearch extends CommonComponent {
 	}
 
 }
-
 
 
 

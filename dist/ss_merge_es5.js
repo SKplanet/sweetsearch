@@ -11,8 +11,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var LocalStorage = (function () {
-	function LocalStorage() {
+	function LocalStorage(sKey) {
 		_classCallCheck(this, LocalStorage);
+
+		this.sKey = sKey;
 	}
 
 	_createClass(LocalStorage, [{
@@ -21,7 +23,6 @@ var LocalStorage = (function () {
 			if (typeof Storage === "undefined") return;
 
 			var aMergeData = [];
-			var sKey = "searchQuery";
 
 			var newStr = sKeyword.trim();
 
@@ -33,20 +34,19 @@ var LocalStorage = (function () {
 			//save data
 			var nIndex = aLegacy.indexOf(sKeyword);
 			if (nIndex > -1) {
-				if (nIndex === sKeyword.length - 1) return;
+				if (nIndex === aLegacy.length - 1) return;
 				aLegacy.splice(nIndex, 1);
 			}
 
 			aLegacy.push(sKeyword);
-			localStorage.setItem(sKey, JSON.stringify(aLegacy));
+			localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
 		}
 	}, {
 		key: "getKeywords",
 		value: function getKeywords() {
 			if (typeof Storage === "undefined") return;
 
-			var sKey = "searchQuery";
-			var sResult = localStorage.getItem(sKey);
+			var sResult = localStorage.getItem(this.sKey);
 			return sResult;
 		}
 	}, {
@@ -54,9 +54,11 @@ var LocalStorage = (function () {
 		value: function removeKeywords() {
 			if (typeof Storage === "undefined") return;
 
-			var sKey = "searchQuery";
-			return localStorage.removeItem(sKey);
+			return localStorage.removeItem(this.sKey);
 		}
+	}, {
+		key: "_validStorage",
+		value: function _validStorage() {}
 	}]);
 
 	return LocalStorage;
@@ -238,7 +240,7 @@ var SmartSearch = (function (_CommonComponent) {
 			this.elClearButton = this.elTarget.querySelector(".clearQuery");
 			this.htCachedData = {};
 
-			this.oStorage = new LocalStorage();
+			this.oStorage = new LocalStorage("searchQuery");
 		}
 	}, {
 		key: "_setDefaultOption",
