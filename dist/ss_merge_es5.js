@@ -20,7 +20,7 @@ var LocalStorage = (function () {
 	_createClass(LocalStorage, [{
 		key: "saveKeyword",
 		value: function saveKeyword(sKeyword) {
-			if (typeof Storage === "undefined") return;
+			if (this._validStorage()) return;
 
 			var aMergeData = [];
 
@@ -44,7 +44,7 @@ var LocalStorage = (function () {
 	}, {
 		key: "getKeywords",
 		value: function getKeywords() {
-			if (typeof Storage === "undefined") return;
+			if (this._validStorage()) return;
 
 			var sResult = localStorage.getItem(this.sKey);
 			return sResult;
@@ -52,13 +52,15 @@ var LocalStorage = (function () {
 	}, {
 		key: "removeKeywords",
 		value: function removeKeywords() {
-			if (typeof Storage === "undefined") return;
+			if (this._validStorage()) return;
 
 			return localStorage.removeItem(this.sKey);
 		}
 	}, {
 		key: "_validStorage",
-		value: function _validStorage() {}
+		value: function _validStorage() {
+			if (typeof Storage === "undefined") return;
+		}
 	}]);
 
 	return LocalStorage;

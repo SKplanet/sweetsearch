@@ -6,11 +6,7 @@ class  LocalStorage {
 	}
 
 	saveKeyword(sKeyword) {
-		if( typeof(Storage) === "undefined") return;
-
-		let aMergeData = []; 
-
-		let newStr = sKeyword.trim();
+		if(this._validStorage()) return;
 
 		let aLegacy = this.getKeywords();
 
@@ -30,20 +26,20 @@ class  LocalStorage {
 	}
 
 	getKeywords(){ 
-		if( typeof(Storage) === "undefined") return;
+		if(this._validStorage()) return;
 
 		let sResult = localStorage.getItem(this.sKey);
 		return sResult;
 	}
 
 	removeKeywords() {
-		if( typeof(Storage) === "undefined") return;
+		if(this._validStorage()) return;
 
 		return localStorage.removeItem(this.sKey);
 	}
 
 	_validStorage() {
-
+		if( typeof(Storage) === "undefined") return;
 	}
 
 }
