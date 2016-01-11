@@ -45,6 +45,8 @@
 
     <script>
 
+    var oSS= null;
+
     (function(doc){
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
@@ -67,7 +69,7 @@
             elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
         }
     
-        var oSS = new SmartSearch(document.querySelector(".search-form"), {
+        oSS = new SmartSearch(document.querySelector(".search-form"), {
             //'nDuration' : 100,  //default 100
         });
 

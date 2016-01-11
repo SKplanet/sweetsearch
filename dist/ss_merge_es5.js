@@ -10,6 +10,58 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var LocalStorage = (function () {
+	function LocalStorage() {
+		_classCallCheck(this, LocalStorage);
+	}
+
+	_createClass(LocalStorage, [{
+		key: "saveKeyword",
+		value: function saveKeyword(sKeyword) {
+			if (typeof Storage === "undefined") return;
+
+			var aMergeData = [];
+			var sKey = "searchQuery";
+
+			var newStr = sKeyword.trim();
+
+			var aLegacy = this.getKeywords();
+
+			//to Array
+			if (aLegacy === null) aLegacy = [];else aLegacy = JSON.parse(aLegacy);
+
+			//save data
+			var nIndex = aLegacy.indexOf(sKeyword);
+			if (nIndex > -1) {
+				if (nIndex === sKeyword.length - 1) return;
+				aLegacy.splice(nIndex, 1);
+			}
+
+			aLegacy.push(sKeyword);
+			localStorage.setItem(sKey, JSON.stringify(aLegacy));
+		}
+	}, {
+		key: "getKeywords",
+		value: function getKeywords() {
+			if (typeof Storage === "undefined") return;
+
+			var sKey = "searchQuery";
+			var sResult = localStorage.getItem(sKey);
+			return sResult;
+		}
+	}, {
+		key: "removeKeywords",
+		value: function removeKeywords() {
+			if (typeof Storage === "undefined") return;
+
+			var sKey = "searchQuery";
+			return localStorage.removeItem(sKey);
+		}
+	}]);
+
+	return LocalStorage;
+})();
+
 var CommonComponent = (function () {
 	function CommonComponent(htOption) {
 		_classCallCheck(this, CommonComponent);
@@ -185,6 +237,8 @@ var SmartSearch = (function (_CommonComponent) {
 
 			this.elClearButton = this.elTarget.querySelector(".clearQuery");
 			this.htCachedData = {};
+
+			this.oStorage = new LocalStorage();
 		}
 	}, {
 		key: "_setDefaultOption",
@@ -278,8 +332,15 @@ var SmartSearch = (function (_CommonComponent) {
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
+
+			//user customed function
 			this.htFn.fnInsertAutoCompleteWord(sResult);
+
+			//save history
 			this.htCachedData[sQuery] = sResult;
+
+			//save keyword to localstorage
+			//this.saveKeyword(sQuery);
 		}
 	}, {
 		key: "_defer",

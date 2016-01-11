@@ -27,6 +27,8 @@ class SmartSearch extends CommonComponent {
 
 		this.elClearButton 			= this.elTarget.querySelector(".clearQuery");
 		this.htCachedData 			= {};
+
+		this.oStorage = new LocalStorage();
 	}
 
 	_setDefaultOption () {
@@ -91,8 +93,15 @@ class SmartSearch extends CommonComponent {
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
+
+		//user customed function
 		this.htFn.fnInsertAutoCompleteWord(sResult);
+
+		//save history
 		this.htCachedData[sQuery] = sResult;
+
+		//save keyword to localstorage 
+		//this.saveKeyword(sQuery);
 	}
 
 	_defer(fn) {
@@ -145,9 +154,7 @@ class SmartSearch extends CommonComponent {
 		this.elRecentWordLayer.style.display = "none";
 	}
 
-
 }
-
 
 
 
