@@ -235,7 +235,8 @@ var SmartSearch = (function (_CommonComponent) {
 			this.elCloseButton = this.elAutoCompleteLayer.querySelector(".closeLayer");
 			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(".closeLayer");
 
-			this.elClearButton = this.elTarget.querySelector(".clearQuery");
+			this.elClearQueryBtn = this.elTarget.querySelector(".clearQuery");
+			this.elClearRecentWordBtn = this.elTarget.querySelector(".deleteWord");
 			this.htCachedData = {};
 
 			this.oStorage = new LocalStorage("searchQuery");
@@ -251,7 +252,8 @@ var SmartSearch = (function (_CommonComponent) {
 		key: "_setDefaultFunction",
 		value: function _setDefaultFunction() {
 			this._htDefaultFunction = {
-				'fnInsertAutoCompleteWord': function fnInsertAutoCompleteWord() {}
+				'fnInsertAutoCompleteWord': function fnInsertAutoCompleteWord() {},
+				'fnInsertRecentlySearchWord': function fnInsertRecentlySearchWord() {}
 			};
 		}
 	}, {
@@ -265,10 +267,6 @@ var SmartSearch = (function (_CommonComponent) {
 		key: "_registerEvents",
 		value: function _registerEvents() {
 			var _this2 = this;
-
-			this.elInputField.addEventListener("touchstart", function (evt) {
-				_this2.handlerInputTouchStart(evt);
-			});
 
 			this.elInputField.addEventListener("focus", function (evt) {
 				_this2.handlerInputFocus(evt);
@@ -291,23 +289,22 @@ var SmartSearch = (function (_CommonComponent) {
 				_this2.handlerCloseAllLayer(evt);
 			});
 
-			this.elClearButton.addEventListener("touchend", function (evt) {
+			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
 				_this2.handlerClearInputValue(evt);
+			});
+			this.elClearRecentWordBtn.addEventListener("touchend", function (evt) {
+				_this2.handlerClearRecentWord(evt);
 			});
 		}
 
 		/* start EVENT-HANDLER */
 
 	}, {
-		key: "handlerInputTouchStart",
-		value: function handlerInputTouchStart(evt) {
-			this.elRecentWordLayer.style.display = "block";
-			//TODO. show recent word from DB.
-		}
-	}, {
 		key: "handlerInputFocus",
 		value: function handlerInputFocus(evt) {
-			this.elClearButton.style.display = "inline-block";
+			this.elClearQueryBtn.style.display = "inline-block";
+			//TODO.  optional
+			this.showRecentlySearchWord();
 		}
 
 		//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
@@ -332,7 +329,6 @@ var SmartSearch = (function (_CommonComponent) {
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
-
 			//user customed function
 			this.htFn.fnInsertAutoCompleteWord(sResult);
 
@@ -341,6 +337,15 @@ var SmartSearch = (function (_CommonComponent) {
 
 			//save keyword to localstorage
 			//this.saveKeyword(sQuery);
+		}
+	}, {
+		key: "showRecentlySearchWord",
+		value: function showRecentlySearchWord() {
+			this.elRecentWordLayer.style.display = "block";
+			var sData = this.oStorage.getKeywords();
+			if (sData === null || sData === "") return;
+			var aData = JSON.parse();
+			this.htFn.fnInsertRecentlySearchWord(aData);
 		}
 	}, {
 		key: "_defer",
@@ -392,6 +397,12 @@ var SmartSearch = (function (_CommonComponent) {
 			this.handlerCloseAllLayer();
 		}
 	}, {
+		key: "handlerClearRecentWord",
+		value: function handlerClearRecentWord(evt) {
+			this.oStorage.removeKeywords();
+			this.elRecentWordLayer.querySelector("ul").innerHTML = "";
+		}
+	}, {
 		key: "handlerCloseAllLayer",
 		value: function handlerCloseAllLayer(evt) {
 			this.elAutoCompleteLayer.style.display = "none";
@@ -399,10 +410,10 @@ var SmartSearch = (function (_CommonComponent) {
 		}
 	}, {
 		key: "replaceHTML",
-		value: function replaceHTML(sHTML) {
-			this.elRecentWordLayer.style.display = "none";
-			this.elAutoCompleteLayer.style.display = "block";
-			this.elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+		value: function replaceHTML(elClose, elShow, sHTML) {
+			elClose.style.display = "none";
+			elShow.style.display = "block";
+			elShow.querySelector("ul").innerHTML = sHTML;
 		}
 	}]);
 

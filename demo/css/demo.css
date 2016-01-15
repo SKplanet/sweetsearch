@@ -121,14 +121,16 @@ a:link {
 }
 
 .ul-wrap {
-    padding-top : 1em;
+    1padding-top : 1em;
 }
 
 .ul-wrap > li {
     display: block;
-    padding-left: 0.3em;
+    padding-top: 0.5em;
     padding-bottom: 0.6em;
+    padding-left: 0.3em;
     font-size: 1.1em;
+    border-bottom: 1px solid #E8E6E6;
 }
 
 .closeLayer {
@@ -140,6 +142,17 @@ a:link {
     background-color: none;
     color: #B3B3B3;
 }
+
+button.deleteWord {
+    position: absolute;
+    top: 170px;
+    left: 60%;
+    border: 0;
+    border-radius: 10%;
+    background-color: none;
+    color: #B3B3B3;
+}
+
 @media only screen and (max-width: 500px) {
 }
 

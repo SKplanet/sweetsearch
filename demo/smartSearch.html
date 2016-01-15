@@ -35,6 +35,7 @@
 
             <section class="recent-word-wrap" style="display:none;">
                 <ul class="ul-wrap"></ul>
+                <button class="deleteWord">전체삭제</button>
                 <button class="closeLayer">닫기</button>
             </section>
         </div>
@@ -64,11 +65,25 @@
                 sHTML += result;
             });
 
-            oSS.replaceHTML(sHTML);
+            oSS.replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
+        }
+
+        var fnInsertRecentlySearchWord = function(aData) {
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+
+            aData.forEach( function(v) {
+                result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+                sHTML += result;
+            });
+
+            oSS.replaceHTML(elAutoCompleteLayer, elRecentWordLayer, sHTML);
         }
     
         oSS.registerCallback({
-            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord
+            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
+            'fnInsertRecentlySearchWord' : fnInsertRecentlySearchWord
         });
 
     })(document);
