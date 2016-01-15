@@ -41,7 +41,7 @@ class SmartSearch extends CommonComponent {
 	_setDefaultFunction() {
 		this._htDefaultFunction = {
 			'fnInsertAutoCompleteWord' : function(){},
-			'fnInsertRecentlySearchWord' : function(){}
+			'fnInsertRecentSearchWord' : function(){}
 		}
 	}
 
@@ -70,7 +70,7 @@ class SmartSearch extends CommonComponent {
 	handlerInputFocus(evt) {
 		this.elClearQueryBtn.style.display = "inline-block";
 		//TODO.  optional
-		this.showRecentlySearchWord();
+		this.showRecentSearchWord();
 	}
 
 	//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
@@ -100,12 +100,13 @@ class SmartSearch extends CommonComponent {
 		//this.saveKeyword(sQuery);
 	}
 
-	showRecentlySearchWord() {
+	showRecentSearchWord() {
 		this.elRecentWordLayer.style.display = "block";
 		let sData = this.oStorage.getKeywords();
 		if(sData === null || sData === "") return;
-		let aData = JSON.parse();
-		this.htFn.fnInsertRecentlySearchWord(aData);
+		this.elClearRecentWordBtn.style.display = "block";
+		let aData = JSON.parse(sData);
+		this.htFn.fnInsertRecentSearchWord(aData);
 	}
 
 	_defer(fn) {
@@ -156,6 +157,7 @@ class SmartSearch extends CommonComponent {
 	handlerClearRecentWord(evt) {
 		this.oStorage.removeKeywords();
 		this.elRecentWordLayer.querySelector("ul").innerHTML = "";
+		this.elClearRecentWordBtn.style.display = "none";
 	}
 
 	handlerCloseAllLayer(evt) {

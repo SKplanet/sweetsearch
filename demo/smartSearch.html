@@ -35,7 +35,7 @@
 
             <section class="recent-word-wrap" style="display:none;">
                 <ul class="ul-wrap"></ul>
-                <button class="deleteWord">전체삭제</button>
+                <button class="deleteWord" style="display:none">전체삭제</button>
                 <button class="closeLayer">닫기</button>
             </section>
         </div>
@@ -68,7 +68,7 @@
             oSS.replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
         }
 
-        var fnInsertRecentlySearchWord = function(aData) {
+        var fnInsertRecentSearchWord = function(aData) {
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
@@ -83,7 +83,7 @@
     
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
-            'fnInsertRecentlySearchWord' : fnInsertRecentlySearchWord
+            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord
         });
 
     })(document);
