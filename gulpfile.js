@@ -18,7 +18,7 @@ gulp.task('cleanDist', function() {
 
 //development. AMD(for requireJS)
 gulp.task('compileBabelAMD', function() {
-	 gulp.src(['src/LocalStorage.js', 'src/commonComponent.js', 'src/SmartSearch.js'])
+	 gulp.src(['src/LocalStorage.js', 'src/commonComponent.js', 'src/RecentWordPlugin.js', 'src/SmartSearch.js'])
 			.pipe(concat('ss_merge_es5.js'))
 	        .pipe(sourcemaps.init())
 	        .pipe(babel({

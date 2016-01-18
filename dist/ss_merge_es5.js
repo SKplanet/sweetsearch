@@ -218,12 +218,6 @@ var CommonComponent = (function () {
 
 //plugin - recentword
 
-var SimpleAjax = function SimpleAjax() {
-	_classCallCheck(this, SimpleAjax);
-};
-
-//plugin - recentword
-
 var RecentWordPlugin = (function (_CommonComponent) {
 	_inherits(RecentWordPlugin, _CommonComponent);
 
@@ -315,10 +309,11 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	return RecentWordPlugin;
 })(CommonComponent);
 
-/**
- * SmartSearch Core
- *
-**/
+//plugin - recentword
+
+var SimpleAjax = function SimpleAjax() {
+	_classCallCheck(this, SimpleAjax);
+};
 
 var SmartSearch = (function (_CommonComponent2) {
 	_inherits(SmartSearch, _CommonComponent2);
