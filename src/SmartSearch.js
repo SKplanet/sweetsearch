@@ -1,9 +1,3 @@
-
-//plugin - recentword
-class SimpleAjax {
-
-}
-
 class SmartSearch extends CommonComponent {
 	
 	constructor(elTarget, htOption) {

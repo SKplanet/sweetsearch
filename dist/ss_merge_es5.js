@@ -309,12 +309,6 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	return RecentWordPlugin;
 })(CommonComponent);
 
-//plugin - recentword
-
-var SimpleAjax = function SimpleAjax() {
-	_classCallCheck(this, SimpleAjax);
-};
-
 var SmartSearch = (function (_CommonComponent2) {
 	_inherits(SmartSearch, _CommonComponent2);
 
