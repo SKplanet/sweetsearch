@@ -1,5 +1,3 @@
-
-//plugin - recentword
 class RecentWordPlugin extends CommonComponent {
 
 	constructor(elTarget, htOption) {
@@ -20,7 +18,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
-		this.oStorage = new LocalStorage("searchQuery");
+		this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery");
 	}
 
 	_setDefaultOption () {

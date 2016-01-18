@@ -44,11 +44,9 @@ class SmartSearch extends CommonComponent {
 
 	_registerEvents() {
 		this.elInputField.addEventListener("focus" , 	(evt) => this.handlerInputFocus(evt));
-
 		this.elInputField.addEventListener("keypress", 	(evt) => this.handlerInputKeyPress(evt));
 		this.elInputField.addEventListener("keydown", 	(evt) => this.handlerInputKeydown(evt));
 		this.elInputField.addEventListener("input", 	(evt) => this.handlerInputKeyInput(evt));
-
 		this.elCloseButton.addEventListener("touchend", (evt) => this.handlerCloseAllLayer(evt));
 		this.elClearQueryBtn.addEventListener("touchend", (evt) => this.handlerClearInputValue(evt));
 	}
@@ -143,6 +141,3 @@ class SmartSearch extends CommonComponent {
 	}
 
 }
-
-
-

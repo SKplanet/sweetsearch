@@ -10,14 +10,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LocalStorage = (function () {
-	function LocalStorage(sKey) {
-		_classCallCheck(this, LocalStorage);
+var RecentWordPluginLocalStorageAddOn = (function () {
+	function RecentWordPluginLocalStorageAddOn(sKey) {
+		_classCallCheck(this, RecentWordPluginLocalStorageAddOn);
 
 		this.sKey = sKey;
 	}
 
-	_createClass(LocalStorage, [{
+	_createClass(RecentWordPluginLocalStorageAddOn, [{
 		key: "saveKeyword",
 		value: function saveKeyword(sKeyword) {
 			if (this._validStorage()) return;
@@ -59,8 +59,112 @@ var LocalStorage = (function () {
 		}
 	}]);
 
-	return LocalStorage;
+	return RecentWordPluginLocalStorageAddOn;
 })();
+
+var CommonUtil = {
+
+	// __proto__
+	//__proto__: theProtoObj,
+
+	getFnName: function getFnName(fn) {
+		if (typeof fn !== "function") return "not a function";
+		var sName = fn.name ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
+		return sName;
+	},
+
+	// animation by rAF
+	// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
+	// 			'before' : fnBefore,
+	// 			'after' : this.fnAfter
+	// });
+	runAnimation: function runAnimation(nWidthForAnimation, nDuration, htFn) {
+		if (htFn && htFn.before && typeof htFn.before === "function") {
+			htFn['before'].call();
+		}
+
+		this.bAnimationing = true;
+
+		var sTF = this.getCSSName("transform");
+
+		var elTarget = this.elTarget;
+		var nStartTime = Date.now();
+
+		var nPreviousTranslateX = this.getTranslate3dX(elTarget);
+
+		function execAnimation() {
+
+			var nNowTime = Date.now();
+			var nDiffTime = nNowTime - nStartTime;
+
+			if (nDiffTime > nDuration) {
+
+				var nStep = nPreviousTranslateX + nWidthForAnimation;
+				elTarget.style[sTF] = 'translate3d(' + nStep + 'px, 0, 0)';
+				this.bAnimationing = false;
+				if (htFn && htFn.after && typeof htFn.after === "function") {
+					htFn['after'].call();
+				}
+				return;
+			} else {
+
+				var nStep = nPreviousTranslateX + nDiffTime / nDuration * nWidthForAnimation;
+				elTarget.style[sTF] = 'translate3d(' + nStep + 'px, 0, 0)';
+				window.requestAnimationFrame(execAnimation.bind(this));
+			}
+		}
+
+		window.requestAnimationFrame(execAnimation.bind(this));
+	},
+	setTranslate3dX: function setTranslate3dX(ele, nValue) {
+
+		var sTF = this.getCSSName('transform');
+		this.elTarget.style[sTF] = 'translate3d(' + nValue + 'px, 0, 0)';
+	},
+	getWidth: function getWidth(ele) {
+		var nWidth = 0;
+		if (ele.getBoundingClientRect().width) {
+			nWidth = ele.getBoundingClientRect().width;
+		} else {
+			nWidth = ele.offsetWidth;
+		}
+
+		return nWidth;
+	},
+	getCSSName: function getCSSName(sName) {
+		if (this.htCacheData[sName]) return this.htCacheData[sName];
+
+		var _htNameSet = {
+			'transition': ['webkitTransition', 'transition'],
+			'transform': ['webkitTransform', 'transform']
+		};
+
+		var aNameList = _htNameSet[sName];
+
+		if (!this.isExist(aNameList)) return null;
+
+		for (var i = 0, len = aNameList.length; i < len; i++) {
+			if (typeof document.body.style[aNameList[i]] === 'string') this.htCacheData[sName] = aNameList[i];
+			return this.htCacheData[sName];
+		}
+	},
+	getTranslate3dX: function getTranslate3dX(ele) {
+		var sTF = this.getCSSName("transform");
+		var sPreCss = ele.style[sTF];
+		var nPreX = +sPreCss.replace(/translate3d\((-*\d+(?:\.\d+)*)(px)*\,.+\)/g, "$1");
+		return nPreX;
+	},
+	getCSSTransitionEnd: function getCSSTransitionEnd() {
+		var sTS = this.getCSSName('transition');
+		var sTSE = sTS === "webkitTransition" ? "webkitTransitionEnd" : "transitionend";
+		return sTSE;
+	},
+
+	//check null or undefined
+	isExist: function isExist(data) {
+		return data != null;
+	}
+};
 
 var CommonComponent = (function () {
 	function CommonComponent(htOption) {
@@ -86,137 +190,15 @@ var CommonComponent = (function () {
 	}, {
 		key: "_addOnPlugin",
 		value: function _addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
-			var sFunctionName = this.getFnName(fnPlugin);
+			var sFunctionName = CommonUtil.getFnName(fnPlugin);
 			if (aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
 			htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
 			return htPluginInstance[sFunctionName];
-		}
-	}, {
-		key: "getFnName",
-		value: function getFnName(fn) {
-			if (typeof fn !== "function") return "not a function";
-			var sName = fn.name ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
-			return sName;
-		}
-
-		// animation by rAF
-		// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
-		// 			'before' : fnBefore,
-		// 			'after' : this.fnAfter
-		// });
-
-	}, {
-		key: "runAnimation",
-		value: function runAnimation(nWidthForAnimation, nDuration, htFn) {
-
-			if (htFn && htFn.before && typeof htFn.before === "function") {
-				htFn['before'].call();
-			}
-
-			this.bAnimationing = true;
-
-			var sTF = this.getCSSName("transform");
-
-			var elTarget = this.elTarget;
-			var nStartTime = Date.now();
-
-			var nPreviousTranslateX = this.getTranslate3dX(elTarget);
-
-			function execAnimation() {
-
-				var nNowTime = Date.now();
-				var nDiffTime = nNowTime - nStartTime;
-
-				if (nDiffTime > nDuration) {
-
-					var nStep = nPreviousTranslateX + nWidthForAnimation;
-					elTarget.style[sTF] = 'translate3d(' + nStep + 'px, 0, 0)';
-					this.bAnimationing = false;
-					if (htFn && htFn.after && typeof htFn.after === "function") {
-						htFn['after'].call();
-					}
-					return;
-				} else {
-
-					var nStep = nPreviousTranslateX + nDiffTime / nDuration * nWidthForAnimation;
-					elTarget.style[sTF] = 'translate3d(' + nStep + 'px, 0, 0)';
-					window.requestAnimationFrame(execAnimation.bind(this));
-				}
-			}
-
-			window.requestAnimationFrame(execAnimation.bind(this));
-		}
-	}, {
-		key: "setTranslate3dX",
-		value: function setTranslate3dX(ele, nValue) {
-
-			var sTF = this.getCSSName('transform');
-			this.elTarget.style[sTF] = 'translate3d(' + nValue + 'px, 0, 0)';
-		}
-	}, {
-		key: "getWidth",
-		value: function getWidth(ele) {
-
-			var nWidth = 0;
-			if (ele.getBoundingClientRect().width) {
-				nWidth = ele.getBoundingClientRect().width;
-			} else {
-				nWidth = ele.offsetWidth;
-			}
-
-			return nWidth;
-		}
-	}, {
-		key: "getCSSName",
-		value: function getCSSName(sName) {
-
-			if (this.htCacheData[sName]) return this.htCacheData[sName];
-
-			var _htNameSet = {
-				'transition': ['webkitTransition', 'transition'],
-				'transform': ['webkitTransform', 'transform']
-			};
-
-			var aNameList = _htNameSet[sName];
-
-			if (!this.isExist(aNameList)) return null;
-
-			for (var i = 0, len = aNameList.length; i < len; i++) {
-				if (typeof document.body.style[aNameList[i]] === 'string') this.htCacheData[sName] = aNameList[i];
-				return this.htCacheData[sName];
-			}
-		}
-	}, {
-		key: "getTranslate3dX",
-		value: function getTranslate3dX(ele) {
-
-			var sTF = this.getCSSName("transform");
-			var sPreCss = ele.style[sTF];
-			var nPreX = +sPreCss.replace(/translate3d\((-*\d+(?:\.\d+)*)(px)*\,.+\)/g, "$1");
-			return nPreX;
-		}
-	}, {
-		key: "getCSSTransitionEnd",
-		value: function getCSSTransitionEnd() {
-
-			var sTS = this.getCSSName('transition');
-			var sTSE = sTS === "webkitTransition" ? "webkitTransitionEnd" : "transitionend";
-			return sTSE;
-		}
-
-		//check null or undefined
-
-	}, {
-		key: "isExist",
-		value: function isExist(data) {
-			return data != null;
 		}
 	}]);
 
 	return CommonComponent;
 })();
-
-//plugin - recentword
 
 var RecentWordPlugin = (function (_CommonComponent) {
 	_inherits(RecentWordPlugin, _CommonComponent);
@@ -246,7 +228,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			this.elRecentWordLayer = this.elTarget.querySelector(".recent-word-wrap");
 			this.elClearRecentWordBtn = this.elTarget.querySelector(".deleteWord");
 			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(".closeLayer");
-			this.oStorage = new LocalStorage("searchQuery");
+			this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery");
 		}
 	}, {
 		key: "_setDefaultOption",
@@ -370,7 +352,6 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elInputField.addEventListener("focus", function (evt) {
 				return _this4.handlerInputFocus(evt);
 			});
-
 			this.elInputField.addEventListener("keypress", function (evt) {
 				return _this4.handlerInputKeyPress(evt);
 			});
@@ -380,7 +361,6 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elInputField.addEventListener("input", function (evt) {
 				return _this4.handlerInputKeyInput(evt);
 			});
-
 			this.elCloseButton.addEventListener("touchend", function (evt) {
 				return _this4.handlerCloseAllLayer(evt);
 			});
