@@ -22,6 +22,19 @@ class CommonComponent {
 
 	}
 
+	_addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
+		let sFunctionName = this.getFnName(fnPlugin);
+		if(aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
+		htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
+		return htPluginInstance[sFunctionName];
+	}
+
+	getFnName(fn) {
+	    if(typeof fn !== "function") return "not a function";
+	    var sName = (fn.name) ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
+	    return sName;
+	}
+
 	// animation by rAF
 	// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
 	// 			'before' : fnBefore,

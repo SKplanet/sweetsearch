@@ -105,6 +105,9 @@ class SmartSearch extends CommonComponent {
 		this.elClearQueryBtn 		= this.elTarget.querySelector(".clearQuery");
 		this.htCachedData 			= {};
 
+		//for plugin
+		this.aPluginList			= ['RecentWordPlugin'];
+		this.htPluginInstance 		= {};
 	}
 
 	_setDefaultOption () {
@@ -154,7 +157,7 @@ class SmartSearch extends CommonComponent {
 		if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 	}
-	
+
 	handlerClearInputValue(evt) {
 		this.elInputField.value = "";
 		this.handlerCloseAllLayer();
@@ -165,9 +168,12 @@ class SmartSearch extends CommonComponent {
 	}
 
 	execAfterFocus(evt) {
-		if(this.oRecentWord) {
-			this.oRecentWord.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
-		}
+		//execute RecentWordPlugin.
+		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+		if(!oRecentWordPlugin) return;
+		oRecentWordPlugin.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
+
+		//execute other plugin or other logic.
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
@@ -212,11 +218,10 @@ class SmartSearch extends CommonComponent {
 		xhr.send(sData);
 	}
 
-	addOnPlugin(fnPlugin) {
-		this.oRecentWord = new fnPlugin(this.elTarget);
-		return this.oRecentWord;
+	addOnPlugin(fnName) {
+		return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
 	}
-	
+
 }
 
 

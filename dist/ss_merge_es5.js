@@ -83,6 +83,21 @@ var CommonComponent = (function () {
 				}
 			});
 		}
+	}, {
+		key: "_addOnPlugin",
+		value: function _addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
+			var sFunctionName = this.getFnName(fnPlugin);
+			if (aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
+			htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
+			return htPluginInstance[sFunctionName];
+		}
+	}, {
+		key: "getFnName",
+		value: function getFnName(fn) {
+			if (typeof fn !== "function") return "not a function";
+			var sName = fn.name ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
+			return sName;
+		}
 
 		// animation by rAF
 		// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
@@ -339,6 +354,10 @@ var SmartSearch = (function (_CommonComponent2) {
 
 			this.elClearQueryBtn = this.elTarget.querySelector(".clearQuery");
 			this.htCachedData = {};
+
+			//for plugin
+			this.aPluginList = ['RecentWordPlugin'];
+			this.htPluginInstance = {};
 		}
 	}, {
 		key: "_setDefaultOption",
@@ -429,9 +448,12 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "execAfterFocus",
 		value: function execAfterFocus(evt) {
-			if (this.oRecentWord) {
-				this.oRecentWord.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
-			}
+			//execute RecentWordPlugin.
+			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+			if (!oRecentWordPlugin) return;
+			oRecentWordPlugin.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
+
+			//execute other plugin or other logic.
 		}
 	}, {
 		key: "execAfterAutoCompleteAjax",
@@ -480,9 +502,8 @@ var SmartSearch = (function (_CommonComponent2) {
 		}
 	}, {
 		key: "addOnPlugin",
-		value: function addOnPlugin(fnPlugin) {
-			this.oRecentWord = new fnPlugin(this.elTarget);
-			return this.oRecentWord;
+		value: function addOnPlugin(fnName) {
+			return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
 		}
 	}]);
 
