@@ -35,7 +35,7 @@
 
             <section class="recent-word-wrap" style="display:none;">
                 <ul class="ul-wrap"></ul>
-                <button class="deleteWord">전체삭제</button>
+                <button class="deleteWord" style="display:none">전체삭제</button>
                 <button class="closeLayer">닫기</button>
             </section>
         </div>
@@ -52,9 +52,16 @@
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
 
-        oSS = new SmartSearch(document.querySelector(".search-form"), {
-        });
 
+
+        //reuse util
+        var _replaceHTML = function(elClose, elShow, sHTML) {
+            elClose.style.display = "none";
+            elShow.style.display = "block";
+            elShow.querySelector("ul").innerHTML = sHTML;
+        }
+
+        //자동완성레이어에 보여줄 HTML (사용자정의)
         var fnInsertAutoCompleteWord = function(sData) {
             var result  = "";
             var sHTML   = "";
@@ -65,10 +72,11 @@
                 sHTML += result;
             });
 
-            oSS.replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
+            _replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
         }
 
-        var fnInsertRecentlySearchWord = function(aData) {
+        //최근검색어에 보여줄 HTML (사용자정의)
+        var fnInsertRecentSearchWord = function(aData) {
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
@@ -78,13 +86,20 @@
                 sHTML += result;
             });
 
-            oSS.replaceHTML(elAutoCompleteLayer, elRecentWordLayer, sHTML);
+            _replaceHTML(elAutoCompleteLayer, elRecentWordLayer, sHTML);
         }
+
+        oSS = new SmartSearch(document.querySelector(".search-form"), {
+        });
     
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
-            'fnInsertRecentlySearchWord' : fnInsertRecentlySearchWord
         });
+
+        oSS.addOnPlugin(RecentWordPlugin)
+            .registerCallback({
+                'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+            });
 
     })(document);
 

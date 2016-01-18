@@ -1,5 +1,5 @@
 
-class  LocalStorage {
+class  RecentWordPluginLocalStorageAddOn {
 	
 	constructor(sKey) {
 		this.sKey = sKey;

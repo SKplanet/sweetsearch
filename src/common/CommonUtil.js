@@ -1,26 +1,14 @@
+var CommonUtil = {
 
-class CommonComponent {
+	
+	// __proto__
+	//__proto__: theProtoObj,
 
-	constructor(htOption) {
-
-		this.htOption = htOption;
-		this.htCacheData = {};
-
-	}
-
-	execOption (htValue, htDefaultValue, htStorage) {
-
-		Object.keys(htDefaultValue).forEach((v,i,o) => {
-
-			if(typeof htValue[v] === "undefined") {
-				htStorage[v] = htDefaultValue[v];
-			} else {
-				htStorage[v] = htValue[v];
-			}
-
-		});
-
-	}
+	getFnName(fn){
+	    if(typeof fn !== "function") return "not a function";
+	    var sName = (fn.name) ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
+	    return sName;
+	},
 
 	// animation by rAF
 	// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
@@ -28,7 +16,6 @@ class CommonComponent {
 	// 			'after' : this.fnAfter
 	// });
 	runAnimation(nWidthForAnimation, nDuration, htFn) {
-
 		if(htFn && htFn.before && (typeof htFn.before === "function")) { 
 		 	htFn['before'].call();
 		}
@@ -68,18 +55,16 @@ class CommonComponent {
 		}
 
 		window.requestAnimationFrame(execAnimation.bind(this));
-
-	}
+	},
 
 	setTranslate3dX(ele, nValue) {
 
 		let sTF = this.getCSSName('transform');
 		this.elTarget.style[sTF] = 'translate3d(' + (nValue) + 'px, 0, 0)';
 
-	}
+	},
 
-	getWidth (ele) {
-
+	getWidth(ele) {
 		let nWidth = 0;
 		if (ele.getBoundingClientRect().width) {
  			nWidth = ele.getBoundingClientRect().width;
@@ -88,10 +73,9 @@ class CommonComponent {
 		}
 
 		return nWidth
-	}
+	},
 
 	getCSSName(sName) {
-
 		if(this.htCacheData[sName]) return this.htCacheData[sName];
 
 		var _htNameSet = {
@@ -107,28 +91,23 @@ class CommonComponent {
 			if(typeof document.body.style[aNameList[i]] === 'string') this.htCacheData[sName] = aNameList[i];
 			return this.htCacheData[sName];
 		}
-	}
+	},
 
 	getTranslate3dX(ele) {
-
 		let sTF = this.getCSSName("transform");
 		let sPreCss = ele.style[sTF];
 		let nPreX = +sPreCss.replace(/translate3d\((-*\d+(?:\.\d+)*)(px)*\,.+\)/g , "$1");
 		return nPreX;
-
-	}
+	},
 
 	getCSSTransitionEnd() {
-
 		let sTS = this.getCSSName('transition');
 		let sTSE = (sTS === "webkitTransition") ? "webkitTransitionEnd" : "transitionend";
 		return sTSE;
-
-	}
+	},
 
 	//check null or undefined
-	isExist(data) {
+	isExist(data){
 		return data != null;
 	}
-
 }

@@ -1,4 +1,3 @@
-
 class SmartSearch extends CommonComponent {
 	
 	constructor(elTarget, htOption) {
@@ -20,16 +19,15 @@ class SmartSearch extends CommonComponent {
 		//TODO. have to set to option value
 		this.elInputField 			= this.elTarget.querySelector(".input-field");
 		this.elAutoCompleteLayer 	= this.elTarget.querySelector(".auto-complete-wrap");
-		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 
 		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(".closeLayer");
-		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
 
 		this.elClearQueryBtn 		= this.elTarget.querySelector(".clearQuery");
-		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
 		this.htCachedData 			= {};
 
-		this.oStorage = new LocalStorage("searchQuery");
+		//for plugin
+		this.aPluginList			= ['RecentWordPlugin'];
+		this.htPluginInstance 		= {};
 	}
 
 	_setDefaultOption () {
@@ -41,8 +39,16 @@ class SmartSearch extends CommonComponent {
 	_setDefaultFunction() {
 		this._htDefaultFunction = {
 			'fnInsertAutoCompleteWord' : function(){},
-			'fnInsertRecentlySearchWord' : function(){}
 		}
+	}
+
+	_registerEvents() {
+		this.elInputField.addEventListener("focus" , 	(evt) => this.handlerInputFocus(evt));
+		this.elInputField.addEventListener("keypress", 	(evt) => this.handlerInputKeyPress(evt));
+		this.elInputField.addEventListener("keydown", 	(evt) => this.handlerInputKeydown(evt));
+		this.elInputField.addEventListener("input", 	(evt) => this.handlerInputKeyInput(evt));
+		this.elCloseButton.addEventListener("touchend", (evt) => this.handlerCloseAllLayer(evt));
+		this.elClearQueryBtn.addEventListener("touchend", (evt) => this.handlerClearInputValue(evt));
 	}
 
 	registerCallback(htFn) {
@@ -51,42 +57,41 @@ class SmartSearch extends CommonComponent {
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 	}
 
-	_registerEvents() {
-		this.elInputField.addEventListener("focus" , 	(evt) => { this.handlerInputFocus(evt) });
-
-		this.elInputField.addEventListener("keypress", 	(evt) => { this.handlerInputKeyPress(evt) });
-		this.elInputField.addEventListener("keydown", 	(evt) => { this.handlerInputKeydown(evt) });
-		this.elInputField.addEventListener("input", 	(evt) => { this.handlerInputKeyInput(evt) });
-
-		this.elCloseButton.addEventListener("touchend", (evt) => { this.handlerCloseAllLayer(evt)});
-		this.elCloseButtonRWL.addEventListener("touchend", (evt) => { this.handlerCloseAllLayer(evt)});
-
-		this.elClearQueryBtn.addEventListener("touchend", (evt) => { this.handlerClearInputValue(evt)});
-		this.elClearRecentWordBtn.addEventListener("touchend", (evt) => { this.handlerClearRecentWord(evt)});
-
-	}
-
 	/* start EVENT-HANDLER */ 
 	handlerInputFocus(evt) {
 		this.elClearQueryBtn.style.display = "inline-block";
-		//TODO.  optional
-		this.showRecentlySearchWord();
+		this.execAfterFocus(evt);
 	}
 
 	//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
-	handlerInputKeyPress(evt) {
-		//this._defer(this._makeAjaxRequest.bind(this));
-	}
+	handlerInputKeyPress(evt) {}
 	
 	//특수키(keycode 8인 backspace등) 작업 조정이 필요한 경우 여기서 처리.
-	handlerInputKeydown(evt) {
-	}
+	handlerInputKeydown(evt) {}
 
 	handlerInputKeyInput(evt) {
 		let sInputData = this.elInputField.value;
 		console.log("input evet fired : ", sInputData);
 		if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
+	}
+
+	handlerClearInputValue(evt) {
+		this.elInputField.value = "";
+		this.handlerCloseAllLayer();
+	}
+	
+	handlerCloseAllLayer(evt) {
+		this.elAutoCompleteLayer.style.display = "none";
+	}
+
+	execAfterFocus(evt) {
+		//execute RecentWordPlugin.
+		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+		if(!oRecentWordPlugin) return;
+		oRecentWordPlugin.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
+
+		//execute other plugin or other logic.
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
@@ -98,23 +103,6 @@ class SmartSearch extends CommonComponent {
 
 		//save keyword to localstorage 
 		//this.saveKeyword(sQuery);
-	}
-
-	showRecentlySearchWord() {
-		this.elRecentWordLayer.style.display = "block";
-		let sData = this.oStorage.getKeywords();
-		if(sData === null || sData === "") return;
-		let aData = JSON.parse();
-		this.htFn.fnInsertRecentlySearchWord(aData);
-	}
-
-	_defer(fn) {
-		setTimeout( function() {
-			let sInputData = this.elInputField.value;
-			//let sQuery = sInputData + String.fromCharCode(evt.charCode);
-			console.log("keydown timeout: " , sInputData);
-			//fn(sInputData);
-		}.bind(this),10);
 	}
 
 	_makeAutoCompleteAjaxRequest(sQuery) {
@@ -148,28 +136,8 @@ class SmartSearch extends CommonComponent {
 		xhr.send(sData);
 	}
 
-	handlerClearInputValue(evt) {
-		this.elInputField.value = "";
-		this.handlerCloseAllLayer();
+	addOnPlugin(fnName) {
+		return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
 	}
-
-	handlerClearRecentWord(evt) {
-		this.oStorage.removeKeywords();
-		this.elRecentWordLayer.querySelector("ul").innerHTML = "";
-	}
-
-	handlerCloseAllLayer(evt) {
-		this.elAutoCompleteLayer.style.display = "none";
-		this.elRecentWordLayer.style.display = "none";
-	}
-
-	replaceHTML(elClose, elShow, sHTML) {
-		elClose.style.display = "none";
-        elShow.style.display = "block";
-        elShow.querySelector("ul").innerHTML = sHTML;
-    }
 
 }
-
-
-
