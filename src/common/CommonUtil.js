@@ -106,6 +106,10 @@ var CommonUtil = {
 		return sTSE;
 	},
 
+	setCSS(el,style,value) {
+		el.style[style] = value;
+	},
+
 	//check null or undefined
 	isExist(data){
 		return data != null;

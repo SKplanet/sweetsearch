@@ -10,10 +10,10 @@ var
  	clean 			= require('gulp-clean');
 
 
-var allJS = ['src/RecentWordPluginLocalStorageAddOn.js',
-	 			 'src/common/commonUtil.js',
+var allJS = ['src/common/commonUtil.js',
 	 			 'src/common/commonComponent.js',
 	 			 'src/RecentWordPlugin.js',
+	 			 'src/RecentWordPluginLocalStorageAddOn.js',
 	 			 'src/SmartSearch.js'];
 
 

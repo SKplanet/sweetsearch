@@ -59,7 +59,7 @@ class SmartSearch extends CommonComponent {
 
 	/* start EVENT-HANDLER */ 
 	handlerInputFocus(evt) {
-		this.elClearQueryBtn.style.display = "inline-block";
+		CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		this.execAfterFocus(evt);
 	}
 
@@ -82,7 +82,7 @@ class SmartSearch extends CommonComponent {
 	}
 	
 	handlerCloseAllLayer(evt) {
-		this.elAutoCompleteLayer.style.display = "none";
+		CommonUtil.setCSS(this.elAutoCompleteLayer, "display", "none");
 	}
 
 	execAfterFocus(evt) {

@@ -10,58 +10,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var RecentWordPluginLocalStorageAddOn = (function () {
-	function RecentWordPluginLocalStorageAddOn(sKey) {
-		_classCallCheck(this, RecentWordPluginLocalStorageAddOn);
-
-		this.sKey = sKey;
-	}
-
-	_createClass(RecentWordPluginLocalStorageAddOn, [{
-		key: "saveKeyword",
-		value: function saveKeyword(sKeyword) {
-			if (this._validStorage()) return;
-
-			var aLegacy = this.getKeywords();
-
-			//to Array
-			if (aLegacy === null) aLegacy = [];else aLegacy = JSON.parse(aLegacy);
-
-			//save data
-			var nIndex = aLegacy.indexOf(sKeyword);
-			if (nIndex > -1) {
-				if (nIndex === aLegacy.length - 1) return;
-				aLegacy.splice(nIndex, 1);
-			}
-
-			aLegacy.push(sKeyword);
-			localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
-		}
-	}, {
-		key: "getKeywords",
-		value: function getKeywords() {
-			if (this._validStorage()) return;
-
-			var sResult = localStorage.getItem(this.sKey);
-			return sResult;
-		}
-	}, {
-		key: "removeKeywords",
-		value: function removeKeywords() {
-			if (this._validStorage()) return;
-
-			return localStorage.removeItem(this.sKey);
-		}
-	}, {
-		key: "_validStorage",
-		value: function _validStorage() {
-			if (typeof Storage === "undefined") return;
-		}
-	}]);
-
-	return RecentWordPluginLocalStorageAddOn;
-})();
-
 var CommonUtil = {
 
 	// __proto__
@@ -159,6 +107,9 @@ var CommonUtil = {
 		var sTSE = sTS === "webkitTransition" ? "webkitTransitionEnd" : "transitionend";
 		return sTSE;
 	},
+	setCSS: function setCSS(el, style, value) {
+		el.style[style] = value;
+	},
 
 	//check null or undefined
 	isExist: function isExist(data) {
@@ -177,9 +128,7 @@ var CommonComponent = (function () {
 	_createClass(CommonComponent, [{
 		key: "execOption",
 		value: function execOption(htValue, htDefaultValue, htStorage) {
-
 			Object.keys(htDefaultValue).forEach(function (v, i, o) {
-
 				if (typeof htValue[v] === "undefined") {
 					htStorage[v] = htDefaultValue[v];
 				} else {
@@ -291,6 +240,58 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	return RecentWordPlugin;
 })(CommonComponent);
 
+var RecentWordPluginLocalStorageAddOn = (function () {
+	function RecentWordPluginLocalStorageAddOn(sKey) {
+		_classCallCheck(this, RecentWordPluginLocalStorageAddOn);
+
+		this.sKey = sKey;
+	}
+
+	_createClass(RecentWordPluginLocalStorageAddOn, [{
+		key: "saveKeyword",
+		value: function saveKeyword(sKeyword) {
+			if (this._validStorage()) return;
+
+			var aLegacy = this.getKeywords();
+
+			//to Array
+			if (aLegacy === null) aLegacy = [];else aLegacy = JSON.parse(aLegacy);
+
+			//save data
+			var nIndex = aLegacy.indexOf(sKeyword);
+			if (nIndex > -1) {
+				if (nIndex === aLegacy.length - 1) return;
+				aLegacy.splice(nIndex, 1);
+			}
+
+			aLegacy.push(sKeyword);
+			localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
+		}
+	}, {
+		key: "getKeywords",
+		value: function getKeywords() {
+			if (this._validStorage()) return;
+
+			var sResult = localStorage.getItem(this.sKey);
+			return sResult;
+		}
+	}, {
+		key: "removeKeywords",
+		value: function removeKeywords() {
+			if (this._validStorage()) return;
+
+			return localStorage.removeItem(this.sKey);
+		}
+	}, {
+		key: "_validStorage",
+		value: function _validStorage() {
+			if (typeof Storage === "undefined") return;
+		}
+	}]);
+
+	return RecentWordPluginLocalStorageAddOn;
+})();
+
 var SmartSearch = (function (_CommonComponent2) {
 	_inherits(SmartSearch, _CommonComponent2);
 
@@ -381,7 +382,7 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "handlerInputFocus",
 		value: function handlerInputFocus(evt) {
-			this.elClearQueryBtn.style.display = "inline-block";
+			CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
 			this.execAfterFocus(evt);
 		}
 
@@ -412,7 +413,7 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "handlerCloseAllLayer",
 		value: function handlerCloseAllLayer(evt) {
-			this.elAutoCompleteLayer.style.display = "none";
+			CommonUtil.setCSS(this.elAutoCompleteLayer, "display", "none");
 		}
 	}, {
 		key: "execAfterFocus",

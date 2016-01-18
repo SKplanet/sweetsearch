@@ -5,17 +5,13 @@ class CommonComponent {
 	}
 
 	execOption (htValue, htDefaultValue, htStorage) {
-
 		Object.keys(htDefaultValue).forEach((v,i,o) => {
-
 			if(typeof htValue[v] === "undefined") {
 				htStorage[v] = htDefaultValue[v];
 			} else {
 				htStorage[v] = htValue[v];
 			}
-
 		});
-
 	}
 
 	_addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
