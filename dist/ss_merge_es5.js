@@ -201,17 +201,121 @@ var CommonComponent = (function () {
 	return CommonComponent;
 })();
 
-var SmartSearch = (function (_CommonComponent) {
-	_inherits(SmartSearch, _CommonComponent);
+//plugin - recentword
 
-	function SmartSearch(elTarget, htOption) {
-		_classCallCheck(this, SmartSearch);
+var SimpleAjax = function SimpleAjax() {
+	_classCallCheck(this, SimpleAjax);
+};
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
+//plugin - recentword
+
+var RecentWordPlugin = (function (_CommonComponent) {
+	_inherits(RecentWordPlugin, _CommonComponent);
+
+	function RecentWordPlugin(elTarget, htOption) {
+		_classCallCheck(this, RecentWordPlugin);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RecentWordPlugin).call(this, htOption));
 
 		_this.elTarget = elTarget;
 		_this.init(htOption);
 		return _this;
+	}
+
+	_createClass(RecentWordPlugin, [{
+		key: "init",
+		value: function init(htOption) {
+			this._setDefaultOption();
+			this.option = {};
+			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "execOption", this).call(this, htOption, this._htDefaultOption, this.option);
+			this._setInitValue();
+			this._registerEvents();
+		}
+	}, {
+		key: "_setInitValue",
+		value: function _setInitValue() {
+			this.elRecentWordLayer = this.elTarget.querySelector(".recent-word-wrap");
+			this.elClearRecentWordBtn = this.elTarget.querySelector(".deleteWord");
+			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(".closeLayer");
+			this.oStorage = new LocalStorage("searchQuery");
+		}
+	}, {
+		key: "_setDefaultOption",
+		value: function _setDefaultOption() {
+			this._htDefaultOption = {};
+		}
+	}, {
+		key: "_setDefaultFunction",
+		value: function _setDefaultFunction() {
+			this._htDefaultFunction = {
+				'fnInsertRecentSearchWord': function fnInsertRecentSearchWord() {}
+			};
+		}
+	}, {
+		key: "registerCallback",
+		value: function registerCallback(htFn) {
+			this.htFn = {};
+			this._setDefaultFunction();
+			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "execOption", this).call(this, htFn, this._htDefaultFunction, this.htFn);
+		}
+	}, {
+		key: "_registerEvents",
+		value: function _registerEvents() {
+			var _this2 = this;
+
+			this.elClearRecentWordBtn.addEventListener("touchend", function (evt) {
+				_this2.handlerClearRecentWord(evt);
+			});
+			this.elCloseButtonRWL.addEventListener("touchend", function (evt) {
+				_this2.handlerCloseAllLayer(evt);
+			});
+		}
+	}, {
+		key: "handlerClearRecentWord",
+		value: function handlerClearRecentWord(evt) {
+			this.oStorage.removeKeywords();
+			this.elRecentWordLayer.querySelector("ul").innerHTML = "";
+			this.elClearRecentWordBtn.style.display = "none";
+		}
+
+		//TODO. duplicate
+
+	}, {
+		key: "handlerCloseAllLayer",
+		value: function handlerCloseAllLayer(evt) {
+			this.elRecentWordLayer.style.display = "none";
+		}
+	}, {
+		key: "showRecentSearchWord",
+		value: function showRecentSearchWord() {
+			this.elRecentWordLayer.style.display = "block";
+			var sData = this.oStorage.getKeywords();
+			if (sData === null || sData === "") return;
+			this.elClearRecentWordBtn.style.display = "block";
+			var aData = JSON.parse(sData);
+			this.htFn.fnInsertRecentSearchWord(aData);
+		}
+	}]);
+
+	return RecentWordPlugin;
+})(CommonComponent);
+
+/**
+ * SmartSearch Core
+ *
+**/
+
+var SmartSearch = (function (_CommonComponent2) {
+	_inherits(SmartSearch, _CommonComponent2);
+
+	function SmartSearch(elTarget, htOption) {
+		_classCallCheck(this, SmartSearch);
+
+		var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
+
+		_this3.elTarget = elTarget;
+		_this3.init(htOption);
+		return _this3;
 	}
 
 	_createClass(SmartSearch, [{
@@ -230,16 +334,11 @@ var SmartSearch = (function (_CommonComponent) {
 			//TODO. have to set to option value
 			this.elInputField = this.elTarget.querySelector(".input-field");
 			this.elAutoCompleteLayer = this.elTarget.querySelector(".auto-complete-wrap");
-			this.elRecentWordLayer = this.elTarget.querySelector(".recent-word-wrap");
 
 			this.elCloseButton = this.elAutoCompleteLayer.querySelector(".closeLayer");
-			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(".closeLayer");
 
 			this.elClearQueryBtn = this.elTarget.querySelector(".clearQuery");
-			this.elClearRecentWordBtn = this.elTarget.querySelector(".deleteWord");
 			this.htCachedData = {};
-
-			this.oStorage = new LocalStorage("searchQuery");
 		}
 	}, {
 		key: "_setDefaultOption",
@@ -252,9 +351,34 @@ var SmartSearch = (function (_CommonComponent) {
 		key: "_setDefaultFunction",
 		value: function _setDefaultFunction() {
 			this._htDefaultFunction = {
-				'fnInsertAutoCompleteWord': function fnInsertAutoCompleteWord() {},
-				'fnInsertRecentSearchWord': function fnInsertRecentSearchWord() {}
+				'fnInsertAutoCompleteWord': function fnInsertAutoCompleteWord() {}
 			};
+		}
+	}, {
+		key: "_registerEvents",
+		value: function _registerEvents() {
+			var _this4 = this;
+
+			this.elInputField.addEventListener("focus", function (evt) {
+				return _this4.handlerInputFocus(evt);
+			});
+
+			this.elInputField.addEventListener("keypress", function (evt) {
+				return _this4.handlerInputKeyPress(evt);
+			});
+			this.elInputField.addEventListener("keydown", function (evt) {
+				return _this4.handlerInputKeydown(evt);
+			});
+			this.elInputField.addEventListener("input", function (evt) {
+				return _this4.handlerInputKeyInput(evt);
+			});
+
+			this.elCloseButton.addEventListener("touchend", function (evt) {
+				return _this4.handlerCloseAllLayer(evt);
+			});
+			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
+				return _this4.handlerClearInputValue(evt);
+			});
 		}
 	}, {
 		key: "registerCallback",
@@ -263,39 +387,6 @@ var SmartSearch = (function (_CommonComponent) {
 			this._setDefaultFunction();
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "execOption", this).call(this, htFn, this._htDefaultFunction, this.htFn);
 		}
-	}, {
-		key: "_registerEvents",
-		value: function _registerEvents() {
-			var _this2 = this;
-
-			this.elInputField.addEventListener("focus", function (evt) {
-				_this2.handlerInputFocus(evt);
-			});
-
-			this.elInputField.addEventListener("keypress", function (evt) {
-				_this2.handlerInputKeyPress(evt);
-			});
-			this.elInputField.addEventListener("keydown", function (evt) {
-				_this2.handlerInputKeydown(evt);
-			});
-			this.elInputField.addEventListener("input", function (evt) {
-				_this2.handlerInputKeyInput(evt);
-			});
-
-			this.elCloseButton.addEventListener("touchend", function (evt) {
-				_this2.handlerCloseAllLayer(evt);
-			});
-			this.elCloseButtonRWL.addEventListener("touchend", function (evt) {
-				_this2.handlerCloseAllLayer(evt);
-			});
-
-			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
-				_this2.handlerClearInputValue(evt);
-			});
-			this.elClearRecentWordBtn.addEventListener("touchend", function (evt) {
-				_this2.handlerClearRecentWord(evt);
-			});
-		}
 
 		/* start EVENT-HANDLER */
 
@@ -303,8 +394,7 @@ var SmartSearch = (function (_CommonComponent) {
 		key: "handlerInputFocus",
 		value: function handlerInputFocus(evt) {
 			this.elClearQueryBtn.style.display = "inline-block";
-			//TODO.  optional
-			this.showRecentSearchWord();
+			this.execAfterFocus(evt);
 		}
 
 		//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
@@ -312,7 +402,6 @@ var SmartSearch = (function (_CommonComponent) {
 	}, {
 		key: "handlerInputKeyPress",
 		value: function handlerInputKeyPress(evt) {}
-		//this._defer(this._makeAjaxRequest.bind(this));
 
 		//특수키(keycode 8인 backspace등) 작업 조정이 필요한 경우 여기서 처리.
 
@@ -327,6 +416,24 @@ var SmartSearch = (function (_CommonComponent) {
 			if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 		}
 	}, {
+		key: "handlerClearInputValue",
+		value: function handlerClearInputValue(evt) {
+			this.elInputField.value = "";
+			this.handlerCloseAllLayer();
+		}
+	}, {
+		key: "handlerCloseAllLayer",
+		value: function handlerCloseAllLayer(evt) {
+			this.elAutoCompleteLayer.style.display = "none";
+		}
+	}, {
+		key: "execAfterFocus",
+		value: function execAfterFocus(evt) {
+			if (this.oRecentWord) {
+				this.oRecentWord.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
+			}
+		}
+	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
 			//user customed function
@@ -337,26 +444,6 @@ var SmartSearch = (function (_CommonComponent) {
 
 			//save keyword to localstorage
 			//this.saveKeyword(sQuery);
-		}
-	}, {
-		key: "showRecentSearchWord",
-		value: function showRecentSearchWord() {
-			this.elRecentWordLayer.style.display = "block";
-			var sData = this.oStorage.getKeywords();
-			if (sData === null || sData === "") return;
-			this.elClearRecentWordBtn.style.display = "block";
-			var aData = JSON.parse(sData);
-			this.htFn.fnInsertRecentSearchWord(aData);
-		}
-	}, {
-		key: "_defer",
-		value: function _defer(fn) {
-			setTimeout((function () {
-				var sInputData = this.elInputField.value;
-				//let sQuery = sInputData + String.fromCharCode(evt.charCode);
-				console.log("keydown timeout: ", sInputData);
-				//fn(sInputData);
-			}).bind(this), 10);
 		}
 	}, {
 		key: "_makeAutoCompleteAjaxRequest",
@@ -392,30 +479,10 @@ var SmartSearch = (function (_CommonComponent) {
 			xhr.send(sData);
 		}
 	}, {
-		key: "handlerClearInputValue",
-		value: function handlerClearInputValue(evt) {
-			this.elInputField.value = "";
-			this.handlerCloseAllLayer();
-		}
-	}, {
-		key: "handlerClearRecentWord",
-		value: function handlerClearRecentWord(evt) {
-			this.oStorage.removeKeywords();
-			this.elRecentWordLayer.querySelector("ul").innerHTML = "";
-			this.elClearRecentWordBtn.style.display = "none";
-		}
-	}, {
-		key: "handlerCloseAllLayer",
-		value: function handlerCloseAllLayer(evt) {
-			this.elAutoCompleteLayer.style.display = "none";
-			this.elRecentWordLayer.style.display = "none";
-		}
-	}, {
-		key: "replaceHTML",
-		value: function replaceHTML(elClose, elShow, sHTML) {
-			elClose.style.display = "none";
-			elShow.style.display = "block";
-			elShow.querySelector("ul").innerHTML = sHTML;
+		key: "addOnPlugin",
+		value: function addOnPlugin(fnPlugin) {
+			this.oRecentWord = new fnPlugin(this.elTarget);
+			return this.oRecentWord;
 		}
 	}]);
 

@@ -55,6 +55,13 @@
         oSS = new SmartSearch(document.querySelector(".search-form"), {
         });
 
+
+        var _replaceHTML = function(elClose, elShow, sHTML) {
+            elClose.style.display = "none";
+            elShow.style.display = "block";
+            elShow.querySelector("ul").innerHTML = sHTML;
+        }
+
         var fnInsertAutoCompleteWord = function(sData) {
             var result  = "";
             var sHTML   = "";
@@ -65,7 +72,7 @@
                 sHTML += result;
             });
 
-            oSS.replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
+            _replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
         }
 
         var fnInsertRecentSearchWord = function(aData) {
@@ -78,13 +85,17 @@
                 sHTML += result;
             });
 
-            oSS.replaceHTML(elAutoCompleteLayer, elRecentWordLayer, sHTML);
+            _replaceHTML(elAutoCompleteLayer, elRecentWordLayer, sHTML);
         }
     
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
-            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord
         });
+
+        oSS.addOnPlugin(RecentWordPlugin)
+            .registerCallback({
+                'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+            });
 
     })(document);
 
