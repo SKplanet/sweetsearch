@@ -72,7 +72,8 @@
                 sHTML += result;
             });
 
-            _replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+            //_replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
         }
 
         //최근검색어에 보여줄 HTML (사용자정의)

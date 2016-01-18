@@ -76,6 +76,11 @@ class SmartSearch extends CommonComponent {
 	handlerInputKeyInput(evt) {
 		let sInputData = this.elInputField.value;
 		console.log("input evet fired : ", sInputData);
+
+		//after input word, must hide a recent word layer
+		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+		if(oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
+
 		if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 	}
@@ -101,6 +106,11 @@ class SmartSearch extends CommonComponent {
 	execAfterAutoCompleteAjax(sQuery, sResult) {
 		//user customed function
 		this.htFn.fnInsertAutoCompleteWord(sResult);
+
+		//control layer.
+		this.elAutoCompleteLayer.style.display = "block";
+		// let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+		// if(!oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
 
 		//save history
 		this.htCachedData[sQuery] = sResult;

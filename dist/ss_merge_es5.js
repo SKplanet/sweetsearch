@@ -406,6 +406,11 @@ var SmartSearch = (function (_CommonComponent2) {
 		value: function handlerInputKeyInput(evt) {
 			var sInputData = this.elInputField.value;
 			console.log("input evet fired : ", sInputData);
+
+			//after input word, must hide a recent word layer
+			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+			if (oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
+
 			if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 		}
 	}, {
@@ -434,6 +439,11 @@ var SmartSearch = (function (_CommonComponent2) {
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
 			//user customed function
 			this.htFn.fnInsertAutoCompleteWord(sResult);
+
+			//control layer.
+			this.elAutoCompleteLayer.style.display = "block";
+			// let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+			// if(!oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
 
 			//save history
 			this.htCachedData[sQuery] = sResult;
