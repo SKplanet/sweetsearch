@@ -318,13 +318,17 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "_setInitValue",
 		value: function _setInitValue() {
-			//TODO. have to set to option value
-			this.elInputField = this.elTarget.querySelector(".input-field");
-			this.elAutoCompleteLayer = this.elTarget.querySelector(".auto-complete-wrap");
+			var _cssSelector = {
+				inputField: ".input-field",
+				autoCompleteWrap: ".auto-complete-wrap",
+				closeLayer: ".closeLayer",
+				clearQueryBtn: ".clearQuery"
+			};
 
-			this.elCloseButton = this.elAutoCompleteLayer.querySelector(".closeLayer");
-
-			this.elClearQueryBtn = this.elTarget.querySelector(".clearQuery");
+			this.elInputField = this.elTarget.querySelector(_cssSelector.inputField);
+			this.elAutoCompleteLayer = this.elTarget.querySelector(_cssSelector.autoCompleteWrap);
+			this.elCloseButton = this.elAutoCompleteLayer.querySelector(_cssSelector.closeLayer);
+			this.elClearQueryBtn = this.elTarget.querySelector(_cssSelector.clearQueryBtn);
 			this.htCachedData = {};
 
 			//for plugin
