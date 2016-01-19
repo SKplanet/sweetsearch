@@ -114,6 +114,12 @@ var CommonUtil = {
 	//check null or undefined
 	isExist: function isExist(data) {
 		return data != null;
+	},
+	isArray: function isArray(_a) {
+		if (!Array.isArray) {
+			return Object.prototype.toString.call(_a) === '[object Array]';
+		}
+		return Array.isArray(_a);
 	}
 };
 
@@ -469,14 +475,16 @@ var SmartSearch = (function (_CommonComponent2) {
 			var xhr = new XMLHttpRequest();
 			xhr.open(method, url);
 
-			aHeaders.forEach(function (v) {
-				xhr.setRequestHeader(v[0], v[1]);
-			});
+			if (aHeaders && CommonUtil.isArray(aHeaders)) {
+				aHeaders.forEach(function (v) {
+					xhr.setRequestHeader(v[0], v[1]);
+				});
+			}
 
 			xhr.addEventListener("load", (function () {
 				if (xhr.status === 200) {
 					var sResult = JSON.parse(xhr.responseText);
-					fnCallback.call(this, sResult);
+					if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
 				}
 			}).bind(this));
 			xhr.send(sData);

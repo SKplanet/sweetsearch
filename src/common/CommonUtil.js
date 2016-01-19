@@ -113,5 +113,11 @@ var CommonUtil = {
 	//check null or undefined
 	isExist(data){
 		return data != null;
+	},
+	isArray(_a) {
+		if (!Array.isArray) {
+			return Object.prototype.toString.call(_a) === '[object Array]';
+		}
+		return Array.isArray(_a);
 	}
 }

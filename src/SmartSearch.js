@@ -133,14 +133,16 @@ class SmartSearch extends CommonComponent {
 		let xhr = new XMLHttpRequest();
 		xhr.open(method, url);
 
-		aHeaders.forEach( (v) => {
-			xhr.setRequestHeader(v[0], v[1]);
-		});
+		if(aHeaders && CommonUtil.isArray(aHeaders)) {
+			aHeaders.forEach( (v) => {
+				xhr.setRequestHeader(v[0], v[1]);
+			});
+		}
 
 		xhr.addEventListener("load", function() {
 			if (xhr.status === 200) {
 				var sResult = JSON.parse(xhr.responseText);
-				fnCallback.call(this, sResult);
+				if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
 			}
 		}.bind(this));
 		xhr.send(sData);
