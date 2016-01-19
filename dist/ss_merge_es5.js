@@ -473,13 +473,11 @@ var SmartSearch = (function (_CommonComponent2) {
 		value: function handlerClearInputValue(evt) {
 			this.elInputField.value = "";
 			this.handlerCloseAllLayer();
-			//_cu.setCSS(this.elClearQueryBtn, "display", "none");
 			_cu.closeLayer(this.elClearQueryBtn);
 		}
 	}, {
 		key: "handlerCloseAllLayer",
 		value: function handlerCloseAllLayer(evt) {
-			//_cu.setCSS(this.elAutoCompleteLayer, "display", "none");
 			_cu.closeLayer(this.elAutoCompleteLayer);
 		}
 	}, {
@@ -494,8 +492,7 @@ var SmartSearch = (function (_CommonComponent2) {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
 			this.htFn.fnInsertAutoCompleteWord(sResult);
-			//_cu.setCSS(this.elAutoCompleteLayer, "display", "block");
-			_cu.showLayer(this.elAutoCompleteLayer);
+			if (this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);else _cu.closeLayer(this.elAutoCompleteLayer);
 
 			//save history
 			this.htCachedData[sQuery] = sResult;
