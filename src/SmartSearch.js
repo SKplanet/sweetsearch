@@ -116,19 +116,26 @@ class SmartSearch extends CommonComponent {
 	}
 
 	_makeAutoCompleteAjaxRequest(sQuery) {
-		let url = "../jsonMock/"+ sQuery +".json";
-		let aHeaders = [["Content-Type", "application/json"]];
 
-		CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
-			JSON.stringify({
-				sQuery : sQuery,
-				nTime : Date.now() 
-			}), 
-		"get", aHeaders, sQuery);
+		// let myfunction = function(data) {
+		// 	console.log("jsonp response..", data);
+		// };
+
+		//TODO. execAfterAutoCompleteAjax 메서드를 콜백을 전달해서 실행하게 해야 한다.
+		let sURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+		CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion");
+
+		//Ajax request.
+		// let url = "../jsonMock/"+ sQuery +".json";
+		// let aHeaders = [["Content-Type", "application/json"]];
+		// CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
+		// 	JSON.stringify({
+		// 		sQuery : sQuery,
+		// 		nTime : Date.now() 
+		// 	}), 
+		// "get", aHeaders, sQuery);
 	}
 
-	//TODO. move to a CommmonComponent or AjaxUtils.
-	
 	addOnPlugin(fnName) {
 		return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
 	}

@@ -16,7 +16,7 @@ var CommonUtil = {
 	//__proto__: theProtoObj,
 
 	getFnName: function getFnName(fn) {
-		if (typeof fn !== "function") return "not a function";
+		if (typeof fn !== "function") return;
 		var sName = fn.name ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
 		return sName;
 	},
@@ -28,7 +28,6 @@ var CommonUtil = {
 	// });
 
 	sendSimpleAjax: function sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
-
 		var xhr = new XMLHttpRequest();
 		xhr.open(method, url);
 
@@ -45,6 +44,22 @@ var CommonUtil = {
 			}
 		}).bind(this));
 		xhr.send(sData);
+	},
+	sendSimpleJSONP: function sendSimpleJSONP(sURL, query, sCompletionName) {
+
+		window[sCompletionName] = null;
+		var encodedQuery = encodeURIComponent(query);
+
+		var elScript = document.createElement('script');
+		elScript.setAttribute('src', sURL + 'method=' + sCompletionName + '&q=' + encodedQuery);
+		document.getElementsByTagName('head')[0].appendChild(elScript);
+
+		elScript.onload = function () {
+			console.log("json result -> ", window.completion);
+			//delete script for JSONP Request.
+			document.getElementsByTagName('head')[0].removeChild(this);
+			window[sCompletionName] = null;
+		};
 	},
 	runAnimation: function runAnimation(nWidthForAnimation, nDuration, htFn) {
 		if (htFn && htFn.before && typeof htFn.before === "function") {
@@ -477,17 +492,25 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "_makeAutoCompleteAjaxRequest",
 		value: function _makeAutoCompleteAjaxRequest(sQuery) {
-			var url = "../jsonMock/" + sQuery + ".json";
-			var aHeaders = [["Content-Type", "application/json"]];
 
-			CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
-				sQuery: sQuery,
-				nTime: Date.now()
-			}), "get", aHeaders, sQuery);
+			// let myfunction = function(data) {
+			// 	console.log("jsonp response..", data);
+			// };
+
+			//TODO. execAfterAutoCompleteAjax 메서드를 콜백을 전달해서 실행하게 해야 한다.
+			var sURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+			CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion");
+
+			//Ajax request.
+			// let url = "../jsonMock/"+ sQuery +".json";
+			// let aHeaders = [["Content-Type", "application/json"]];
+			// CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery),
+			// 	JSON.stringify({
+			// 		sQuery : sQuery,
+			// 		nTime : Date.now()
+			// 	}),
+			// "get", aHeaders, sQuery);
 		}
-
-		//TODO. move to a CommmonComponent or AjaxUtils.
-
 	}, {
 		key: "addOnPlugin",
 		value: function addOnPlugin(fnName) {

@@ -5,7 +5,7 @@ var CommonUtil = {
 	//__proto__: theProtoObj,
 
 	getFnName(fn){
-	    if(typeof fn !== "function") return "not a function";
+	    if(typeof fn !== "function") return;
 	    var sName = (fn.name) ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
 	    return sName;
 	},
@@ -17,7 +17,6 @@ var CommonUtil = {
 	// });
 
 	sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
-
 		let xhr = new XMLHttpRequest();
 		xhr.open(method, url);
 
@@ -34,6 +33,23 @@ var CommonUtil = {
 			}
 		}.bind(this));
 		xhr.send(sData);
+	},
+
+	sendSimpleJSONP(sURL, query, sCompletionName) {
+
+		window[sCompletionName] = null;
+		let encodedQuery = encodeURIComponent(query);
+
+		var elScript = document.createElement('script');
+		elScript.setAttribute('src', sURL + 'method=' + sCompletionName + '&q=' + encodedQuery);
+		document.getElementsByTagName('head')[0].appendChild(elScript);
+
+		elScript.onload= function() {
+			console.log("json result -> ", window.completion);
+			//delete script for JSONP Request.
+			document.getElementsByTagName('head')[0].removeChild(this);
+			window[sCompletionName] = null;
+		}
 	},
 
 	runAnimation(nWidthForAnimation, nDuration, htFn) {
