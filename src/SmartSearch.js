@@ -119,7 +119,7 @@ class SmartSearch extends CommonComponent {
 		let url = "../jsonMock/"+ sQuery +".json";
 		let aHeaders = [["Content-Type", "application/json"]];
 
-		this.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
+		CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
 			JSON.stringify({
 				sQuery : sQuery,
 				nTime : Date.now() 
@@ -128,26 +128,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	//TODO. move to a CommmonComponent or AjaxUtils.
-	sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
-
-		let xhr = new XMLHttpRequest();
-		xhr.open(method, url);
-
-		if(aHeaders && CommonUtil.isArray(aHeaders)) {
-			aHeaders.forEach( (v) => {
-				xhr.setRequestHeader(v[0], v[1]);
-			});
-		}
-
-		xhr.addEventListener("load", function() {
-			if (xhr.status === 200) {
-				var sResult = JSON.parse(xhr.responseText);
-				if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
-			}
-		}.bind(this));
-		xhr.send(sData);
-	}
-
+	
 	addOnPlugin(fnName) {
 		return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
 	}

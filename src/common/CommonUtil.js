@@ -15,6 +15,27 @@ var CommonUtil = {
 	// 			'before' : fnBefore,
 	// 			'after' : this.fnAfter
 	// });
+
+	sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
+
+		let xhr = new XMLHttpRequest();
+		xhr.open(method, url);
+
+		if(aHeaders && CommonUtil.isArray(aHeaders)) {
+			aHeaders.forEach( (v) => {
+				xhr.setRequestHeader(v[0], v[1]);
+			});
+		}
+
+		xhr.addEventListener("load", function() {
+			if (xhr.status === 200) {
+				var sResult = JSON.parse(xhr.responseText);
+				if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
+			}
+		}.bind(this));
+		xhr.send(sData);
+	},
+
 	runAnimation(nWidthForAnimation, nDuration, htFn) {
 		if(htFn && htFn.before && (typeof htFn.before === "function")) { 
 		 	htFn['before'].call();
@@ -114,6 +135,7 @@ var CommonUtil = {
 	isExist(data){
 		return data != null;
 	},
+
 	isArray(_a) {
 		if (!Array.isArray) {
 			return Object.prototype.toString.call(_a) === '[object Array]';

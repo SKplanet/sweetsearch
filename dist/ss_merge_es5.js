@@ -26,6 +26,26 @@ var CommonUtil = {
 	// 			'before' : fnBefore,
 	// 			'after' : this.fnAfter
 	// });
+
+	sendSimpleAjax: function sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
+
+		var xhr = new XMLHttpRequest();
+		xhr.open(method, url);
+
+		if (aHeaders && CommonUtil.isArray(aHeaders)) {
+			aHeaders.forEach(function (v) {
+				xhr.setRequestHeader(v[0], v[1]);
+			});
+		}
+
+		xhr.addEventListener("load", (function () {
+			if (xhr.status === 200) {
+				var sResult = JSON.parse(xhr.responseText);
+				if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
+			}
+		}).bind(this));
+		xhr.send(sData);
+	},
 	runAnimation: function runAnimation(nWidthForAnimation, nDuration, htFn) {
 		if (htFn && htFn.before && typeof htFn.before === "function") {
 			htFn['before'].call();
@@ -460,7 +480,7 @@ var SmartSearch = (function (_CommonComponent2) {
 			var url = "../jsonMock/" + sQuery + ".json";
 			var aHeaders = [["Content-Type", "application/json"]];
 
-			this.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
+			CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
 				sQuery: sQuery,
 				nTime: Date.now()
 			}), "get", aHeaders, sQuery);
@@ -468,27 +488,6 @@ var SmartSearch = (function (_CommonComponent2) {
 
 		//TODO. move to a CommmonComponent or AjaxUtils.
 
-	}, {
-		key: "sendSimpleAjax",
-		value: function sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
-
-			var xhr = new XMLHttpRequest();
-			xhr.open(method, url);
-
-			if (aHeaders && CommonUtil.isArray(aHeaders)) {
-				aHeaders.forEach(function (v) {
-					xhr.setRequestHeader(v[0], v[1]);
-				});
-			}
-
-			xhr.addEventListener("load", (function () {
-				if (xhr.status === 200) {
-					var sResult = JSON.parse(xhr.responseText);
-					if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
-				}
-			}).bind(this));
-			xhr.send(sData);
-		}
 	}, {
 		key: "addOnPlugin",
 		value: function addOnPlugin(fnName) {
