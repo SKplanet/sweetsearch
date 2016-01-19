@@ -56,15 +56,20 @@ class SmartSearch extends CommonComponent {
 		this.elClearQueryBtn.addEventListener("touchend", (evt) => this.handlerClearInputValue(evt));
 	}
 
+
 	registerCallback(htFn) {
 		this.htFn = {};
  		this._setDefaultFunction();
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 	}
 
+	registerAutoCompleteData(htRequestOption) {
+		this.htRequestOption = htRequestOption;
+	} 
+
 	/* start EVENT-HANDLER */ 
 	handlerInputFocus(evt) {
-		CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
+		//CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		this.execAfterFocus(evt);
 	}
 
@@ -78,12 +83,15 @@ class SmartSearch extends CommonComponent {
 		let sInputData = this.elInputField.value;
 		console.log("input evet fired : ", sInputData);
 
+		if(sInputData.length > 0 ) CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
+		else CommonUtil.setCSS(this.elClearQueryBtn, "display", "none");
+
 		//after input word, must hide a recent word layer
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 		if(oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
 
-		if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);
-		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
+		if (typeof this.htCachedData[sInputData] === "undefined") this._AutoCompleteRequestManager(sInputData);
+		else this._AutoCompleteRequestManager(sInputData, this.htCachedData[sInputData]);
 	}
 
 	handlerClearInputValue(evt) {
@@ -115,25 +123,34 @@ class SmartSearch extends CommonComponent {
 		//this.saveKeyword(sQuery);
 	}
 
-	_makeAutoCompleteAjaxRequest(sQuery) {
+	_AutoCompleteRequestManager(sQuery) {
+		let type = this.htRequestOption.requestType;
+		switch(type) {
+			case 'jsonp':
+				this._makeAutoCompleteJSONPRequest(sQuery, this.htRequestOption.sAutoCompleteURL);
+				break;
+			case 'ajax':
+				this._makeAutoCompleteAjaxRequest(sQuery, this.htRequestOption.sAutoCompleteURL);
+				break;
+			default: 
+				//do something..
+		}
+	}
 
-		// let myfunction = function(data) {
-		// 	console.log("jsonp response..", data);
-		// };
+	_makeAutoCompleteJSONPRequest(sQuery, sURL) {
+		CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
+	}
 
-		//TODO. execAfterAutoCompleteAjax 메서드를 콜백을 전달해서 실행하게 해야 한다.
-		let sURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
-		CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion");
-
-		//Ajax request.
-		// let url = "../jsonMock/"+ sQuery +".json";
-		// let aHeaders = [["Content-Type", "application/json"]];
-		// CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
-		// 	JSON.stringify({
-		// 		sQuery : sQuery,
-		// 		nTime : Date.now() 
-		// 	}), 
-		// "get", aHeaders, sQuery);
+	_makeAutoCompleteAjaxRequest(sQuery, sURL) {
+		// hardcoded url for test.
+		let url = "../jsonMock/"+ sQuery +".json";
+		let aHeaders = [["Content-Type", "application/json"]];
+		CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
+			JSON.stringify({
+				sQuery : sQuery,
+				nTime : Date.now() 
+			}), 
+		"get", aHeaders, sQuery);
 	}
 
 	addOnPlugin(fnName) {

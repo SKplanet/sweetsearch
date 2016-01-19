@@ -45,7 +45,7 @@ var CommonUtil = {
 		}).bind(this));
 		xhr.send(sData);
 	},
-	sendSimpleJSONP: function sendSimpleJSONP(sURL, query, sCompletionName) {
+	sendSimpleJSONP: function sendSimpleJSONP(sURL, query, sCompletionName, fnCallback) {
 
 		window[sCompletionName] = null;
 		var encodedQuery = encodeURIComponent(query);
@@ -54,9 +54,9 @@ var CommonUtil = {
 		elScript.setAttribute('src', sURL + 'method=' + sCompletionName + '&q=' + encodedQuery);
 		document.getElementsByTagName('head')[0].appendChild(elScript);
 
-		elScript.onload = function () {
-			console.log("json result -> ", window.completion);
-			//delete script for JSONP Request.
+		elScript.onload = function (evt) {
+			var result = window[sCompletionName];
+			if (fnCallback && typeof fnCallback === 'function') fnCallback(result);
 			document.getElementsByTagName('head')[0].removeChild(this);
 			window[sCompletionName] = null;
 		};
@@ -423,13 +423,18 @@ var SmartSearch = (function (_CommonComponent2) {
 			this._setDefaultFunction();
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "execOption", this).call(this, htFn, this._htDefaultFunction, this.htFn);
 		}
+	}, {
+		key: "registerAutoCompleteData",
+		value: function registerAutoCompleteData(htRequestOption) {
+			this.htRequestOption = htRequestOption;
+		}
 
 		/* start EVENT-HANDLER */
 
 	}, {
 		key: "handlerInputFocus",
 		value: function handlerInputFocus(evt) {
-			CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
+			//CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
 			this.execAfterFocus(evt);
 		}
 
@@ -450,11 +455,13 @@ var SmartSearch = (function (_CommonComponent2) {
 			var sInputData = this.elInputField.value;
 			console.log("input evet fired : ", sInputData);
 
+			if (sInputData.length > 0) CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");else CommonUtil.setCSS(this.elClearQueryBtn, "display", "none");
+
 			//after input word, must hide a recent word layer
 			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 			if (oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
 
-			if (typeof this.htCachedData[sInputData] === "undefined") this._makeAutoCompleteAjaxRequest(sInputData);else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
+			if (typeof this.htCachedData[sInputData] === "undefined") this._AutoCompleteRequestManager(sInputData);else this._AutoCompleteRequestManager(sInputData, this.htCachedData[sInputData]);
 		}
 	}, {
 		key: "handlerClearInputValue",
@@ -490,26 +497,35 @@ var SmartSearch = (function (_CommonComponent2) {
 			//this.saveKeyword(sQuery);
 		}
 	}, {
+		key: "_AutoCompleteRequestManager",
+		value: function _AutoCompleteRequestManager(sQuery) {
+			var type = this.htRequestOption.requestType;
+			switch (type) {
+				case 'jsonp':
+					this._makeAutoCompleteJSONPRequest(sQuery, this.htRequestOption.sAutoCompleteURL);
+					break;
+				case 'ajax':
+					this._makeAutoCompleteAjaxRequest(sQuery, this.htRequestOption.sAutoCompleteURL);
+					break;
+				default:
+				//do something..
+			}
+		}
+	}, {
+		key: "_makeAutoCompleteJSONPRequest",
+		value: function _makeAutoCompleteJSONPRequest(sQuery, sURL) {
+			CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this, sQuery));
+		}
+	}, {
 		key: "_makeAutoCompleteAjaxRequest",
-		value: function _makeAutoCompleteAjaxRequest(sQuery) {
-
-			// let myfunction = function(data) {
-			// 	console.log("jsonp response..", data);
-			// };
-
-			//TODO. execAfterAutoCompleteAjax 메서드를 콜백을 전달해서 실행하게 해야 한다.
-			var sURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
-			CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion");
-
-			//Ajax request.
-			// let url = "../jsonMock/"+ sQuery +".json";
-			// let aHeaders = [["Content-Type", "application/json"]];
-			// CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery),
-			// 	JSON.stringify({
-			// 		sQuery : sQuery,
-			// 		nTime : Date.now()
-			// 	}),
-			// "get", aHeaders, sQuery);
+		value: function _makeAutoCompleteAjaxRequest(sQuery, sURL) {
+			// hardcoded url for test.
+			var url = "../jsonMock/" + sQuery + ".json";
+			var aHeaders = [["Content-Type", "application/json"]];
+			CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
+				sQuery: sQuery,
+				nTime: Date.now()
+			}), "get", aHeaders, sQuery);
 		}
 	}, {
 		key: "addOnPlugin",

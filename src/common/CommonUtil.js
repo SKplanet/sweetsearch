@@ -35,7 +35,7 @@ var CommonUtil = {
 		xhr.send(sData);
 	},
 
-	sendSimpleJSONP(sURL, query, sCompletionName) {
+	sendSimpleJSONP(sURL, query, sCompletionName, fnCallback) {
 
 		window[sCompletionName] = null;
 		let encodedQuery = encodeURIComponent(query);
@@ -44,9 +44,9 @@ var CommonUtil = {
 		elScript.setAttribute('src', sURL + 'method=' + sCompletionName + '&q=' + encodedQuery);
 		document.getElementsByTagName('head')[0].appendChild(elScript);
 
-		elScript.onload= function() {
-			console.log("json result -> ", window.completion);
-			//delete script for JSONP Request.
+		elScript.onload= function(evt) {
+			let result = window[sCompletionName];
+			if(fnCallback && typeof fnCallback === 'function') fnCallback(result);
 			document.getElementsByTagName('head')[0].removeChild(this);
 			window[sCompletionName] = null;
 		}

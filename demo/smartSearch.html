@@ -51,9 +51,10 @@
     (function(doc){
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
+        var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
 
-
-        //자동완성레이어에 보여줄 HTML (사용자정의)
+        /*
+        // callback 4 Ajax (local)
         var fnInsertAutoCompleteWord = function(sData) {
             var result  = "";
             var sHTML   = "";
@@ -66,25 +67,48 @@
 
             elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
         }
+        */
+
+        //callback 4 JSONP (Amazon)
+        //자동완성레이어에 보여줄 HTML (사용자정의)
+        var fnInsertAutoCompleteWord = function(sData) {
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            
+            if(!sData) return;
+            sData[1].forEach( function(v) {
+                result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+                sHTML += result;
+            });
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+        }
 
 
-        //최근검색어에 보여줄 HTML (사용자정의)
         var fnInsertRecentSearchWord = function(aData) {
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
-
             aData.forEach( function(v) {
                 result = sTemplate.replace(/\[%sKeyword%\]/, v);       
                 sHTML += result;
             });
-
             elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
         }
         
 
         oSS = new SmartSearch(document.querySelector(".search-form"), {
         });
+
+        oSS.registerAutoCompleteData({ 
+            sAutoCompleteURL : sAutoCompleteURL,
+            requestType : 'jsonp'
+        });
+
+        // oSS.registerAutoCompleteData({ 
+        //     sAutoCompleteURL : "",
+        //     requestType : 'ajax'
+        // });
     
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
