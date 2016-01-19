@@ -53,14 +53,6 @@
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
 
 
-
-        //reuse util
-        var _replaceHTML = function(elClose, elShow, sHTML) {
-            elClose.style.display = "none";
-            elShow.style.display = "block";
-            elShow.querySelector("ul").innerHTML = sHTML;
-        }
-
         //자동완성레이어에 보여줄 HTML (사용자정의)
         var fnInsertAutoCompleteWord = function(sData) {
             var result  = "";
@@ -73,8 +65,8 @@
             });
 
             elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
-            //_replaceHTML(elRecentWordLayer, elAutoCompleteLayer, sHTML);
         }
+
 
         //최근검색어에 보여줄 HTML (사용자정의)
         var fnInsertRecentSearchWord = function(aData) {
@@ -87,8 +79,9 @@
                 sHTML += result;
             });
 
-            _replaceHTML(elAutoCompleteLayer, elRecentWordLayer, sHTML);
+            elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
         }
+        
 
         oSS = new SmartSearch(document.querySelector(".search-form"), {
         });

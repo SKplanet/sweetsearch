@@ -6,6 +6,7 @@ class SmartSearch extends CommonComponent {
 		this.init(htOption);
 	}
 
+	//TODO. think about moving super class.
 	init(htOption) {
 		this._setDefaultOption();
 		//option variable declaration
@@ -29,7 +30,7 @@ class SmartSearch extends CommonComponent {
 		this.elClearQueryBtn 		= this.elTarget.querySelector(_cssSelector.clearQueryBtn);
 		this.htCachedData 			= {};
 
-		//for plugin
+		//plugins
 		this.aPluginList			= ['RecentWordPlugin'];
 		this.htPluginInstance 		= {};
 	}
@@ -104,13 +105,8 @@ class SmartSearch extends CommonComponent {
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
-		//user customed function
 		this.htFn.fnInsertAutoCompleteWord(sResult);
-
-		//control layer.
 		this.elAutoCompleteLayer.style.display = "block";
-		// let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-		// if(!oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
 
 		//save history
 		this.htCachedData[sQuery] = sResult;

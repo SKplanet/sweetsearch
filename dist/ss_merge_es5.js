@@ -305,6 +305,8 @@ var SmartSearch = (function (_CommonComponent2) {
 		return _this3;
 	}
 
+	//TODO. think about moving super class.
+
 	_createClass(SmartSearch, [{
 		key: "init",
 		value: function init(htOption) {
@@ -331,7 +333,7 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elClearQueryBtn = this.elTarget.querySelector(_cssSelector.clearQueryBtn);
 			this.htCachedData = {};
 
-			//for plugin
+			//plugins
 			this.aPluginList = ['RecentWordPlugin'];
 			this.htPluginInstance = {};
 		}
@@ -437,13 +439,8 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
-			//user customed function
 			this.htFn.fnInsertAutoCompleteWord(sResult);
-
-			//control layer.
 			this.elAutoCompleteLayer.style.display = "block";
-			// let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-			// if(!oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
 
 			//save history
 			this.htCachedData[sQuery] = sResult;
