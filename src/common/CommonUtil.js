@@ -1,19 +1,10 @@
 var _cu = {
 	
-	// __proto__
-	//__proto__: theProtoObj,
-
 	getFnName(fn){
 	    if(typeof fn !== "function") return;
 	    var sName = (fn.name) ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
 	    return sName;
 	},
-
-	// animation by rAF
-	// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
-	// 			'before' : fnBefore,
-	// 			'after' : this.fnAfter
-	// });
 
 	sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
 		let xhr = new XMLHttpRequest();

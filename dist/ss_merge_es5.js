@@ -11,22 +11,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _cu = {
-
-	// __proto__
-	//__proto__: theProtoObj,
-
 	getFnName: function getFnName(fn) {
 		if (typeof fn !== "function") return;
 		var sName = fn.name ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
 		return sName;
 	},
-
-	// animation by rAF
-	// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
-	// 			'before' : fnBefore,
-	// 			'after' : this.fnAfter
-	// });
-
 	sendSimpleAjax: function sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
 		var xhr = new XMLHttpRequest();
 		xhr.open(method, url);
