@@ -33,6 +33,7 @@ class SmartSearch extends CommonComponent {
 		//plugins
 		this.aPluginList			= ['RecentWordPlugin'];
 		this.htPluginInstance 		= {};
+
 	}
 
 	_setDefaultOption () {
@@ -69,7 +70,6 @@ class SmartSearch extends CommonComponent {
 
 	/* start EVENT-HANDLER */ 
 	handlerInputFocus(evt) {
-		//CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		this.execAfterFocus(evt);
 	}
 
@@ -83,12 +83,12 @@ class SmartSearch extends CommonComponent {
 		let sInputData = this.elInputField.value;
 		console.log("input evet fired : ", sInputData);
 
-		if(sInputData.length > 0 ) CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
-		else CommonUtil.setCSS(this.elClearQueryBtn, "display", "none");
+		if(sInputData.length > 0 ) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");
+		else _cu.closeLayer(this.elClearQueryBtn);
 
 		//after input word, must hide a recent word layer
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-		if(oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
+		if(oRecentWordPlugin) _cu.closeLayer(oRecentWordPlugin.elRecentWordLayer);
 
 		if (typeof this.htCachedData[sInputData] === "undefined") this._AutoCompleteRequestManager(sInputData);
 		else this._AutoCompleteRequestManager(sInputData, this.htCachedData[sInputData]);
@@ -97,10 +97,13 @@ class SmartSearch extends CommonComponent {
 	handlerClearInputValue(evt) {
 		this.elInputField.value = "";
 		this.handlerCloseAllLayer();
+		//_cu.setCSS(this.elClearQueryBtn, "display", "none");
+		_cu.closeLayer(this.elClearQueryBtn);
 	}
 	
 	handlerCloseAllLayer(evt) {
-		CommonUtil.setCSS(this.elAutoCompleteLayer, "display", "none");
+		//_cu.setCSS(this.elAutoCompleteLayer, "display", "none");
+		_cu.closeLayer(this.elAutoCompleteLayer);
 	}
 
 	execAfterFocus(evt) {
@@ -108,19 +111,15 @@ class SmartSearch extends CommonComponent {
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 		if(!oRecentWordPlugin) return;
 		oRecentWordPlugin.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
-
-		//execute other plugin or other logic.
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
 		this.htFn.fnInsertAutoCompleteWord(sResult);
-		this.elAutoCompleteLayer.style.display = "block";
+		//_cu.setCSS(this.elAutoCompleteLayer, "display", "block");
+		_cu.showLayer(this.elAutoCompleteLayer);
 
 		//save history
 		this.htCachedData[sQuery] = sResult;
-
-		//save keyword to localstorage 
-		//this.saveKeyword(sQuery);
 	}
 
 	_AutoCompleteRequestManager(sQuery) {
@@ -138,14 +137,14 @@ class SmartSearch extends CommonComponent {
 	}
 
 	_makeAutoCompleteJSONPRequest(sQuery, sURL) {
-		CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
+		_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 
 	_makeAutoCompleteAjaxRequest(sQuery, sURL) {
 		// hardcoded url for test.
 		let url = "../jsonMock/"+ sQuery +".json";
 		let aHeaders = [["Content-Type", "application/json"]];
-		CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
+		_cu.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
 			JSON.stringify({
 				sQuery : sQuery,
 				nTime : Date.now() 

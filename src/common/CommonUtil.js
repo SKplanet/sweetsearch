@@ -1,5 +1,4 @@
-var CommonUtil = {
-
+var _cu = {
 	
 	// __proto__
 	//__proto__: theProtoObj,
@@ -20,7 +19,7 @@ var CommonUtil = {
 		let xhr = new XMLHttpRequest();
 		xhr.open(method, url);
 
-		if(aHeaders && CommonUtil.isArray(aHeaders)) {
+		if(aHeaders && this.isArray(aHeaders)) {
 			aHeaders.forEach( (v) => {
 				xhr.setRequestHeader(v[0], v[1]);
 			});
@@ -145,6 +144,14 @@ var CommonUtil = {
 
 	setCSS(el,style,value) {
 		el.style[style] = value;
+	},
+
+	showLayer(el) {
+		el.style.display = "block";
+	},
+
+	closeLayer(el) {
+		el.style.display = "none";
 	},
 
 	//check null or undefined

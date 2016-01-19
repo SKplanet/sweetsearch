@@ -10,7 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var CommonUtil = {
+var _cu = {
 
 	// __proto__
 	//__proto__: theProtoObj,
@@ -31,7 +31,7 @@ var CommonUtil = {
 		var xhr = new XMLHttpRequest();
 		xhr.open(method, url);
 
-		if (aHeaders && CommonUtil.isArray(aHeaders)) {
+		if (aHeaders && this.isArray(aHeaders)) {
 			aHeaders.forEach(function (v) {
 				xhr.setRequestHeader(v[0], v[1]);
 			});
@@ -145,6 +145,12 @@ var CommonUtil = {
 	setCSS: function setCSS(el, style, value) {
 		el.style[style] = value;
 	},
+	showLayer: function showLayer(el) {
+		el.style.display = "block";
+	},
+	closeLayer: function closeLayer(el) {
+		el.style.display = "none";
+	},
 
 	//check null or undefined
 	isExist: function isExist(data) {
@@ -180,7 +186,7 @@ var CommonComponent = (function () {
 	}, {
 		key: "_addOnPlugin",
 		value: function _addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
-			var sFunctionName = CommonUtil.getFnName(fnPlugin);
+			var sFunctionName = _cu.getFnName(fnPlugin);
 			if (aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
 			htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
 			return htPluginInstance[sFunctionName];
@@ -434,7 +440,6 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "handlerInputFocus",
 		value: function handlerInputFocus(evt) {
-			//CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");
 			this.execAfterFocus(evt);
 		}
 
@@ -455,11 +460,11 @@ var SmartSearch = (function (_CommonComponent2) {
 			var sInputData = this.elInputField.value;
 			console.log("input evet fired : ", sInputData);
 
-			if (sInputData.length > 0) CommonUtil.setCSS(this.elClearQueryBtn, "display", "inline-block");else CommonUtil.setCSS(this.elClearQueryBtn, "display", "none");
+			if (sInputData.length > 0) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");else _cu.closeLayer(this.elClearQueryBtn);
 
 			//after input word, must hide a recent word layer
 			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-			if (oRecentWordPlugin) oRecentWordPlugin.elRecentWordLayer.style.display = "none";
+			if (oRecentWordPlugin) _cu.closeLayer(oRecentWordPlugin.elRecentWordLayer);
 
 			if (typeof this.htCachedData[sInputData] === "undefined") this._AutoCompleteRequestManager(sInputData);else this._AutoCompleteRequestManager(sInputData, this.htCachedData[sInputData]);
 		}
@@ -468,11 +473,14 @@ var SmartSearch = (function (_CommonComponent2) {
 		value: function handlerClearInputValue(evt) {
 			this.elInputField.value = "";
 			this.handlerCloseAllLayer();
+			//_cu.setCSS(this.elClearQueryBtn, "display", "none");
+			_cu.closeLayer(this.elClearQueryBtn);
 		}
 	}, {
 		key: "handlerCloseAllLayer",
 		value: function handlerCloseAllLayer(evt) {
-			CommonUtil.setCSS(this.elAutoCompleteLayer, "display", "none");
+			//_cu.setCSS(this.elAutoCompleteLayer, "display", "none");
+			_cu.closeLayer(this.elAutoCompleteLayer);
 		}
 	}, {
 		key: "execAfterFocus",
@@ -481,20 +489,16 @@ var SmartSearch = (function (_CommonComponent2) {
 			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 			if (!oRecentWordPlugin) return;
 			oRecentWordPlugin.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
-
-			//execute other plugin or other logic.
 		}
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
 			this.htFn.fnInsertAutoCompleteWord(sResult);
-			this.elAutoCompleteLayer.style.display = "block";
+			//_cu.setCSS(this.elAutoCompleteLayer, "display", "block");
+			_cu.showLayer(this.elAutoCompleteLayer);
 
 			//save history
 			this.htCachedData[sQuery] = sResult;
-
-			//save keyword to localstorage
-			//this.saveKeyword(sQuery);
 		}
 	}, {
 		key: "_AutoCompleteRequestManager",
@@ -514,7 +518,7 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "_makeAutoCompleteJSONPRequest",
 		value: function _makeAutoCompleteJSONPRequest(sQuery, sURL) {
-			CommonUtil.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this, sQuery));
+			_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this, sQuery));
 		}
 	}, {
 		key: "_makeAutoCompleteAjaxRequest",
@@ -522,7 +526,7 @@ var SmartSearch = (function (_CommonComponent2) {
 			// hardcoded url for test.
 			var url = "../jsonMock/" + sQuery + ".json";
 			var aHeaders = [["Content-Type", "application/json"]];
-			CommonUtil.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
+			_cu.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
 				sQuery: sQuery,
 				nTime: Date.now()
 			}), "get", aHeaders, sQuery);
