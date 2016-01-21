@@ -22,6 +22,7 @@ a:link {
 }
 
 .search-form{
+    margin : 0px auto;
     width : 90%;
     padding: 20px 12px 10px 20px;
     font: 13px Arial, Helvetica, sans-serif;
@@ -48,10 +49,12 @@ a:link {
     border: 1px solid #E0D7D7;
     border-radius: 50%;
     padding: .4em;
-    width: 5%;
+    width: 25px;
+    height: 25px;
     display: inline-block;
     text-align: center;
-    line-height: 1.2em;
+    line-height: 23px;
+    margin-left: 10%;
 }
 
 .search-form div.inputWrap {
@@ -129,31 +132,35 @@ a:link {
     padding-top: 0.5em;
     padding-bottom: 0.6em;
     padding-left: 0.3em;
-    font-size: 1.1em;
+    font-size: 1.4em;
     border-bottom: 1px solid #E8E6E6;
 }
 
-.closeLayer {
-    position: absolute;
-    top: 170px;
-    left: 80%;
+.closeLayer, .deleteWord {
+    font-size: 1.3em;
+    color :#fff;
+    background-color: none;
     border: 0;
     border-radius: 10%;
-    background-color: none;
-    color: #B3B3B3;
+    position: absolute;
+    top: 170px;
 }
 
-button.deleteWord {
-    position: absolute;
-    top: 170px;
-    left: 60%;
-    border: 0;
-    border-radius: 10%;
-    background-color: none;
-    color: #B3B3B3;
+.closeLayer {
+    right: 5%;
+}
+
+.deleteWord {
+    right: 10%;
 }
 
 @media only screen and (max-width: 500px) {
+    .clearQuery{
+        margin-left: 0;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+    }
 }
 
          
