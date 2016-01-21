@@ -18,12 +18,14 @@ class SmartSearch extends CommonComponent {
 
 	_setInitValue() {
 		const _cssSelector = {
+			inputFieldWrap 		: ".inputWrap",
 			inputField 			: ".input-field",
 			autoCompleteWrap 	: ".auto-complete-wrap",
 			closeLayer 			: ".closeLayer",
 			clearQueryBtn 		: ".clearQuery"
 		} 
 
+		this.elInputFieldWrap		= this.elTarget.querySelector(_cssSelector.inputFieldWrap);
 		this.elInputField 			= this.elTarget.querySelector(_cssSelector.inputField);
 		this.elAutoCompleteLayer 	= this.elTarget.querySelector(_cssSelector.autoCompleteWrap);
 		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(_cssSelector.closeLayer);
@@ -49,7 +51,8 @@ class SmartSearch extends CommonComponent {
 	}
 
 	_registerEvents() {
-		this.elInputField.addEventListener("focus" , 	(evt) => this.handlerInputFocus(evt));
+		this.elInputFieldWrap.addEventListener("touchend", (evt) => this.handlerInputWrap(evt));
+		//this.elInputField.addEventListener("focus" , 	(evt) => this.handlerInputFocus(evt));
 		this.elInputField.addEventListener("keypress", 	(evt) => this.handlerInputKeyPress(evt));
 		this.elInputField.addEventListener("keydown", 	(evt) => this.handlerInputKeydown(evt));
 		this.elInputField.addEventListener("input", 	(evt) => this.handlerInputKeyInput(evt));
@@ -68,10 +71,17 @@ class SmartSearch extends CommonComponent {
 		this.htRequestOption = htRequestOption;
 	} 
 
-	/* start EVENT-HANDLER */ 
+	handlerInputWrap(evt) {
+		this.execAfterFocus(evt);
+		this.elInputField.focus();
+	}
+
+	//deprecated. to move handlerInputWrap method.
+	/*
 	handlerInputFocus(evt) {
 		this.execAfterFocus(evt);
 	}
+	*/
 
 	//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
 	handlerInputKeyPress(evt) {}
