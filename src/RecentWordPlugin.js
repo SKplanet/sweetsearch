@@ -40,7 +40,7 @@ class RecentWordPlugin extends CommonComponent {
 
 	_registerEvents() {
 		this.elClearRecentWordBtn.addEventListener("touchend", (evt) => { this.handlerClearRecentWord(evt)});	
-		this.elCloseButtonRWL.addEventListener("touchend", (evt) => { this.handlerCloseAllLayer(evt)});
+		this.elCloseButtonRWL.addEventListener("touchend", (evt) => { this.handlerCloseLayer(evt)});
 	}
 
 	handlerClearRecentWord(evt) {
@@ -50,7 +50,7 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	//TODO. duplicate
-	handlerCloseAllLayer(evt) {
+	handlerCloseLayer(evt) {
 		this.elRecentWordLayer.style.display = "none";
 	}
 

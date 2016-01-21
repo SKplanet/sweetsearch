@@ -243,7 +243,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 				_this2.handlerClearRecentWord(evt);
 			});
 			this.elCloseButtonRWL.addEventListener("touchend", function (evt) {
-				_this2.handlerCloseAllLayer(evt);
+				_this2.handlerCloseLayer(evt);
 			});
 		}
 	}, {
@@ -257,8 +257,8 @@ var RecentWordPlugin = (function (_CommonComponent) {
 		//TODO. duplicate
 
 	}, {
-		key: "handlerCloseAllLayer",
-		value: function handlerCloseAllLayer(evt) {
+		key: "handlerCloseLayer",
+		value: function handlerCloseLayer(evt) {
 			this.elRecentWordLayer.style.display = "none";
 		}
 	}, {
@@ -405,7 +405,7 @@ var SmartSearch = (function (_CommonComponent2) {
 				return _this4.handlerInputKeyInput(evt);
 			});
 			this.elCloseButton.addEventListener("touchend", function (evt) {
-				return _this4.handlerCloseAllLayer(evt);
+				return _this4.handlerCloseLayer(evt);
 			});
 			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
 				return _this4.handlerClearInputValue(evt);
@@ -461,12 +461,12 @@ var SmartSearch = (function (_CommonComponent2) {
 		key: "handlerClearInputValue",
 		value: function handlerClearInputValue(evt) {
 			this.elInputField.value = "";
-			this.handlerCloseAllLayer();
+			this.handlerCloseLayer();
 			_cu.closeLayer(this.elClearQueryBtn);
 		}
 	}, {
-		key: "handlerCloseAllLayer",
-		value: function handlerCloseAllLayer(evt) {
+		key: "handlerCloseLayer",
+		value: function handlerCloseLayer(evt) {
 			_cu.closeLayer(this.elAutoCompleteLayer);
 		}
 	}, {

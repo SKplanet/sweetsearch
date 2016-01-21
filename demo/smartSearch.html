@@ -122,6 +122,23 @@
     })(document);
 
     </script>
+
+    <script>
+    //support Desktop ENV.
+    (function () {
+        document.querySelector(".recent-word-wrap .closeLayer").
+            addEventListener("mousedown", function(){ 
+                oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
+        });
+
+        document.querySelector(".auto-complete-wrap .closeLayer").
+            addEventListener("mousedown", function(){
+                oSS.handlerCloseLayer();
+        });
+
+    })(); 
+    </script>
+
     </body>
 </html>
 
