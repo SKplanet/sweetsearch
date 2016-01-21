@@ -125,18 +125,23 @@
 
     <script>
     //support Desktop ENV.
-    (function () {
-        document.querySelector(".recent-word-wrap .closeLayer").
+    (function (doc) {
+        doc.querySelector(".recent-word-wrap .closeLayer").
             addEventListener("mousedown", function(){ 
                 oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
         });
 
-        document.querySelector(".auto-complete-wrap .closeLayer").
+        doc.querySelector(".auto-complete-wrap .closeLayer").
             addEventListener("mousedown", function(){
                 oSS.handlerCloseLayer();
         });
 
-    })(); 
+        doc.querySelector(".clearQuery").
+            addEventListener("mousedown", function(){ 
+                oSS.handlerClearInputValue();
+        });
+
+    })(document); 
     </script>
 
     </body>
