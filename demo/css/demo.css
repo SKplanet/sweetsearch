@@ -121,7 +121,7 @@ a:link {
 .auto-complete-wrap {
     margin-top: -3px;
     overflow: auto;
-    max-height: 400px;
+    max-height: 600px;
 }
 
 .recent-word-wrap {
@@ -165,6 +165,9 @@ a:link {
         width: 20px;
         height: 20px;
         line-height: 20px;
+    }
+    .auto-complete-wrap {
+        max-height: 400px;
     }
 }
 
