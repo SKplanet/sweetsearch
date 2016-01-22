@@ -134,29 +134,33 @@ a:link {
 
 .ul-wrap > li {
     display: block;
-    padding-top: 0.5em;
-    padding-bottom: 0.6em;
-    padding-left: 0.3em;
+    padding : 0.5em 0.3em;
     font-size: 1.4em;
     border-bottom: 1px solid #E8E6E6;
 }
 
+.footer-button-wrap {
+    overflow: hidden;
+    padding : 0.5em 0.3em;
+}
+
 .closeLayer, .deleteWord {
-    font-size: 1.3em;
-    color :#fff;
-    background-color: #7D7D7B;
-    border: 0;
+    font-size: 1em;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid lightgrey;
     border-radius: 10%;
-    position: absolute;
-    top: 170px;
+    padding: 0.5em 0.6em;
 }
 
 .closeLayer {
-    right: 5%;
+    float: right;
+    margin-right: 5%;
 }
 
 .deleteWord {
-    right: 10%;
+    float: right;
+    margin-right: 10%;
 }
 
 @media only screen and (max-width: 500px) {
@@ -166,6 +170,11 @@ a:link {
         height: 20px;
         line-height: 20px;
     }
+
+    .ul-wrap > li {
+        font-size: 1.2em;
+    }
+
     .auto-complete-wrap {
         max-height: 400px;
     }
