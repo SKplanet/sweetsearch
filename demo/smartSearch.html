@@ -154,7 +154,6 @@
             },
         }
 
-
         var _q = {
             recentCloseLayer : ".recent-word-wrap .closeLayer",
             autoCloseLayer   : ".auto-complete-wrap .closeLayer",
@@ -171,9 +170,7 @@
         });
 
         _u.on(_q.autoCloseLayer, "mousedown", oSS.handlerCloseLayer.bind(oSS));
-
         _u.on(_q.clearQuery , "mousedown", oSS.handlerClearInputValue.bind(oSS));
-
         _u.on(_q.inputWrap, "mousedown", oSS.handlerInputWrap.bind(oSS));
 
         //change selected LI 
