@@ -130,6 +130,8 @@
     <script>
     //support Desktop ENV.
     (function (doc) {
+
+        // Support Mouse Events.
         doc.querySelector(".recent-word-wrap .closeLayer").
             addEventListener("mousedown", function(){ 
                 oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
@@ -143,6 +145,15 @@
         doc.querySelector(".clearQuery").
             addEventListener("mousedown", function(){ 
                 oSS.handlerClearInputValue();
+        });
+
+        doc.querySelector(".auto-complete-wrap .ul-wrap").addEventListener("mouseover", function(evt){
+            var _el = evt.target;
+            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+            var _oldSelectedLI = elCurrentLI.parentElement.querySelector(".selectedLI");
+
+            if(_oldSelectedLI) _oldSelectedLI.className = "";
+            elCurrentLI.className += "selectedLI";
         });
 
     })(document); 

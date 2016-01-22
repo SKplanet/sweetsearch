@@ -129,7 +129,7 @@ a:link {
 }
 
 .ul-wrap {
-    1padding-top : 1em;
+    cursor: pointer;
 }
 
 .ul-wrap > li {
@@ -161,6 +161,10 @@ a:link {
 .deleteWord {
     float: right;
     margin-right: 10%;
+}
+
+.selectedLI {
+    background-color: rgba(206, 206, 206, 0.18);
 }
 
 @media only screen and (max-width: 500px) {
