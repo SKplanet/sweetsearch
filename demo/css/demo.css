@@ -112,15 +112,20 @@ a:link {
 
 .auto-complete-wrap, .recent-word-wrap {
     width: 85%;
-    height: 200px;
+    height: auto;
     border: 1px solid rgba(115, 115, 115, 0.31);
     position: relative;
     border-top: none;
 }
 
 .auto-complete-wrap {
-   margin-top: -3px;
-   overflow: auto;
+    margin-top: -3px;
+    overflow: auto;
+    max-height: 400px;
+}
+
+.recent-word-wrap {
+    height: 200px;
 }
 
 .ul-wrap {
@@ -139,7 +144,7 @@ a:link {
 .closeLayer, .deleteWord {
     font-size: 1.3em;
     color :#fff;
-    background-color: none;
+    background-color: #7D7D7B;
     border: 0;
     border-radius: 10%;
     position: absolute;
