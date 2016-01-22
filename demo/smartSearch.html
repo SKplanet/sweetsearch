@@ -38,8 +38,8 @@
             <section class="recent-word-wrap" style="display:none;">
                 <ul class="ul-wrap"></ul>
                  <div class="footer-button-wrap">
-                    <button class="deleteWord" style="display:none">전체삭제</button>
                     <button class="closeLayer">닫기</button>
+                    <button class="deleteWord" style="display:none">전체삭제</button>
                 </div>
             </section>
         </div>
@@ -93,6 +93,8 @@
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            //5개만,
+            aData.length = 5;
             aData.forEach( function(v) {
                 result = sTemplate.replace(/\[%sKeyword%\]/, v);       
                 sHTML += result;
@@ -131,43 +133,59 @@
     //support Desktop ENV.
     (function (doc) {
 
+        var _u = {
+            on : function(el,eType, handler) {
+                doc.querySelector(el).addEventListener(eType, handler);
+            }
+        }
+
+        var _h = {
+            toggleSelectedBG : function(evt) {
+                var _el = evt.target;
+                var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+                var _oldSelectedLI = elCurrentLI.parentElement.querySelector(".selectedLI");
+
+                if(_oldSelectedLI) _oldSelectedLI.className = "";
+                elCurrentLI.className += "selectedLI";
+            },
+            clearSelectedGB : function(evt) {
+                var _oldSelectedLI = this.querySelector(".selectedLI");
+                if(_oldSelectedLI) _oldSelectedLI.className = "";
+            },
+        }
+
+
+        var _q = {
+            recentCloseLayer : ".recent-word-wrap .closeLayer",
+            autoCloseLayer   : ".auto-complete-wrap .closeLayer",
+            clearQuery       : ".clearQuery",
+            inputWrap        : ".inputWrap",
+            autoULWrap       : ".auto-complete-wrap .ul-wrap",
+            recentULWrap     : ".recent-word-wrap .ul-wrap",
+            realForm         : ".search-form form",
+        }
+
         // Support Mouse Events.
-        doc.querySelector(".recent-word-wrap .closeLayer").addEventListener("mousedown", function(){
+        _u.on(_q.recentCloseLayer, "mousedown", function(){
             oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
         });
 
-        doc.querySelector(".auto-complete-wrap .closeLayer").addEventListener("mousedown", function(){
-            oSS.handlerCloseLayer();
-        });
+        _u.on(_q.autoCloseLayer, "mousedown", oSS.handlerCloseLayer.bind(oSS));
 
-        doc.querySelector(".clearQuery"). addEventListener("mousedown", function(){
-            oSS.handlerClearInputValue();
-        });
+        _u.on(_q.clearQuery , "mousedown", oSS.handlerClearInputValue.bind(oSS));
 
-        doc.querySelector(".inputWrap").addEventListener("mousedown", function(evt){
-            oSS.handlerInputWrap();
-        });
+        _u.on(_q.inputWrap, "mousedown", oSS.handlerInputWrap.bind(oSS));
 
         //change selected LI 
-        doc.querySelector(".auto-complete-wrap .ul-wrap").addEventListener("mouseover", function(evt){
-            var _el = evt.target;
-            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
-            var _oldSelectedLI = elCurrentLI.parentElement.querySelector(".selectedLI");
-
-            if(_oldSelectedLI) _oldSelectedLI.className = "";
-            elCurrentLI.className += "selectedLI";
-        });
-
+        _u.on(_q.autoULWrap , "mouseover", _h.toggleSelectedBG);
+        _u.on(_q.recentULWrap, "mouseover", _h.toggleSelectedBG);
+     
         //rollback backgroundColor when mouseover.
-        doc.querySelector(".auto-complete-wrap .ul-wrap").addEventListener("mouseout", function(evt){
-            var _oldSelectedLI = this.querySelector(".selectedLI");
-            if(_oldSelectedLI) _oldSelectedLI.className = "";
-        });
+        _u.on(_q.autoULWrap, "mouseout", _h.clearSelectedGB);
+        _u.on(_q.recentULWrap, "mouseout", _h.clearSelectedGB);
 
         //prevent Form submit.
-        doc.querySelector(".search-form form").addEventListener("submit", function(evt){
-          evt.preventDefault();
-        });
+        _u.on(_q.realForm, "submit", function(evt){ evt.preventDefault()});
 
     })(document); 
     </script>

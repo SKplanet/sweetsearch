@@ -125,7 +125,7 @@ a:link {
 }
 
 .recent-word-wrap {
-    height: 200px;
+    1height: 200px;
 }
 
 .ul-wrap {
@@ -149,7 +149,6 @@ a:link {
     color: #000;
     background-color: #fff;
     border: 1px solid lightgrey;
-    border-radius: 10%;
     padding: 0.5em 0.6em;
 }
 
@@ -160,7 +159,7 @@ a:link {
 
 .deleteWord {
     float: right;
-    margin-right: 10%;
+    margin-right: 2%;
 }
 
 .selectedLI {
