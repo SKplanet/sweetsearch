@@ -13,7 +13,7 @@
         <div class="search-form">
             <div class="search-form-heading"> Smart Search </div>
             <div class="formContainer">
-                <form action="" method="post">
+                <form id="search-form" action="" method="post">
                     <div class="inputWrap">
                         <input type="text" class="input-field" name="field1" value="" 
                             autocomplete="off"
@@ -132,21 +132,23 @@
     (function (doc) {
 
         // Support Mouse Events.
-        doc.querySelector(".recent-word-wrap .closeLayer").
-            addEventListener("mousedown", function(){ 
-                oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
+        doc.querySelector(".recent-word-wrap .closeLayer").addEventListener("mousedown", function(){
+            oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
         });
 
-        doc.querySelector(".auto-complete-wrap .closeLayer").
-            addEventListener("mousedown", function(){
-                oSS.handlerCloseLayer();
+        doc.querySelector(".auto-complete-wrap .closeLayer").addEventListener("mousedown", function(){
+            oSS.handlerCloseLayer();
         });
 
-        doc.querySelector(".clearQuery").
-            addEventListener("mousedown", function(){ 
-                oSS.handlerClearInputValue();
+        doc.querySelector(".clearQuery"). addEventListener("mousedown", function(){
+            oSS.handlerClearInputValue();
         });
 
+        doc.querySelector(".inputWrap").addEventListener("mousedown", function(evt){
+            oSS.handlerInputWrap();
+        });
+
+        //change selected LI 
         doc.querySelector(".auto-complete-wrap .ul-wrap").addEventListener("mouseover", function(evt){
             var _el = evt.target;
             var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
@@ -154,6 +156,17 @@
 
             if(_oldSelectedLI) _oldSelectedLI.className = "";
             elCurrentLI.className += "selectedLI";
+        });
+
+        //rollback backgroundColor when mouseover.
+        doc.querySelector(".auto-complete-wrap .ul-wrap").addEventListener("mouseout", function(evt){
+            var _oldSelectedLI = this.querySelector(".selectedLI");
+            if(_oldSelectedLI) _oldSelectedLI.className = "";
+        });
+
+        //prevent Form submit.
+        doc.querySelector(".search-form form").addEventListener("submit", function(evt){
+          evt.preventDefault();
         });
 
     })(document); 
