@@ -101,7 +101,7 @@ class SmartSearch extends CommonComponent {
 		if(oRecentWordPlugin) _cu.closeLayer(oRecentWordPlugin.elRecentWordLayer);
 
 		if (typeof this.htCachedData[sInputData] === "undefined") this._AutoCompleteRequestManager(sInputData);
-		else this._AutoCompleteRequestManager(sInputData, this.htCachedData[sInputData]);
+		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 	}
 
 	handlerClearInputValue(evt) {
