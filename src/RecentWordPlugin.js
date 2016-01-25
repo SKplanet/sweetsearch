@@ -54,6 +54,10 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer.style.display = "none";
 	}
 
+	saveQuery(sQuery) {
+		this.oStorage.saveKeyword(sQuery);
+	}
+
 	showRecentSearchWord() {
 		let sData = this.oStorage.getKeywords();
 		if(sData === null || sData === "") return;

@@ -105,17 +105,22 @@
             elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
         }
 
+        //set css when select item and get text.
         var fnSelectAutoCompleteWord = function(_el) {
-            elForm.submit = function() { return false};
-
             //highlight selected item.
             var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
             elCurrentLI.className += "selectedLI";
 
             //submit form with custom value.
             var sText = elCurrentLI.querySelector("span").innerText.trim();
-            doc.querySelector(".inputWrap input").value = sText;
-            location.href = "./SearchResult.html?q=" + sText;
+
+            return sText;
+        }
+
+        //set submit custom url.
+        var fnSubmitForm = function(sQuery) {
+            var url = "./SearchResult.html?q=" + sQuery;
+             location.href = url;
         }
 
         oSS = new SmartSearch(elFormComtainer, {});
@@ -133,6 +138,7 @@
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
             'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
+            'fnSubmitForm' : fnSubmitForm,
         });
 
         oSS.addOnPlugin(RecentWordPlugin)
@@ -201,10 +207,10 @@
         });
 
         //Form submit.
-        _u.on(_q.realForm, "submit", function(evt){ 
-            evt.preventDefault();
-            location.href = "./SearchResult.html?q=" + doc.querySelector(".inputWrap input").value;
-        });
+        // _u.on(_q.realForm, "submit", function(evt){ 
+        //     evt.preventDefault();
+        //     location.href = "./SearchResult.html?q=" + doc.querySelector(".inputWrap input").value;
+        // });
 
     })(document); 
     </script>

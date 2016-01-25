@@ -23,7 +23,8 @@ class SmartSearch extends CommonComponent {
 			autoCompleteWrap 	: ".auto-complete-wrap",
 			closeLayer 			: ".closeLayer",
 			clearQueryBtn 		: ".clearQuery",
-			autoULWrap			: ".auto-complete-wrap .ul-wrap"
+			autoULWrap			: ".auto-complete-wrap .ul-wrap",
+			realForm 			: "#search-form"
 		} 
 
 		this.elInputFieldWrap		= this.elTarget.querySelector(_s.inputFieldWrap);
@@ -32,6 +33,7 @@ class SmartSearch extends CommonComponent {
 		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(_s.closeLayer);
 		this.elClearQueryBtn 		= this.elTarget.querySelector(_s.clearQueryBtn);
 		this.elAutoULWrap			= this.elAutoCompleteLayer.querySelector(_s.autoULWrap);
+		this.elForm 				= this.elTarget.querySelector(_s.realForm);
 		this.htCachedData 			= {};
 
 		//plugins
@@ -46,10 +48,13 @@ class SmartSearch extends CommonComponent {
 		}
 	}
 
+	// callback list of this Component.
 	_setDefaultFunction() {
+		//TODO rearrange.(maybe remove function)
 		this._htDefaultFunction = {
 			'fnInsertAutoCompleteWord' : function(){},
-			'fnSelectAutoCompleteWord' : function(){}
+			'fnSelectAutoCompleteWord' : function(){},
+			'fnSubmitForm' : function(){}
 		}
 	}
 
@@ -65,6 +70,8 @@ class SmartSearch extends CommonComponent {
 
 		this.elAutoULWrap.addEventListener("touchstart", (evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
 		this.elAutoULWrap.addEventListener("touchend", (evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
+
+		this.elForm.addEventListener("submit", (evt) => this.handlerSubmitForm(evt));
 	}
 
 
@@ -126,10 +133,22 @@ class SmartSearch extends CommonComponent {
 	}
 
 	handlerSelectAutoCompletedWordTouchEnd(evt) {
-		var nDiff = this.htTouchStartSelectedWord.y - evt.changedTouches[0].pageY;
-		if(nDiff !== 0) return;
-		if(_isExecuteTouchScoll(evt.changedTouches[0].pageY)) return;
-		this.htFn.fnSelectAutoCompleteWord(evt.target);
+		let nowPageY = evt.changedTouches[0].pageY;
+		if(this._isExecuteTouchScoll(nowPageY)) return;
+
+		let sText = this.htFn.fnSelectAutoCompleteWord(evt.target);
+		this.elInputField.value = sText;
+
+		this.handlerSubmitForm(null, sText);
+	}
+
+	handlerSubmitForm(evt, sQuery) {
+        if(evt) evt.preventDefault();
+        sQuery = sQuery || this.elInputField.value;
+		this.htFn.fnSubmitForm(sQuery);
+
+		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
+		if(oRecentWordPlugin) oRecentWordPlugin.saveQuery(sQuery);
 	}
 
 	_isExecuteTouchScoll(pageY) {
