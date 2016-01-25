@@ -105,10 +105,15 @@
         }
 
         var fnSelectAutoCompleteWord = function(_el) {
-            var sText = (_el.nodeName === "LI") ? _el.querySelector("span").innerText : _el.innerText;
-            sText = sText.trim();
-            doc.querySelector(".inputWrap input").value = sText;
             elForm.submit = function() { return false};
+
+            //highlight selected item.
+            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+            elCurrentLI.className += "selectedLI";
+
+            //submit form with custom value.
+            var sText = elCurrentLI.querySelector("span").innerText.trim();
+            doc.querySelector(".inputWrap input").value = sText;
             location.href = "./SearchResult.html?q=" + sText;
         }
 

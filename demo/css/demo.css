@@ -165,7 +165,7 @@ a:link {
 }
 
 .selectedLI {
-    background-color: rgba(206, 206, 206, 0.18);
+    background-color: rgba(206, 206, 206, 0.70);
 }
 
 @media only screen and (max-width: 500px) {
