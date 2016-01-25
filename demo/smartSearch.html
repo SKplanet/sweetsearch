@@ -190,6 +190,10 @@
         _u.on(_q.autoULWrap, "mouseout", _h.clearSelectedGB);
         _u.on(_q.recentULWrap, "mouseout", _h.clearSelectedGB);
 
+        _u.on(_q.autoULWrap, "mouseup", function(evt) {
+            oSS.htFn.fnSelectAutoCompleteWord(evt.target)
+        });
+
         //Form submit.
         _u.on(_q.realForm, "submit", function(evt){ 
             evt.preventDefault();
