@@ -101,7 +101,13 @@
             });
             elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
         }
-        
+
+        var fnSelectAutoCompleteWord = function(_el) {
+            console.log(_el);
+            var sText = (_el.nodeName === "LI") ? _el.querySelector("span").innerText : _el.innerText;
+            document.querySelector(".inputWrap input").value = sText.trim();
+            return sText.trim();
+        }
 
         oSS = new SmartSearch(document.querySelector(".search-form"), {
         });
@@ -118,6 +124,7 @@
     
         oSS.registerCallback({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
+            'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
         });
 
         oSS.addOnPlugin(RecentWordPlugin)

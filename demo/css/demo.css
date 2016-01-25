@@ -130,6 +130,8 @@ a:link {
 
 .ul-wrap {
     cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .ul-wrap > li {
@@ -179,7 +181,7 @@ a:link {
     }
 
     .auto-complete-wrap {
-        max-height: 400px;
+        max-height: 480px;
     }
 }
 

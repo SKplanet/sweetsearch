@@ -17,19 +17,21 @@ class SmartSearch extends CommonComponent {
 	}
 
 	_setInitValue() {
-		const _cssSelector = {
+		const _s = {
 			inputFieldWrap 		: ".inputWrap",
 			inputField 			: ".input-field",
 			autoCompleteWrap 	: ".auto-complete-wrap",
 			closeLayer 			: ".closeLayer",
-			clearQueryBtn 		: ".clearQuery"
+			clearQueryBtn 		: ".clearQuery",
+			autoULWrap			: ".auto-complete-wrap .ul-wrap"
 		} 
 
-		this.elInputFieldWrap		= this.elTarget.querySelector(_cssSelector.inputFieldWrap);
-		this.elInputField 			= this.elTarget.querySelector(_cssSelector.inputField);
-		this.elAutoCompleteLayer 	= this.elTarget.querySelector(_cssSelector.autoCompleteWrap);
-		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(_cssSelector.closeLayer);
-		this.elClearQueryBtn 		= this.elTarget.querySelector(_cssSelector.clearQueryBtn);
+		this.elInputFieldWrap		= this.elTarget.querySelector(_s.inputFieldWrap);
+		this.elInputField 			= this.elTarget.querySelector(_s.inputField);
+		this.elAutoCompleteLayer 	= this.elTarget.querySelector(_s.autoCompleteWrap);
+		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(_s.closeLayer);
+		this.elClearQueryBtn 		= this.elTarget.querySelector(_s.clearQueryBtn);
+		this.elAutoULWrap			= this.elAutoCompleteLayer.querySelector(_s.autoULWrap);
 		this.htCachedData 			= {};
 
 		//plugins
@@ -47,6 +49,7 @@ class SmartSearch extends CommonComponent {
 	_setDefaultFunction() {
 		this._htDefaultFunction = {
 			'fnInsertAutoCompleteWord' : function(){},
+			'fnSelectAutoCompleteWord' : function(){}
 		}
 	}
 
@@ -56,8 +59,11 @@ class SmartSearch extends CommonComponent {
 		this.elInputField.addEventListener("keypress", 	(evt) => this.handlerInputKeyPress(evt));
 		this.elInputField.addEventListener("keydown", 	(evt) => this.handlerInputKeydown(evt));
 		this.elInputField.addEventListener("input", 	(evt) => this.handlerInputKeyInput(evt));
+
 		this.elCloseButton.addEventListener("touchend", (evt) => this.handlerCloseLayer(evt));
 		this.elClearQueryBtn.addEventListener("touchend", (evt) => this.handlerClearInputValue(evt));
+
+		this.elAutoULWrap.addEventListener("touchend", (evt) => this.handlerSelectAutoCompletedWord(evt));
 	}
 
 
@@ -112,6 +118,10 @@ class SmartSearch extends CommonComponent {
 	
 	handlerCloseLayer(evt) {
 		_cu.closeLayer(this.elAutoCompleteLayer);
+	}
+
+	handlerSelectAutoCompletedWord(evt) {
+		let sSelectedText = this.htFn.fnSelectAutoCompleteWord(evt.target);
 	}
 
 	execAfterFocus(evt) {
