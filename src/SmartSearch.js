@@ -128,7 +128,14 @@ class SmartSearch extends CommonComponent {
 	handlerSelectAutoCompletedWordTouchEnd(evt) {
 		var nDiff = this.htTouchStartSelectedWord.y - evt.changedTouches[0].pageY;
 		if(nDiff !== 0) return;
+		if(_isExecuteTouchScoll(evt.changedTouches[0].pageY)) return;
 		this.htFn.fnSelectAutoCompleteWord(evt.target);
+	}
+
+	_isExecuteTouchScoll(pageY) {
+		var nDiff = this.htTouchStartSelectedWord.y - pageY;
+		if(nDiff !== 0) return true;
+		return false;
 	}
 
 	execAfterFocus(evt) {
