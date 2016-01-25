@@ -136,7 +136,7 @@ a:link {
 
 .ul-wrap > li {
     display: block;
-    padding : 0.5em 0.3em;
+    padding : 0.9em 0.3em;
     font-size: 1.4em;
     border-bottom: 1px solid #E8E6E6;
 }
@@ -181,7 +181,7 @@ a:link {
     }
 
     .auto-complete-wrap {
-        max-height: 480px;
+        1max-height: 480px;
     }
 }
 

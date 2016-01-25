@@ -1,0 +1,62 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<title>search result</title>
+	<style>
+		#wrap {
+			margin: 50px auto;
+		}
+		.query{
+			font-weight: bold;
+			font-size: 1.1em;
+			color : red;
+		}
+		button{
+			border: 1px solid grey;
+			background-color: #fff;
+			padding: 0.5em;
+			margin-top: 16px;
+			font-size: 1.2em;
+			color: grey;
+		}
+	</style>
+</head>
+<body>
+
+<div id="wrap">
+	<section>
+		<h1></h1>
+		<div><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, laboriosam at, accusantium praesentium vero doloribus sit eveniet delectus tempora natus mollitia, minus magnam perferendis doloremque dolore ipsum molestiae cumque nostrum. </span></div>
+	</section>
+	<button class="back"> Back </button>
+</div>
+	
+</body>
+
+<script>
+
+	document.addEventListener("DOMContentLoaded", function() {
+		registerEvents();
+		insertQuery();
+	})
+
+	function registerEvents() {
+		pushBack();
+	}
+
+	function pushBack() {
+		document.querySelector("button.back").addEventListener("click", function() {
+			window.history.back();
+		});
+	}
+	function insertQuery() {
+		var str = location.search;
+		if(str === "") return;
+		var sQuery = /^\?q=(.+)$/.exec(str)[1];
+		var sMatch = sQuery && decodeURIComponent(sQuery.replace(/\+/g, ' '));
+		document.querySelector("section > h1").innerHTML = 
+				"<span class='query'>\""+ sMatch +"\"</span> Search Result";
+	}
+</script>
+</html>
