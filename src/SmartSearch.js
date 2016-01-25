@@ -63,7 +63,8 @@ class SmartSearch extends CommonComponent {
 		this.elCloseButton.addEventListener("touchend", (evt) => this.handlerCloseLayer(evt));
 		this.elClearQueryBtn.addEventListener("touchend", (evt) => this.handlerClearInputValue(evt));
 
-		this.elAutoULWrap.addEventListener("touchend", (evt) => this.handlerSelectAutoCompletedWord(evt));
+		this.elAutoULWrap.addEventListener("touchstart", (evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
+		this.elAutoULWrap.addEventListener("touchend", (evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
 	}
 
 
@@ -120,8 +121,14 @@ class SmartSearch extends CommonComponent {
 		_cu.closeLayer(this.elAutoCompleteLayer);
 	}
 
-	handlerSelectAutoCompletedWord(evt) {
-		let sSelectedText = this.htFn.fnSelectAutoCompleteWord(evt.target);
+	handlerSelectAutoCompletedWordTouchStart(evt) {
+		this.htTouchStartSelectedWord = {'x' : evt.changedTouches[0].pageX, 'y' : evt.changedTouches[0].pageY};
+	}
+
+	handlerSelectAutoCompletedWordTouchEnd(evt) {
+		var nDiff = this.htTouchStartSelectedWord.y - evt.changedTouches[0].pageY;
+		if(nDiff !== 0) return;
+		this.htFn.fnSelectAutoCompleteWord(evt.target);
 	}
 
 	execAfterFocus(evt) {

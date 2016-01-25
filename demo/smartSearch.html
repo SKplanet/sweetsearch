@@ -53,6 +53,8 @@
     var oSS= null;
 
     (function(doc){
+        var elForm = doc.querySelector("#search-form");
+        var elFormComtainer = doc.querySelector(".search-form");
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
         var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
@@ -103,14 +105,14 @@
         }
 
         var fnSelectAutoCompleteWord = function(_el) {
-            console.log(_el);
             var sText = (_el.nodeName === "LI") ? _el.querySelector("span").innerText : _el.innerText;
-            document.querySelector(".inputWrap input").value = sText.trim();
-            return sText.trim();
+            sText = sText.trim();
+            doc.querySelector(".inputWrap input").value = sText;
+            elForm.submit = function() { return false};
+            location.href = "./SearchResult.html?q=" + sText;
         }
 
-        oSS = new SmartSearch(document.querySelector(".search-form"), {
-        });
+        oSS = new SmartSearch(elFormComtainer, {});
 
         oSS.registerAutoCompleteData({ 
             sAutoCompleteURL : sAutoCompleteURL,
@@ -168,7 +170,7 @@
             inputWrap        : ".inputWrap",
             autoULWrap       : ".auto-complete-wrap .ul-wrap",
             recentULWrap     : ".recent-word-wrap .ul-wrap",
-            realForm         : ".search-form form",
+            realForm         : "#search-form",
         }
 
         // Support Mouse Events.
@@ -188,8 +190,12 @@
         _u.on(_q.autoULWrap, "mouseout", _h.clearSelectedGB);
         _u.on(_q.recentULWrap, "mouseout", _h.clearSelectedGB);
 
-        //prevent Form submit.
-        _u.on(_q.realForm, "submit", function(evt){ evt.preventDefault()});
+        //Form submit.
+        _u.on(_q.realForm, "submit", function(evt){ 
+            evt.preventDefault();
+
+            location.href = "./SearchResult.html?q=" + doc.querySelector(".inputWrap input").value;
+        });
 
     })(document); 
     </script>
