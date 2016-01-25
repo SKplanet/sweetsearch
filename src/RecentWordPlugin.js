@@ -55,9 +55,9 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	showRecentSearchWord() {
-		this.elRecentWordLayer.style.display = "block";
 		let sData = this.oStorage.getKeywords();
 		if(sData === null || sData === "") return;
+		this.elRecentWordLayer.style.display = "block";
 		this.elClearRecentWordBtn.style.display = "block";
 		let aData = JSON.parse(sData);
 		this.htFn.fnInsertRecentSearchWord(aData);
