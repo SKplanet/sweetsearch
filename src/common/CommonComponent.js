@@ -19,11 +19,11 @@ class CommonComponent {
 		});
 	}
 
-	_addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
-		let sFunctionName = _cu.getFnName(fnPlugin);
-		if(aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
-		htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
-		return htPluginInstance[sFunctionName];
-	}
+	// _addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
+	// 	let sFunctionName = _cu.getFnName(fnPlugin);
+	// 	if(aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
+	// 	htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
+	// 	return htPluginInstance[sFunctionName];
+	// }
 }
 

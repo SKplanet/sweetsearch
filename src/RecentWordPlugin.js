@@ -12,6 +12,7 @@ class RecentWordPlugin extends CommonComponent {
 		super.execOption(htOption, this._htDefaultOption, this.option);
 		this._setInitValue();
 		this._registerEvents();
+		this._setDefaultFunction();
 	}
 
 	_setInitValue() {
@@ -34,7 +35,6 @@ class RecentWordPlugin extends CommonComponent {
 
 	registerCallback(htFn) {
 		this.htFn = {};
- 		this._setDefaultFunction();
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 	}
 

@@ -9,11 +9,12 @@ class SmartSearch extends CommonComponent {
 	//TODO. think about moving super class.
 	init(htOption) {
 		this._setDefaultOption();
-		//option variable declaration
 		this.option = {};
 		super.execOption(htOption, this._htDefaultOption, this.option);
 		this._setInitValue();
 		this._registerEvents();
+		this._setDefaultFunction();
+		this._initPlugins();
 	}
 
 	_setInitValue() {
@@ -37,7 +38,7 @@ class SmartSearch extends CommonComponent {
 		this.htCachedData 			= {};
 
 		//plugins
-		this.aPluginList			= ['RecentWordPlugin'];
+		this.htPluginList			= {'RecentWordPlugin' : RecentWordPlugin};
 		this.htPluginInstance 		= {};
 
 	}
@@ -45,6 +46,9 @@ class SmartSearch extends CommonComponent {
 	//must be define full option name.
 	_setDefaultOption () {
 		this._htDefaultOption = {
+			'core' : {
+				'RecentWordPlugin' : true
+			},
 			'autoComplete' : {
 				requestType : 'jsonp',
 				sAutoCompleteURL : ""
@@ -64,7 +68,6 @@ class SmartSearch extends CommonComponent {
 
 	_registerEvents() {
 		this.elInputFieldWrap.addEventListener("touchend", (evt) => this.handlerInputWrap(evt));
-		//this.elInputField.addEventListener("focus" , 	(evt) => this.handlerInputFocus(evt));
 		this.elInputField.addEventListener("keypress", 	(evt) => this.handlerInputKeyPress(evt));
 		this.elInputField.addEventListener("keydown", 	(evt) => this.handlerInputKeydown(evt));
 		this.elInputField.addEventListener("input", 	(evt) => this.handlerInputKeyInput(evt));
@@ -78,11 +81,29 @@ class SmartSearch extends CommonComponent {
 		this.elForm.addEventListener("submit", (evt) => this.handlerSubmitForm(evt));
 	}
 
+	_initPlugins() {
+		Object.keys(this.htPluginList).forEach((v) => {
+			if(this.option.core[v] === "undefined") return;
+			this.htPluginInstance[v] = new this.htPluginList[v](this.elTarget);
+		});
+	}
 
 	registerCallback(htFn) {
 		this.htFn = {};
- 		this._setDefaultFunction();
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
+		this.registerPluginCallback(htFn);
+	}
+
+	registerPluginCallback(htFn) {
+		Object.keys(htFn).forEach((v) => {
+			Object.keys(this.htPluginInstance).forEach((v2) => {
+				if(typeof this.htPluginInstance[v2]._htDefaultFunction[v] !== "undefined") {
+					let htPluginFunction = {};
+					htPluginFunction[v] = htFn[v];
+					this.htPluginInstance[v2].registerCallback(htPluginFunction);
+				}
+			});
+		});
 	}
 
 	handlerInputWrap(evt) {
@@ -198,8 +219,8 @@ class SmartSearch extends CommonComponent {
 		"get", aHeaders, sQuery);
 	}
 
-	addOnPlugin(fnName) {
-		return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
-	}
+	// addOnPlugin(fnName) {
+	// 	return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
+	// }
 
 }

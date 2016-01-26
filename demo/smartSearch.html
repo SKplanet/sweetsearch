@@ -128,6 +128,9 @@
                 sAutoCompleteURL : sAutoCompleteURL,
                 requestType : 'jsonp'
             },
+            'core' : {
+                'RecentWordPlugin' : true
+            }
         });
 
         // oSS.registerAutoCompleteData({ 
@@ -144,12 +147,13 @@
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
             'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
             'fnSubmitForm' : fnSubmitForm,
+            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord
         });
 
-        oSS.addOnPlugin(RecentWordPlugin)
-            .registerCallback({
-                'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
-            });
+        // oSS.addOnPlugin(RecentWordPlugin)
+        //     .registerCallback({
+        //         'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+        //     });
 
     })(document);
 
