@@ -42,13 +42,17 @@ class SmartSearch extends CommonComponent {
 
 	}
 
+	//must be define full option name.
 	_setDefaultOption () {
 		this._htDefaultOption = {
-			//'bCircular' : false,
+			'autoComplete' : {
+				requestType : 'jsonp',
+				sAutoCompleteURL : ""
+			}
 		}
 	}
 
-	// callback list of this Component.
+	//must be define full option name.
 	_setDefaultFunction() {
 		//TODO rearrange.(maybe remove function)
 		this._htDefaultFunction = {
@@ -81,9 +85,9 @@ class SmartSearch extends CommonComponent {
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 	}
 
-	registerAutoCompleteData(htRequestOption) {
-		this.htRequestOption = htRequestOption;
-	} 
+	// registerAutoCompleteData(htRequestOption) {
+	// 	this.htRequestOption = htRequestOption;
+	// } 
 
 	handlerInputWrap(evt) {
 		this.execAfterFocus(evt);
@@ -174,13 +178,14 @@ class SmartSearch extends CommonComponent {
 	}
 
 	_AutoCompleteRequestManager(sQuery) {
-		let type = this.htRequestOption.requestType;
+		let type = this.option.autoComplete.requestType;
+		let url = this.option.autoComplete.sAutoCompleteURL;
 		switch(type) {
 			case 'jsonp':
-				this._makeAutoCompleteJSONPRequest(sQuery, this.htRequestOption.sAutoCompleteURL);
+				this._makeAutoCompleteJSONPRequest(sQuery,url);
 				break;
 			case 'ajax':
-				this._makeAutoCompleteAjaxRequest(sQuery, this.htRequestOption.sAutoCompleteURL);
+				this._makeAutoCompleteAjaxRequest(sQuery,url);
 				break;
 			default: 
 				//do something..

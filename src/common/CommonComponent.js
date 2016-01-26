@@ -5,11 +5,16 @@ class CommonComponent {
 	}
 
 	execOption (htValue, htDefaultValue, htStorage) {
-		Object.keys(htDefaultValue).forEach((v,i,o) => {
+		Object.keys(htDefaultValue).forEach((v) => {
 			if(typeof htValue[v] === "undefined") {
 				htStorage[v] = htDefaultValue[v];
 			} else {
-				htStorage[v] = htValue[v];
+                if(toString.call(htValue[v]) !== "[object Object]") {
+                	htStorage[v] = htValue[v];
+                	return;
+                }
+                htStorage[v] = {};
+				this.execOption.call(this, htValue[v], htDefaultValue[v],htStorage[v]); 
 			}
 		});
 	}

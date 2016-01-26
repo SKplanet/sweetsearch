@@ -123,12 +123,17 @@
              location.href = url;
         }
 
-        oSS = new SmartSearch(elFormComtainer, {});
-
-        oSS.registerAutoCompleteData({ 
-            sAutoCompleteURL : sAutoCompleteURL,
-            requestType : 'jsonp'
+        oSS = new SmartSearch(elFormComtainer, {
+            'autoComplete'   : {
+                sAutoCompleteURL : sAutoCompleteURL,
+                requestType : 'jsonp'
+            },
         });
+
+        // oSS.registerAutoCompleteData({ 
+        //     sAutoCompleteURL : sAutoCompleteURL,
+        //     requestType : 'jsonp'
+        // });
 
         // oSS.registerAutoCompleteData({ 
         //     sAutoCompleteURL : "",
