@@ -88,7 +88,7 @@ class SmartSearch extends CommonComponent {
 		});
 	}
 
-	registerCallback(htFn) {
+	onMethod(htFn) {
 		this.htFn = {};
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 		this.registerPluginCallback(htFn);
@@ -100,7 +100,7 @@ class SmartSearch extends CommonComponent {
 				if(typeof this.htPluginInstance[v2]._htDefaultFunction[v] !== "undefined") {
 					let htPluginFunction = {};
 					htPluginFunction[v] = htFn[v];
-					this.htPluginInstance[v2].registerCallback(htPluginFunction);
+					this.htPluginInstance[v2].onMethod(htPluginFunction);
 				}
 			});
 		});

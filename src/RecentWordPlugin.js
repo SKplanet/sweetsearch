@@ -33,7 +33,7 @@ class RecentWordPlugin extends CommonComponent {
 		}
 	}
 
-	registerCallback(htFn) {
+	onMethod(htFn) {
 		this.htFn = {};
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 	}

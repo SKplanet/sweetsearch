@@ -132,18 +132,8 @@
                 'RecentWordPlugin' : true
             }
         });
-
-        // oSS.registerAutoCompleteData({ 
-        //     sAutoCompleteURL : sAutoCompleteURL,
-        //     requestType : 'jsonp'
-        // });
-
-        // oSS.registerAutoCompleteData({ 
-        //     sAutoCompleteURL : "",
-        //     requestType : 'ajax'
-        // });
     
-        oSS.registerCallback({
+        oSS.onMethod({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
             'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
             'fnSubmitForm' : fnSubmitForm,
