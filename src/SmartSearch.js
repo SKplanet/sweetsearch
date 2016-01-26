@@ -85,21 +85,11 @@ class SmartSearch extends CommonComponent {
 		super.execOption(htFn, this._htDefaultFunction, this.htFn);
 	}
 
-	// registerAutoCompleteData(htRequestOption) {
-	// 	this.htRequestOption = htRequestOption;
-	// } 
-
 	handlerInputWrap(evt) {
 		this.execAfterFocus(evt);
 		this.elInputField.focus();
 	}
 
-	//deprecated. to move handlerInputWrap method.
-	/*
-	handlerInputFocus(evt) {
-		this.execAfterFocus(evt);
-	}
-	*/
 
 	//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
 	handlerInputKeyPress(evt) {}
