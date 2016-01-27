@@ -130,9 +130,6 @@ class SmartSearch extends CommonComponent {
 		if(this.isExecuteTouchScroll(nowPageY)) return;
 
 		let sText = this.htFn.fnSelectAutoCompleteWord(evt.target);
-		this.elInputField.value = sText;
-
-		this.handlerSubmitForm(null, sText);
 	}
 
 	handlerSubmitForm(evt, sQuery) {

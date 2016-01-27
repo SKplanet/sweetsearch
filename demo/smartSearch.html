@@ -58,6 +58,7 @@
         var elFormComtainer = doc.querySelector(".search-form");
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
+        var elInputField        = doc.querySelector(".input-field");
         var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
 
         /*
@@ -114,7 +115,9 @@
             //submit form with custom value.
             var sText = elCurrentLI.querySelector("span").innerText.trim();
 
-            return sText;
+            //must be code.
+            elInputField.value = sText;
+            oSS.handlerSubmitForm(null,sText);
         }
 
         var fnSelectRecentSearchWord = function(_el) {
@@ -125,7 +128,9 @@
             //submit form with custom value.
             var sText = elCurrentLI.querySelector("span").innerText.trim();
 
-            return sText;
+            //must be code.
+            elInputField.value = sText;
+            oSS.handlerSubmitForm(null,sText);
         }
 
         //set submit custom url.

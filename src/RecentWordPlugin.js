@@ -60,11 +60,7 @@ class RecentWordPlugin extends CommonComponent {
 	handlerSelectRecentWordTouchEnd(evt) {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
-
-		let sText = this.htFn.fnSelectRecentSearchWord(evt.target);
-		console.log(sText);
-		//this.elInputField.value = sText;
-		//this.handlerSubmitForm(null, sText);
+		this.htFn.fnSelectRecentSearchWord(evt.target);
 	}
 
 	isExecuteTouchScroll(pageY) {
