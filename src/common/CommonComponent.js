@@ -30,7 +30,7 @@ class CommonComponent {
 	getPluginInstance(htPluginList, htOptionList, elTarget) {
 		let htPluginInstance = {};
 		Object.keys(htPluginList).forEach((v) => {
-			if(htOptionList[v] === "undefined") return;
+			if(htOptionList[v] === "undefined" || !htOptionList[v].usage) return;
 			htPluginInstance[v] = new htPluginList[v](elTarget, htOptionList[v]);
 		});
 		return htPluginInstance;
