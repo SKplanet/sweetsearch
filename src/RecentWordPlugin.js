@@ -13,7 +13,7 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	setInitValue() {
-		const htDefaultFn = ['fnInsertRecentSearchWord'];
+		let htDefaultFn = ['fnInsertRecentSearchWord'];
 		this.htDefaultOption = {}
 
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");

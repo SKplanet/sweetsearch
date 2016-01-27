@@ -15,8 +15,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	setInitValue() {
-
-		const s = {
+		let s = {
 			inputFieldWrap 		: ".inputWrap",
 			inputField 			: ".input-field",
 			autoCompleteWrap 	: ".auto-complete-wrap",
@@ -26,37 +25,38 @@ class SmartSearch extends CommonComponent {
 			realForm 			: "#search-form"
 		} 
 
-		const aDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
+		let aDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
 
 		this._htDefaultOption 	= {
-			'core' : {
-				'RecentWordPlugin' : true
+			'core' 			: {
+					'RecentWordPlugin' : true
 			},
-			'autoComplete' : {
-				requestType : 'jsonp',
-				sAutoCompleteURL : ""
+			'autoComplete' 	: {
+					requestType : 'jsonp',
+					sAutoCompleteURL : ""
 			}
 		}
 
 		this.option 			= {};
-		let _el =  this.elTarget;
+		let _el 				= this.elTarget;
 
-		this.elInputFieldWrap		= _el.querySelector(s.inputFieldWrap);
-		this.elInputField 			= _el.querySelector(s.inputField);
-		this.elAutoCompleteLayer 	= _el.querySelector(s.autoCompleteWrap);
-		this.elClearQueryBtn 		= _el.querySelector(s.clearQueryBtn);
-		this.elForm 				= _el.querySelector(s.realForm);
+		this.elInputFieldWrap	= _el.querySelector(s.inputFieldWrap);
+		this.elInputField 		= _el.querySelector(s.inputField);
+		this.elAutoCompleteLayer= _el.querySelector(s.autoCompleteWrap);
+		this.elClearQueryBtn 	= _el.querySelector(s.clearQueryBtn);
+		this.elForm 			= _el.querySelector(s.realForm);
 
-		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(s.closeLayer);
-		this.elAutoULWrap			= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
+		this.elCloseButton 		= this.elAutoCompleteLayer.querySelector(s.closeLayer);
+		this.elAutoULWrap		= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
-		this.htCachedData 			= {};
-		this.htDefaultFn 			= super.getDefaultCallbackList(aDefaultFn);
-		this.htFn 					= {};
+		this.htCachedData 		= {};
+		this.htDefaultFn 		= super.getDefaultCallbackList(aDefaultFn);
+		this.htFn 				= {};
 
 		//plugins
-		this.htPluginList			= {'RecentWordPlugin' : RecentWordPlugin};
-		this.htPluginInstance 		= {};
+		this.htPluginList		= {'RecentWordPlugin' : RecentWordPlugin};
+		this.htPluginInstance 	= {};
+		//this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.elTarget);
 	}
 
 	registerEvents() {
@@ -76,11 +76,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	initPlugins() {
-		Object.keys(this.htPluginList).forEach((v) => {
-			//TODO FIX BUG..RETURN NO...
-			if(this.option.core[v] === "undefined") return;
-			this.htPluginInstance[v] = new this.htPluginList[v](this.elTarget);
-		});
+		this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.option.core, this.elTarget);
 	}
 
 	onMethod(htUserFn) {
@@ -145,7 +141,7 @@ class SmartSearch extends CommonComponent {
 		this.htFn.fnSubmitForm(sQuery);
 
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-		if(oRecentWordPlugin) oRecentWordPlugin.saveQuery(sQuery);
+		if(this.htPluginInstance["RecentWordPlugin"]) oRecentWordPlugin.saveQuery(sQuery);
 	}
 	/***** End EventHandler *****/
 
@@ -202,9 +198,5 @@ class SmartSearch extends CommonComponent {
 			}), 
 		"get", aHeaders, sQuery);
 	}
-
-	// addOnPlugin(fnName) {
-	// 	return this._addOnPlugin(fnName, this.htPluginInstance, this.aPluginList, this.elTarget);
-	// }
-
+	
 }

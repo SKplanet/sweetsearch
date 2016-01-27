@@ -27,6 +27,15 @@ class CommonComponent {
 		return htFn;
 	}
 
+	getPluginInstance(htPluginList, htOptionList, elTarget) {
+		let htPluginInstance = {};
+		Object.keys(htPluginList).forEach((v) => {
+			if(htOptionList[v] === "undefined") return;
+			htPluginInstance[v] = new htPluginList[v](elTarget);
+		});
+		return htPluginInstance;
+	}
+
 	registerPluginCallback(htFn) {
 		Object.keys(htFn).forEach((v) => {
 			Object.keys(this.htPluginInstance).forEach((v2) => {
@@ -38,6 +47,5 @@ class CommonComponent {
 			});
 		});
 	}
-
 }
 
