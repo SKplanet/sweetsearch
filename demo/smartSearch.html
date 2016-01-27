@@ -124,12 +124,13 @@
         }
 
         oSS = new SmartSearch(elFormComtainer, {
-            'autoComplete'   : {
-                sAutoCompleteURL : sAutoCompleteURL,
-                requestType : 'jsonp'
+            'autoComplete'  : {
+                sAutoCompleteURL    : sAutoCompleteURL,
+                requestType         : 'jsonp'
             },
-            'core' : {
-                'RecentWordPlugin' : true
+            'RecentWordPlugin'          : {
+                'usage' : true,
+                'maxList' : 5
             }
         });
     

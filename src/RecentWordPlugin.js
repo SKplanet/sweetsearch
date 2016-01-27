@@ -14,7 +14,10 @@ class RecentWordPlugin extends CommonComponent {
 
 	setInitValue() {
 		let htDefaultFn = ['fnInsertRecentSearchWord'];
-		this.htDefaultOption = {}
+		this.htDefaultOption = {
+			'usage' : true,
+            'maxList' : 5
+        }
 
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");

@@ -28,12 +28,13 @@ class SmartSearch extends CommonComponent {
 		let aDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
 
 		this._htDefaultOption 	= {
-			'core' 			: {
-					'RecentWordPlugin' : true
-			},
 			'autoComplete' 	: {
-					requestType : 'jsonp',
-					sAutoCompleteURL : ""
+				requestType 		: 'jsonp',
+				sAutoCompleteURL 	: ""
+			},
+			'RecentWordPlugin' 		: {
+				'usage' : false,
+                'maxList' : 5
 			}
 		}
 
@@ -56,7 +57,6 @@ class SmartSearch extends CommonComponent {
 		//plugins
 		this.htPluginList		= {'RecentWordPlugin' : RecentWordPlugin};
 		this.htPluginInstance 	= {};
-		//this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.elTarget);
 	}
 
 	registerEvents() {
@@ -76,7 +76,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	initPlugins() {
-		this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.option.core, this.elTarget);
+		this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.option, this.elTarget);
 	}
 
 	onMethod(htUserFn) {
@@ -198,5 +198,5 @@ class SmartSearch extends CommonComponent {
 			}), 
 		"get", aHeaders, sQuery);
 	}
-	
+
 }
