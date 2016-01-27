@@ -15,7 +15,7 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	setInitValue() {
-		let htDefaultFn = ['fnInsertRecentSearchWord'];
+		let htDefaultFn = ['fnInsertRecentSearchWord', 'fnSelectRecentSearchWord'];
 		this.htDefaultOption = {
 			'usage' : true,
             'maxList' : 5
@@ -24,6 +24,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
+		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(".ul-wrap");
 
 		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
 		this.htFn 					= {};
@@ -35,8 +36,10 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	registerEvents() {
-		this.elClearRecentWordBtn.addEventListener("touchend", (evt) => { this.handlerClearRecentWord(evt)});	
-		this.elCloseButtonRWL.addEventListener("touchend", (evt) => { this.handlerCloseLayer(evt)});
+		this.elClearRecentWordBtn.addEventListener("touchend", 	(evt) => { this.handlerClearRecentWord(evt)});	
+		this.elCloseButtonRWL.addEventListener("touchend", 		(evt) => { this.handlerCloseLayer(evt)});
+		this.elRecentULWrap.addEventListener("touchstart", 		(evt) => { this.handlerSelectRecentWordTouchStart(evt)});
+		this.elRecentULWrap.addEventListener("touchend", 		(evt) => { this.handlerSelectRecentWordTouchEnd(evt)});
 	}
 
 	handlerClearRecentWord(evt) {
@@ -48,6 +51,26 @@ class RecentWordPlugin extends CommonComponent {
 	//TODO. duplicate
 	handlerCloseLayer(evt) {
 		this.elRecentWordLayer.style.display = "none";
+	}
+
+	handlerSelectRecentWordTouchStart(evt) {
+		this.htTouchStartSelectedWord = {'x' : evt.changedTouches[0].pageX, 'y' : evt.changedTouches[0].pageY};
+	}
+
+	handlerSelectRecentWordTouchEnd(evt) {
+		let nowPageY = evt.changedTouches[0].pageY;
+		if(this.isExecuteTouchScroll(nowPageY)) return;
+
+		let sText = this.htFn.fnSelectRecentSearchWord(evt.target);
+		console.log(sText);
+		//this.elInputField.value = sText;
+		//this.handlerSubmitForm(null, sText);
+	}
+
+	isExecuteTouchScroll(pageY) {
+		var nDiff = this.htTouchStartSelectedWord.y - pageY;
+		if(nDiff !== 0) return true;
+		return false;
 	}
 
 	saveQuery(sQuery) {

@@ -36,16 +36,18 @@ class CommonComponent {
 		return htPluginInstance;
 	}
 
+
 	registerPluginCallback(htFn) {
-		Object.keys(htFn).forEach((v) => {
-			Object.keys(this.htPluginInstance).forEach((v2) => {
+		Object.keys(this.htPluginInstance).forEach((v2) => {
+			let htPluginFunction = {};
+			Object.keys(htFn).forEach((v) => {
 				if(typeof this.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
-					let htPluginFunction = {};
 					htPluginFunction[v] = htFn[v];
-					this.htPluginInstance[v2].onMethod(htPluginFunction);
 				}
 			});
+			this.htPluginInstance[v2].onMethod(htPluginFunction);
 		});
 	}
+	
 }
 

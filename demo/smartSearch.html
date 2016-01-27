@@ -117,12 +117,24 @@
             return sText;
         }
 
+        var fnSelectRecentSearchWord = function(_el) {
+            //highlight selected item.
+            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+            elCurrentLI.className += "selectedLI";
+
+            //submit form with custom value.
+            var sText = elCurrentLI.querySelector("span").innerText.trim();
+
+            return sText;
+        }
+
         //set submit custom url.
         var fnSubmitForm = function(sQuery) {
             var url = "./SearchResult.html?q=" + sQuery;
              location.href = url;
         }
 
+        // Component initialize.
         oSS = new SmartSearch(elFormComtainer, {
             'autoComplete'  : {
                 sAutoCompleteURL    : sAutoCompleteURL,
@@ -137,8 +149,9 @@
         oSS.onMethod({
             'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
             'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
-            'fnSubmitForm' : fnSubmitForm,
-            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord
+            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+            'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
+            'fnSubmitForm' : fnSubmitForm
         });
 
 

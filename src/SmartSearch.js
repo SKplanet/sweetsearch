@@ -156,7 +156,7 @@ class SmartSearch extends CommonComponent {
 		//execute RecentWordPlugin.
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 		if(!oRecentWordPlugin) return;
-		oRecentWordPlugin.showRecentSearchWord(this.htFn.fnInsertRecentSearchWord);
+		oRecentWordPlugin.showRecentSearchWord();
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
