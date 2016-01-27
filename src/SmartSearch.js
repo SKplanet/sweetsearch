@@ -8,15 +8,14 @@ class SmartSearch extends CommonComponent {
 
 	//TODO. think about moving super class.
 	init(htOption) {
-		this._setDefaultOption();
-		this.option = {};
-		super.setOption(htOption, this._htDefaultOption, this.option);
 		this._setInitValue();
+		super.setOption(htOption, this._htDefaultOption, this.option);
 		this._registerEvents();
 		this._initPlugins();
 	}
 
 	_setInitValue() {
+
 		const s = {
 			inputFieldWrap 		: ".inputWrap",
 			inputField 			: ".input-field",
@@ -27,9 +26,19 @@ class SmartSearch extends CommonComponent {
 			realForm 			: "#search-form"
 		} 
 
-		const htDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
-		// 	'fnSubmitForm' : function(){}]
+		const aDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
 
+		this._htDefaultOption 	= {
+			'core' : {
+				'RecentWordPlugin' : true
+			},
+			'autoComplete' : {
+				requestType : 'jsonp',
+				sAutoCompleteURL : ""
+			}
+		}
+
+		this.option 			= {};
 		let _el =  this.elTarget;
 
 		this.elInputFieldWrap		= _el.querySelector(s.inputFieldWrap);
@@ -42,24 +51,12 @@ class SmartSearch extends CommonComponent {
 		this.elAutoULWrap			= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
 		this.htCachedData 			= {};
-		this.htDefaultFn 			= super.initDefaultCallbackList(htDefaultFn);
+		this.htDefaultFn 			= super.getDefaultCallbackList(aDefaultFn);
 		this.htFn 					= {};
+
 		//plugins
 		this.htPluginList			= {'RecentWordPlugin' : RecentWordPlugin};
 		this.htPluginInstance 		= {};
-	}
-
-	//must be define full option name.
-	_setDefaultOption () {
-		this._htDefaultOption = {
-			'core' : {
-				'RecentWordPlugin' : true
-			},
-			'autoComplete' : {
-				requestType : 'jsonp',
-				sAutoCompleteURL : ""
-			}
-		}
 	}
 
 	_registerEvents() {
@@ -80,6 +77,7 @@ class SmartSearch extends CommonComponent {
 
 	_initPlugins() {
 		Object.keys(this.htPluginList).forEach((v) => {
+			//TODO FIX BUG..RETURN NO...
 			if(this.option.core[v] === "undefined") return;
 			this.htPluginInstance[v] = new this.htPluginList[v](this.elTarget);
 		});
@@ -90,11 +88,12 @@ class SmartSearch extends CommonComponent {
 		super.registerPluginCallback(htUserFn);
 	}
 
+
+	/***** START EventHandler *****/
 	handlerInputWrap(evt) {
 		this.execAfterFocus(evt);
 		this.elInputField.focus();
 	}
-
 
 	//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
 	handlerInputKeyPress(evt) {}
@@ -148,6 +147,8 @@ class SmartSearch extends CommonComponent {
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 		if(oRecentWordPlugin) oRecentWordPlugin.saveQuery(sQuery);
 	}
+	/***** End EventHandler *****/
+
 
 	_isExecuteTouchScoll(pageY) {
 		var nDiff = this.htTouchStartSelectedWord.y - pageY;

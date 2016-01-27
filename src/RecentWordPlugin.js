@@ -23,7 +23,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
 		this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery");
 
-		this.htDefaultFn 			= super.initDefaultCallbackList(htDefaultFn);
+		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
 		this.htFn = {};
 	}
 

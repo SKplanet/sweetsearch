@@ -19,7 +19,7 @@ class CommonComponent {
 		});
 	}
 
-	initDefaultCallbackList(aFn) {
+	getDefaultCallbackList(aFn) {
 		let htFn = {};
 		aFn.forEach((v) => {
 			htFn[v] = new Function();
