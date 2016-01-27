@@ -1,12 +1,13 @@
 
 class  RecentWordPluginLocalStorageAddOn {
 	
-	constructor(sKey) {
+	constructor(sKey, nMaxList) {
 		this.sKey = sKey;
+		this.nMaxList = nMaxList;
 	}
 
 	saveKeyword(sKeyword) {
-		if(this._validStorage()) return;
+		if(this.validStorage()) return;
 
 		let aLegacy = this.getKeywords();
 
@@ -21,24 +22,25 @@ class  RecentWordPluginLocalStorageAddOn {
 			aLegacy.splice(nIndex, 1);
 		} 
 
-		aLegacy.push(sKeyword);
+		aLegacy.unshift(sKeyword);
+		if(aLegacy.length >= this.nMaxList) aLegacy.length = this.nMaxList;
 		localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
 	}
 
 	getKeywords(){ 
-		if(this._validStorage()) return;
+		if(this.validStorage()) return;
 
 		let sResult = localStorage.getItem(this.sKey);
 		return sResult;
 	}
 
 	removeKeywords() {
-		if(this._validStorage()) return;
+		if(this.validStorage()) return;
 
 		return localStorage.removeItem(this.sKey);
 	}
 
-	_validStorage() {
+	validStorage() {
 		if( typeof(Storage) === "undefined") return;
 	}
 

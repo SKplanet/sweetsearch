@@ -92,12 +92,12 @@
         }
 
 
-        var fnInsertRecentSearchWord = function(aData) {
+        var fnInsertRecentSearchWord = function(aData, nMaxList) {
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
             //5개만,
-            aData.length = 5;
+            aData.length = nMaxList;
             aData.forEach( function(v) {
                 result = sTemplate.replace(/\[%sKeyword%\]/, v);       
                 sHTML += result;
@@ -130,7 +130,7 @@
             },
             'RecentWordPlugin'          : {
                 'usage' : true,
-                'maxList' : 5
+                'maxList' : 7
             }
         });
     

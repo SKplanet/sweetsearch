@@ -10,6 +10,8 @@ class RecentWordPlugin extends CommonComponent {
 		this.setInitValue();
 		super.setOption(htOption, this.htDefaultOption, this.option);
 		this.registerEvents();
+		this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery", this.option.maxList);
+
 	}
 
 	setInitValue() {
@@ -22,7 +24,6 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
-		this.oStorage 				= new RecentWordPluginLocalStorageAddOn("searchQuery");
 
 		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
 		this.htFn 					= {};
@@ -59,7 +60,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer.style.display = "block";
 		this.elClearRecentWordBtn.style.display = "block";
 		let aData = JSON.parse(sData);
-		this.htFn.fnInsertRecentSearchWord(aData);
+		this.htFn.fnInsertRecentSearchWord(aData, this.option.maxList);
 	}
 
 }
