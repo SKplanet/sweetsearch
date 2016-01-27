@@ -69,6 +69,8 @@ a:link {
 
 .buttonWrap {
     margin-left: 2%;
+    width: 5%;
+    min-width: 40px;
 }
 
 .buttonWrap button {
@@ -183,6 +185,20 @@ a:link {
 
     .auto-complete-wrap {
         1max-height: 480px;
+    }
+
+    .search-form {
+        margin: 0px auto;
+        width: 99%;
+        padding:0px;
+        font: 13px Arial, Helvetica, sans-serif;
+        min-width: 300px;
+    }
+
+    .buttonWrap {
+        margin-left: 1%;
+        width: 12%;
+        min-width: 0px;
     }
 }
 
