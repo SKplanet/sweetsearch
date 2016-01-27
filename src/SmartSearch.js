@@ -10,15 +10,14 @@ class SmartSearch extends CommonComponent {
 	init(htOption) {
 		this._setDefaultOption();
 		this.option = {};
-		super.execOption(htOption, this._htDefaultOption, this.option);
+		super.setOption(htOption, this._htDefaultOption, this.option);
 		this._setInitValue();
 		this._registerEvents();
-		this._setDefaultFunction();
 		this._initPlugins();
 	}
 
 	_setInitValue() {
-		const _s = {
+		const s = {
 			inputFieldWrap 		: ".inputWrap",
 			inputField 			: ".input-field",
 			autoCompleteWrap 	: ".auto-complete-wrap",
@@ -28,19 +27,26 @@ class SmartSearch extends CommonComponent {
 			realForm 			: "#search-form"
 		} 
 
-		this.elInputFieldWrap		= this.elTarget.querySelector(_s.inputFieldWrap);
-		this.elInputField 			= this.elTarget.querySelector(_s.inputField);
-		this.elAutoCompleteLayer 	= this.elTarget.querySelector(_s.autoCompleteWrap);
-		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(_s.closeLayer);
-		this.elClearQueryBtn 		= this.elTarget.querySelector(_s.clearQueryBtn);
-		this.elAutoULWrap			= this.elAutoCompleteLayer.querySelector(_s.autoULWrap);
-		this.elForm 				= this.elTarget.querySelector(_s.realForm);
-		this.htCachedData 			= {};
+		const htDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
+		// 	'fnSubmitForm' : function(){}]
 
+		let _el =  this.elTarget;
+
+		this.elInputFieldWrap		= _el.querySelector(s.inputFieldWrap);
+		this.elInputField 			= _el.querySelector(s.inputField);
+		this.elAutoCompleteLayer 	= _el.querySelector(s.autoCompleteWrap);
+		this.elClearQueryBtn 		= _el.querySelector(s.clearQueryBtn);
+		this.elForm 				= _el.querySelector(s.realForm);
+
+		this.elCloseButton 			= this.elAutoCompleteLayer.querySelector(s.closeLayer);
+		this.elAutoULWrap			= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
+
+		this.htCachedData 			= {};
+		this.htDefaultFn 			= super.initDefaultCallbackList(htDefaultFn);
+		this.htFn 					= {};
 		//plugins
 		this.htPluginList			= {'RecentWordPlugin' : RecentWordPlugin};
 		this.htPluginInstance 		= {};
-
 	}
 
 	//must be define full option name.
@@ -56,29 +62,20 @@ class SmartSearch extends CommonComponent {
 		}
 	}
 
-	//must be define full option name.
-	_setDefaultFunction() {
-		//TODO rearrange.(maybe remove function)
-		this._htDefaultFunction = {
-			'fnInsertAutoCompleteWord' : function(){},
-			'fnSelectAutoCompleteWord' : function(){},
-			'fnSubmitForm' : function(){}
-		}
-	}
-
 	_registerEvents() {
-		this.elInputFieldWrap.addEventListener("touchend", (evt) => this.handlerInputWrap(evt));
-		this.elInputField.addEventListener("keypress", 	(evt) => this.handlerInputKeyPress(evt));
-		this.elInputField.addEventListener("keydown", 	(evt) => this.handlerInputKeydown(evt));
-		this.elInputField.addEventListener("input", 	(evt) => this.handlerInputKeyInput(evt));
+		this.elInputFieldWrap.addEventListener("touchend", 	(evt) => this.handlerInputWrap(evt));
 
-		this.elCloseButton.addEventListener("touchend", (evt) => this.handlerCloseLayer(evt));
-		this.elClearQueryBtn.addEventListener("touchend", (evt) => this.handlerClearInputValue(evt));
+		this.elInputField.addEventListener("keypress", 		(evt) => this.handlerInputKeyPress(evt));
+		this.elInputField.addEventListener("keydown", 		(evt) => this.handlerInputKeydown(evt));
+		this.elInputField.addEventListener("input", 		(evt) => this.handlerInputKeyInput(evt));
 
-		this.elAutoULWrap.addEventListener("touchstart", (evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
-		this.elAutoULWrap.addEventListener("touchend", (evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
+		this.elCloseButton.addEventListener("touchend", 	(evt) => this.handlerCloseLayer(evt));
+		this.elClearQueryBtn.addEventListener("touchend", 	(evt) => this.handlerClearInputValue(evt));
 
-		this.elForm.addEventListener("submit", (evt) => this.handlerSubmitForm(evt));
+		this.elAutoULWrap.addEventListener("touchstart", 	(evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
+		this.elAutoULWrap.addEventListener("touchend", 		(evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
+
+		this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 	}
 
 	_initPlugins() {
@@ -88,22 +85,9 @@ class SmartSearch extends CommonComponent {
 		});
 	}
 
-	onMethod(htFn) {
-		this.htFn = {};
-		super.execOption(htFn, this._htDefaultFunction, this.htFn);
-		this.registerPluginCallback(htFn);
-	}
-
-	registerPluginCallback(htFn) {
-		Object.keys(htFn).forEach((v) => {
-			Object.keys(this.htPluginInstance).forEach((v2) => {
-				if(typeof this.htPluginInstance[v2]._htDefaultFunction[v] !== "undefined") {
-					let htPluginFunction = {};
-					htPluginFunction[v] = htFn[v];
-					this.htPluginInstance[v2].onMethod(htPluginFunction);
-				}
-			});
-		});
+	onMethod(htUserFn) {
+		super.setOption(htUserFn, this.htDefaultFn, this.htFn);
+		super.registerPluginCallback(htUserFn);
 	}
 
 	handlerInputWrap(evt) {
@@ -120,7 +104,6 @@ class SmartSearch extends CommonComponent {
 
 	handlerInputKeyInput(evt) {
 		let sInputData = this.elInputField.value;
-		console.log("input evet fired : ", sInputData);
 
 		if(sInputData.length > 0 ) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		else _cu.closeLayer(this.elClearQueryBtn);

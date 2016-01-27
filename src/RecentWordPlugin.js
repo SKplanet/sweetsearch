@@ -9,17 +9,22 @@ class RecentWordPlugin extends CommonComponent {
 	init(htOption) {
 		this._setDefaultOption();
 		this.option = {};
-		super.execOption(htOption, this._htDefaultOption, this.option);
+		super.setOption(htOption, this._htDefaultOption, this.option);
 		this._setInitValue();
 		this._registerEvents();
-		this._setDefaultFunction();
+		//this._setDefaultFunction();
 	}
 
 	_setInitValue() {
+		const htDefaultFn = ['fnInsertRecentSearchWord'];
+
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
 		this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery");
+
+		this.htDefaultFn 			= super.initDefaultCallbackList(htDefaultFn);
+		this.htFn = {};
 	}
 
 	_setDefaultOption () {
@@ -27,15 +32,8 @@ class RecentWordPlugin extends CommonComponent {
 		}
 	}
 
-	_setDefaultFunction() {
-		this._htDefaultFunction = {
-			'fnInsertRecentSearchWord' : function(){}
-		}
-	}
-
 	onMethod(htFn) {
-		this.htFn = {};
-		super.execOption(htFn, this._htDefaultFunction, this.htFn);
+		super.setOption(htFn, this.htDefaultFn, this.htFn);
 	}
 
 	_registerEvents() {

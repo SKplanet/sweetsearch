@@ -4,7 +4,7 @@ class CommonComponent {
 		this.htCacheData = {};
 	}
 
-	execOption (htValue, htDefaultValue, htStorage) {
+	setOption (htValue, htDefaultValue, htStorage) {
 		Object.keys(htDefaultValue).forEach((v) => {
 			if(typeof htValue[v] === "undefined") {
 				htStorage[v] = htDefaultValue[v];
@@ -14,16 +14,30 @@ class CommonComponent {
                 	return;
                 }
                 htStorage[v] = {};
-				this.execOption.call(this, htValue[v], htDefaultValue[v],htStorage[v]); 
+				this.setOption.call(this, htValue[v], htDefaultValue[v],htStorage[v]); 
 			}
 		});
 	}
 
-	// _addOnPlugin(fnPlugin, htPluginInstance, aPluginList, elTarget) {
-	// 	let sFunctionName = _cu.getFnName(fnPlugin);
-	// 	if(aPluginList.indexOf(sFunctionName) < 0) return "unknown plugin";
-	// 	htPluginInstance[sFunctionName] = new fnPlugin(elTarget);
-	// 	return htPluginInstance[sFunctionName];
-	// }
+	initDefaultCallbackList(aFn) {
+		let htFn = {};
+		aFn.forEach((v) => {
+			htFn[v] = new Function();
+		})
+		return htFn;
+	}
+
+	registerPluginCallback(htFn) {
+		Object.keys(htFn).forEach((v) => {
+			Object.keys(this.htPluginInstance).forEach((v2) => {
+				if(typeof this.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
+					let htPluginFunction = {};
+					htPluginFunction[v] = htFn[v];
+					this.htPluginInstance[v2].onMethod(htPluginFunction);
+				}
+			});
+		});
+	}
+
 }
 
