@@ -80,6 +80,7 @@ a:link {
     width: 80%; 
     height: 40px;
     font-size: 1.5em;
+    padding-left: .5%;
     border : none;
     outline: none;
     cursor:auto;

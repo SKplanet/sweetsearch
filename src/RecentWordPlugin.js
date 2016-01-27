@@ -7,30 +7,30 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	init(htOption) {
-		this._setInitValue();
-		super.setOption(htOption, this._htDefaultOption, this.option);
-		this._registerEvents();
+		this.setInitValue();
+		super.setOption(htOption, this.htDefaultOption, this.option);
+		this.registerEvents();
 	}
 
-	_setInitValue() {
+	setInitValue() {
 		const htDefaultFn = ['fnInsertRecentSearchWord'];
-		this._htDefaultOption = {}
+		this.htDefaultOption = {}
 
 		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
 		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
-		this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery");
+		this.oStorage 				= new RecentWordPluginLocalStorageAddOn("searchQuery");
 
 		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
-		this.htFn = {};
-		this.option = {};
+		this.htFn 					= {};
+		this.option 				= {};
 	}
 
 	onMethod(htFn) {
 		super.setOption(htFn, this.htDefaultFn, this.htFn);
 	}
 
-	_registerEvents() {
+	registerEvents() {
 		this.elClearRecentWordBtn.addEventListener("touchend", (evt) => { this.handlerClearRecentWord(evt)});	
 		this.elCloseButtonRWL.addEventListener("touchend", (evt) => { this.handlerCloseLayer(evt)});
 	}

@@ -8,13 +8,13 @@ class SmartSearch extends CommonComponent {
 
 	//TODO. think about moving super class.
 	init(htOption) {
-		this._setInitValue();
+		this.setInitValue();
 		super.setOption(htOption, this._htDefaultOption, this.option);
-		this._registerEvents();
-		this._initPlugins();
+		this.registerEvents();
+		this.initPlugins();
 	}
 
-	_setInitValue() {
+	setInitValue() {
 
 		const s = {
 			inputFieldWrap 		: ".inputWrap",
@@ -59,7 +59,7 @@ class SmartSearch extends CommonComponent {
 		this.htPluginInstance 		= {};
 	}
 
-	_registerEvents() {
+	registerEvents() {
 		this.elInputFieldWrap.addEventListener("touchend", 	(evt) => this.handlerInputWrap(evt));
 
 		this.elInputField.addEventListener("keypress", 		(evt) => this.handlerInputKeyPress(evt));
@@ -75,7 +75,7 @@ class SmartSearch extends CommonComponent {
 		this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 	}
 
-	_initPlugins() {
+	initPlugins() {
 		Object.keys(this.htPluginList).forEach((v) => {
 			//TODO FIX BUG..RETURN NO...
 			if(this.option.core[v] === "undefined") return;
@@ -111,7 +111,7 @@ class SmartSearch extends CommonComponent {
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 		if(oRecentWordPlugin) _cu.closeLayer(oRecentWordPlugin.elRecentWordLayer);
 
-		if (typeof this.htCachedData[sInputData] === "undefined") this._AutoCompleteRequestManager(sInputData);
+		if (typeof this.htCachedData[sInputData] === "undefined") this.autoCompleteRequestManager(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 	}
 
@@ -131,7 +131,7 @@ class SmartSearch extends CommonComponent {
 
 	handlerSelectAutoCompletedWordTouchEnd(evt) {
 		let nowPageY = evt.changedTouches[0].pageY;
-		if(this._isExecuteTouchScoll(nowPageY)) return;
+		if(this.isExecuteTouchScroll(nowPageY)) return;
 
 		let sText = this.htFn.fnSelectAutoCompleteWord(evt.target);
 		this.elInputField.value = sText;
@@ -150,7 +150,7 @@ class SmartSearch extends CommonComponent {
 	/***** End EventHandler *****/
 
 
-	_isExecuteTouchScoll(pageY) {
+	isExecuteTouchScroll(pageY) {
 		var nDiff = this.htTouchStartSelectedWord.y - pageY;
 		if(nDiff !== 0) return true;
 		return false;
@@ -172,26 +172,26 @@ class SmartSearch extends CommonComponent {
 		this.htCachedData[sQuery] = sResult;
 	}
 
-	_AutoCompleteRequestManager(sQuery) {
+	autoCompleteRequestManager(sQuery) {
 		let type = this.option.autoComplete.requestType;
 		let url = this.option.autoComplete.sAutoCompleteURL;
 		switch(type) {
 			case 'jsonp':
-				this._makeAutoCompleteJSONPRequest(sQuery,url);
+				this.makeAutoCompleteJSONPRequest(sQuery,url);
 				break;
 			case 'ajax':
-				this._makeAutoCompleteAjaxRequest(sQuery,url);
+				this.makeAutoCompleteAjaxRequest(sQuery,url);
 				break;
 			default: 
 				//do something..
 		}
 	}
 
-	_makeAutoCompleteJSONPRequest(sQuery, sURL) {
+	makeAutoCompleteJSONPRequest(sQuery, sURL) {
 		_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 
-	_makeAutoCompleteAjaxRequest(sQuery, sURL) {
+	makeAutoCompleteAjaxRequest(sQuery, sURL) {
 		// hardcoded url for test.
 		let url = "../jsonMock/"+ sQuery +".json";
 		let aHeaders = [["Content-Type", "application/json"]];
