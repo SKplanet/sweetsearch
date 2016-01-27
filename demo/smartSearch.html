@@ -220,6 +220,11 @@
             oSS.htFn.fnSelectAutoCompleteWord(evt.target)
         });
 
+        _u.on(_q.recentULWrap, "mouseup", function(evt) {
+            console.log("selected..");
+            oSS.htPluginInstance["RecentWordPlugin"].htFn.fnSelectRecentSearchWord(evt.target);
+        });
+
         //Form submit.
         // _u.on(_q.realForm, "submit", function(evt){ 
         //     evt.preventDefault();
