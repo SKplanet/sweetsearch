@@ -26,7 +26,6 @@ var _cu = {
 	},
 
 	sendSimpleJSONP(sURL, query, sCompletionName, fnCallback) {
-
 		window[sCompletionName] = null;
 		let encodedQuery = encodeURIComponent(query);
 
@@ -155,5 +154,9 @@ var _cu = {
 			return Object.prototype.toString.call(_a) === '[object Array]';
 		}
 		return Array.isArray(_a);
+	},
+
+	isFunction(fn) {
+  		return Object.prototype.toString.call(fn) === '[object Function]';
 	}
 }

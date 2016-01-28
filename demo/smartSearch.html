@@ -80,6 +80,7 @@
         //callback 4 JSONP (Amazon)
         //자동완성레이어에 보여줄 HTML (사용자정의)
         var fnInsertAutoCompleteWord = function(sData) {
+            console.log("fnInsertAutoCompleteWord");
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
@@ -183,6 +184,8 @@
     //support Desktop ENV.
     (function (doc) {
 
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) return;
+
         var _u = {
             on : function(el,eType, handler) {
                 doc.querySelector(el).addEventListener(eType, handler);
@@ -246,7 +249,11 @@
         // });
 
     })(document); 
+
     </script>
+
+    <!-- for WEINRE test -->
+    <!-- script src="http://10.203.227.198:8081/target/target-script-min.js#anonymous"></script -->
 
     </body>
 </html>
