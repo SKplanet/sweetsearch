@@ -9,7 +9,7 @@ class CommonComponent {
 			if(typeof htValue[v] === "undefined") {
 				htStorage[v] = htDefaultValue[v];
 			} else {
-                if(toString.call(htValue[v]) !== "[object Object]") {
+                if(Object.prototype.toString.call(htValue[v]) !== "[object Object]") {
                 	htStorage[v] = htValue[v];
                 	return;
                 }
@@ -22,7 +22,7 @@ class CommonComponent {
 	getDefaultCallbackList(aFn) {
 		let htFn = {};
 		aFn.forEach((v) => {
-			htFn[v] = new Function();
+			htFn[v] = function(){};
 		})
 		return htFn;
 	}
