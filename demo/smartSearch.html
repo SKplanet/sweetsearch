@@ -83,11 +83,26 @@
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            var sInputValue = elInputField.value;
+            var sInputValueNoBlank = sInputValue.replace(/\s+/g, ""); 
+
+            var bHighlightMatchedWord = true;
 
             if(!sData) return;
             sData[1].forEach( function(v) {
+
                 result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+
+                if(bHighlightMatchedWord) { 
+                    if(v.indexOf(sInputValue) > -1) { 
+                        result = result.replace(sInputValue, "<b>"+sInputValue+"</b>");
+                    } else { 
+                        result = result.replace(sInputValueNoBlank, "<b>"+sInputValueNoBlank+"</b>");
+                    }
+                }
+
                 sHTML += result;
+
             });
             elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
         }
