@@ -181,7 +181,9 @@ class SmartSearch extends CommonComponent {
 	}
 
 	makeAutoCompleteJSONPRequest(sQuery, sURL) {
-		_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
+		//amazon
+		//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
+		_cu.sendSimpleJSONP(sURL, sQuery, "ac_done", this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {

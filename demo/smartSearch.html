@@ -59,7 +59,10 @@
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
         var elInputField        = doc.querySelector(".input-field");
-        var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+        //amazon
+        //var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+
+        var sAutoCompleteURL = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
 
         /*
         // callback 4 Ajax (local)
@@ -79,6 +82,7 @@
 
         //callback 4 JSONP (Amazon)
         //자동완성레이어에 보여줄 HTML (사용자정의)
+        /*
         var fnInsertAutoCompleteWord = function(sData) {
             console.log("fnInsertAutoCompleteWord");
             var result  = "";
@@ -93,6 +97,36 @@
             sData[1].forEach( function(v) {
 
                 result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+
+                if(bHighlightMatchedWord) { 
+                    if(v.indexOf(sInputValue) > -1) { 
+                        result = result.replace(sInputValue, "<b>"+sInputValue+"</b>");
+                    } else { 
+                        result = result.replace(sInputValueNoBlank, "<b>"+sInputValueNoBlank+"</b>");
+                    }
+                }
+
+                sHTML += result;
+
+            });
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+        }
+        */
+        //callback 4 JSONP (planet)
+        var fnInsertAutoCompleteWord = function(sData) {
+            console.log("fnInsertAutoCompleteWord");
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            var sInputValue = elInputField.value;
+            var sInputValueNoBlank = sInputValue.replace(/\s+/g, ""); 
+
+            var bHighlightMatchedWord = true;
+
+            if(!sData) return;
+            sData['kwds'].forEach( function(v) {
+
+                result = sTemplate.replace(/\[%sKeyword%\]/, v[0]);       
 
                 if(bHighlightMatchedWord) { 
                     if(v.indexOf(sInputValue) > -1) { 
