@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
         <title></title>
         <link rel="stylesheet" href="./css/demo.css">
 
@@ -12,25 +12,36 @@
     <div id="wrapper">
         <div class="search-form">
             <div class="search-form-heading"> Smart Search </div>
-            <form action="" method="post">
-                <div class="inputWrap">
-                    <input type="text" class="input-field" name="field1" value="" />
-                </div>
-                <div class="buttonWrap">
-                    <button type="submit" value="Submit" /> 검색
-                </div>
-            </form>
+            <div class="formContainer">
+                <form id="search-form" action="" method="post">
+                    <div class="inputWrap">
+                        <input type="text" class="input-field" name="field1" value="" 
+                            autocomplete="off"
+                            autocapitalize="off"
+                            autocorrect="off"
+                            placeholder="Amazon product"
+                        />
+                        <div class="clearQuery" style="display:none;">X</div>
+                    </div>
+                    <div class="buttonWrap">
+                        <button type="submit" value="Submit" /> 검색
+                    </div>
+                </form>
+            </div>
 
             <section class="auto-complete-wrap" style="display:none;">
-                <ul class="ul-wrap">
-                    
-                </ul>
+                <ul class="ul-wrap"></ul>
+                <div class="footer-button-wrap">
+                    <button class="closeLayer">닫기</button>
+                </div>
             </section>
 
             <section class="recent-word-wrap" style="display:none;">
-                <ul class="ul-wrap">
-                    
-                </ul>
+                <ul class="ul-wrap"></ul>
+                 <div class="footer-button-wrap">
+                    <button class="closeLayer">닫기</button>
+                    <button class="deleteWord" style="display:none">전체삭제</button>
+                </div>
             </section>
         </div>
     </div>
@@ -39,19 +50,211 @@
     <script src="../dist/ss_merge_es5.js"></script>
 
     <script>
+
+    var oSS= null;
+
+    (function(doc){
+        var elForm = doc.querySelector("#search-form");
+        var elFormComtainer = doc.querySelector(".search-form");
+        var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
+        var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
+        var elInputField        = doc.querySelector(".input-field");
+        var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+
+        /*
+        // callback 4 Ajax (local)
+        var fnInsertAutoCompleteWord = function(sData) {
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+
+            sData.items[0].forEach( function(v) {
+                result = sTemplate.replace(/\[%sKeyword%\]/, v[0]);       
+                sHTML += result;
+            });
+
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+        }
+        */
+
+        //callback 4 JSONP (Amazon)
+        //자동완성레이어에 보여줄 HTML (사용자정의)
+        var fnInsertAutoCompleteWord = function(sData) {
+            console.log("fnInsertAutoCompleteWord");
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            var sInputValue = elInputField.value;
+            var sInputValueNoBlank = sInputValue.replace(/\s+/g, ""); 
+
+            var bHighlightMatchedWord = true;
+
+            if(!sData) return;
+            sData[1].forEach( function(v) {
+
+                result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+
+                if(bHighlightMatchedWord) { 
+                    if(v.indexOf(sInputValue) > -1) { 
+                        result = result.replace(sInputValue, "<b>"+sInputValue+"</b>");
+                    } else { 
+                        result = result.replace(sInputValueNoBlank, "<b>"+sInputValueNoBlank+"</b>");
+                    }
+                }
+
+                sHTML += result;
+
+            });
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+        }
+
+
+        var fnInsertRecentSearchWord = function(aData, nMaxList) {
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            //5개만,
+            aData.length = nMaxList;
+            aData.forEach( function(v) {
+                result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+                sHTML += result;
+            });
+            elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
+        }
+
+        //set css when select item and get text.
+        var fnSelectAutoCompleteWord = function(_el) {
+            //highlight selected item.
+            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+            elCurrentLI.className += "selectedLI";
+
+            //submit form with custom value.
+            var sText = elCurrentLI.querySelector("span").innerText.trim();
+
+            //must be code.
+            elInputField.value = sText;
+            oSS.handlerSubmitForm(null,sText);
+        }
+
+        var fnSelectRecentSearchWord = function(_el) {
+            //highlight selected item.
+            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+            elCurrentLI.className += "selectedLI";
+
+            //submit form with custom value.
+            var sText = elCurrentLI.querySelector("span").innerText.trim();
+
+            //must be code.
+            elInputField.value = sText;
+            oSS.handlerSubmitForm(null,sText);
+        }
+
+        //set submit custom url.
+        var fnSubmitForm = function(sQuery) {
+            var url = "./SearchResult.html?q=" + sQuery;
+             location.href = url;
+        }
+
+        // Component initialize.
+        oSS = new SmartSearch(elFormComtainer, {
+            'autoComplete'  : {
+                sAutoCompleteURL    : sAutoCompleteURL,
+                requestType         : 'jsonp'
+            },
+            'RecentWordPlugin'          : {
+                'usage' : true,
+                'maxList' : 7
+            }
+        });
     
-        oSS = new SmartSearch(document.querySelector(".search-form"), {
-            //'nDuration' : 100,  //default 100
+        oSS.onMethod({
+            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
+            'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
+            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+            'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
+            'fnSubmitForm' : fnSubmitForm
         });
 
-        // service - code
-        document.body.addEventListener("click", function(evt){
-            if(evt.target.className === "input-field") return;
-            document.querySelector(".auto-complete-wrap").style.display = "none";
-            document.querySelector(".recent-word-wrap").style.display = "none";
-        },false);
+
+    })(document);
 
     </script>
+
+    <script>
+    //support Desktop ENV.
+    (function (doc) {
+
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) return;
+
+        var _u = {
+            on : function(el,eType, handler) {
+                doc.querySelector(el).addEventListener(eType, handler);
+            }
+        }
+
+        var _h = {
+            toggleSelectedBG : function(evt) {
+                var _el = evt.target;
+                var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+                var _oldSelectedLI = elCurrentLI.parentElement.querySelector(".selectedLI");
+
+                if(_oldSelectedLI) _oldSelectedLI.className = "";
+                elCurrentLI.className += "selectedLI";
+            },
+            clearSelectedGB : function(evt) {
+                var _oldSelectedLI = this.querySelector(".selectedLI");
+                if(_oldSelectedLI) _oldSelectedLI.className = "";
+            },
+        }
+
+        var _q = {
+            recentCloseLayer : ".recent-word-wrap .closeLayer",
+            autoCloseLayer   : ".auto-complete-wrap .closeLayer",
+            clearQuery       : ".clearQuery",
+            inputWrap        : ".inputWrap",
+            autoULWrap       : ".auto-complete-wrap .ul-wrap",
+            recentULWrap     : ".recent-word-wrap .ul-wrap",
+            realForm         : "#search-form",
+        }
+
+        // Support Mouse Events.
+        _u.on(_q.recentCloseLayer, "mousedown", function(){
+            oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
+        });
+
+        _u.on(_q.autoCloseLayer, "mousedown", oSS.handlerCloseLayer.bind(oSS));
+        _u.on(_q.clearQuery , "mousedown", oSS.handlerClearInputValue.bind(oSS));
+        _u.on(_q.inputWrap, "mousedown", oSS.handlerInputWrap.bind(oSS));
+
+        //change selected LI 
+        _u.on(_q.autoULWrap , "mouseover", _h.toggleSelectedBG);
+        _u.on(_q.recentULWrap, "mouseover", _h.toggleSelectedBG);
+     
+        //rollback backgroundColor when mouseover.
+        _u.on(_q.autoULWrap, "mouseout", _h.clearSelectedGB);
+        _u.on(_q.recentULWrap, "mouseout", _h.clearSelectedGB);
+
+        _u.on(_q.autoULWrap, "mouseup", function(evt) {
+            oSS.htFn.fnSelectAutoCompleteWord(evt.target)
+        });
+
+        _u.on(_q.recentULWrap, "mouseup", function(evt) {
+            oSS.htPluginInstance["RecentWordPlugin"].htFn.fnSelectRecentSearchWord(evt.target);
+        });
+
+        //Form submit.
+        // _u.on(_q.realForm, "submit", function(evt){ 
+        //     evt.preventDefault();
+        //     location.href = "./SearchResult.html?q=" + doc.querySelector(".inputWrap input").value;
+        // });
+
+    })(document); 
+
+    </script>
+
+    <!-- for WEINRE test -->
+    <!-- script src="http://10.203.227.198:8081/target/target-script-min.js#anonymous"></script -->
+
     </body>
 </html>
 

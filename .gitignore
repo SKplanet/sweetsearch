@@ -1,3 +1,7 @@
 node_modules/
 _test/
+<<<<<<< HEAD
+=======
+demo/goo.js
+>>>>>>> 0.0.1.dev
 dist/

@@ -10,6 +10,12 @@ var
  	clean 			= require('gulp-clean');
 
 
+var allJS = ['src/common/commonUtil.js',
+	 			 'src/common/commonComponent.js',
+	 			 'src/RecentWordPlugin.js',
+	 			 'src/RecentWordPluginLocalStorageAddOn.js',
+	 			 'src/SmartSearch.js'];
+
 
 gulp.task('cleanDist', function() {
 	gulp.src("dist/*.*", {read: false})
@@ -17,8 +23,9 @@ gulp.task('cleanDist', function() {
 });
 
 //development. AMD(for requireJS)
+//TODO. move to upper variables src files"
 gulp.task('compileBabelAMD', function() {
-	 gulp.src(['src/commonComponent.js', 'src/SmartSearch.js'])
+	 gulp.src(allJS)
 			.pipe(concat('ss_merge_es5.js'))
 	        .pipe(sourcemaps.init())
 	        .pipe(babel({
@@ -41,7 +48,7 @@ gulp.task('buildJS', function() {
 });
 
 gulp.task('watchSS', function() {
-    	watch('src/SmartSearch.js' , batch(function(events, done) { 
+    	watch(['src/*.js', 'src/common/*.js'] , batch(function(events, done) { 
     		gulp.start('buildJS', done);
 	    }));
 });

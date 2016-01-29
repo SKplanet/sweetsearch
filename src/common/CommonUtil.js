@@ -1,34 +1,47 @@
+var _cu = {
+	
+	getFnName(fn){
+	    if(typeof fn !== "function") return;
+	    var sName = (fn.name) ? fn.name : fn.toString().match(/function\s+([^(\(|\s)]+)/)[1];
+	    return sName;
+	},
 
-class CommonComponent {
+	sendSimpleAjax(url, fnCallback, sData, method, aHeaders, sQuery) {
+		let xhr = new XMLHttpRequest();
+		xhr.open(method, url);
 
-	constructor(htOption) {
+		if(aHeaders && this.isArray(aHeaders)) {
+			aHeaders.forEach( (v) => {
+				xhr.setRequestHeader(v[0], v[1]);
+			});
+		}
 
-		this.htOption = htOption;
-		this.htCacheData = {};
-
-	}
-
-	execOption (htValue, htDefaultValue, htStorage) {
-
-		Object.keys(htDefaultValue).forEach((v,i,o) => {
-
-			if(typeof htValue[v] === "undefined") {
-				htStorage[v] = htDefaultValue[v];
-			} else {
-				htStorage[v] = htValue[v];
+		xhr.addEventListener("load", function() {
+			if (xhr.status === 200) {
+				var sResult = JSON.parse(xhr.responseText);
+				if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
 			}
+		}.bind(this));
+		xhr.send(sData);
+	},
 
-		});
+	sendSimpleJSONP(sURL, query, sCompletionName, fnCallback) {
+		window[sCompletionName] = null;
+		let encodedQuery = encodeURIComponent(query);
 
-	}
+		var elScript = document.createElement('script');
+		elScript.setAttribute('src', sURL + 'method=' + sCompletionName + '&q=' + encodedQuery);
+		document.getElementsByTagName('head')[0].appendChild(elScript);
 
-	// animation by rAF
-	// super.runAnimation(nWidthForAnimation, this.option.nDuration, {
-	// 			'before' : fnBefore,
-	// 			'after' : this.fnAfter
-	// });
+		elScript.onload= function(evt) {
+			let result = window[sCompletionName];
+			if(fnCallback && typeof fnCallback === 'function') fnCallback(result);
+			document.getElementsByTagName('head')[0].removeChild(this);
+			window[sCompletionName] = null;
+		}
+	},
+
 	runAnimation(nWidthForAnimation, nDuration, htFn) {
-
 		if(htFn && htFn.before && (typeof htFn.before === "function")) { 
 		 	htFn['before'].call();
 		}
@@ -68,18 +81,16 @@ class CommonComponent {
 		}
 
 		window.requestAnimationFrame(execAnimation.bind(this));
-
-	}
+	},
 
 	setTranslate3dX(ele, nValue) {
 
 		let sTF = this.getCSSName('transform');
 		this.elTarget.style[sTF] = 'translate3d(' + (nValue) + 'px, 0, 0)';
 
-	}
+	},
 
-	getWidth (ele) {
-
+	getWidth(ele) {
 		let nWidth = 0;
 		if (ele.getBoundingClientRect().width) {
  			nWidth = ele.getBoundingClientRect().width;
@@ -88,10 +99,9 @@ class CommonComponent {
 		}
 
 		return nWidth
-	}
+	},
 
 	getCSSName(sName) {
-
 		if(this.htCacheData[sName]) return this.htCacheData[sName];
 
 		var _htNameSet = {
@@ -107,28 +117,46 @@ class CommonComponent {
 			if(typeof document.body.style[aNameList[i]] === 'string') this.htCacheData[sName] = aNameList[i];
 			return this.htCacheData[sName];
 		}
-	}
+	},
 
 	getTranslate3dX(ele) {
-
 		let sTF = this.getCSSName("transform");
 		let sPreCss = ele.style[sTF];
 		let nPreX = +sPreCss.replace(/translate3d\((-*\d+(?:\.\d+)*)(px)*\,.+\)/g , "$1");
 		return nPreX;
-
-	}
+	},
 
 	getCSSTransitionEnd() {
-
 		let sTS = this.getCSSName('transition');
 		let sTSE = (sTS === "webkitTransition") ? "webkitTransitionEnd" : "transitionend";
 		return sTSE;
+	},
 
-	}
+	setCSS(el,style,value) {
+		el.style[style] = value;
+	},
+
+	showLayer(el) {
+		el.style.display = "block";
+	},
+
+	closeLayer(el) {
+		el.style.display = "none";
+	},
 
 	//check null or undefined
-	isExist(data) {
+	isExist(data){
 		return data != null;
-	}
+	},
 
+	isArray(_a) {
+		if (!Array.isArray) {
+			return Object.prototype.toString.call(_a) === '[object Array]';
+		}
+		return Array.isArray(_a);
+	},
+
+	isFunction(fn) {
+  		return Object.prototype.toString.call(fn) === '[object Function]';
+	}
 }
