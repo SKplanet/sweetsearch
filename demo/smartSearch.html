@@ -59,11 +59,7 @@
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
         var elInputField        = doc.querySelector(".input-field");
-        //amazon
-        //var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
-
-        var sAutoCompleteURL = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
-
+     
         /*
         // callback 4 Ajax (local)
         var fnInsertAutoCompleteWord = function(sData) {
@@ -82,8 +78,7 @@
 
         //callback 4 JSONP (Amazon)
         //자동완성레이어에 보여줄 HTML (사용자정의)
-        /*
-        var fnInsertAutoCompleteWord = function(sData) {
+        var fnInsertAutoCompleteWordAmazonProduct = function(sData) {
             console.log("fnInsertAutoCompleteWord");
             var result  = "";
             var sHTML   = "";
@@ -111,9 +106,9 @@
             });
             elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
         }
-        */
+
         //callback 4 JSONP (planet)
-        var fnInsertAutoCompleteWord = function(sData) {
+        var fnInsertAutoCompleteWordSyrupTable = function(sData) {
             console.log("fnInsertAutoCompleteWord");
             var result  = "";
             var sHTML   = "";
@@ -189,11 +184,20 @@
              location.href = url;
         }
 
-        // Component initialize.
+        /*****************************/
+        /* Component initialize.
+        /*****************************/
+
+           //amazon
+        var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+        //var sAutoCompleteURL = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
+
         oSS = new SmartSearch(elFormComtainer, {
             'autoComplete'  : {
-                sAutoCompleteURL    : sAutoCompleteURL,
-                requestType         : 'jsonp'
+                'sAutoCompleteURL'    : sAutoCompleteURL,
+                'requestType'         : 'jsonp',
+                'jsonp_callbackName'  : 'completion'
+
             },
             'RecentWordPlugin'          : {
                 'usage' : true,
@@ -202,7 +206,7 @@
         });
     
         oSS.onMethod({
-            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
+            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWordAmazonProduct,
             'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
             'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
             'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,

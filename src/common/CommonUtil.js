@@ -38,13 +38,11 @@ var _cu = {
 		document.getElementsByTagName('head')[0].appendChild(elScript);
 
 		elScript.onload= function(evt) {
-			// let result = window[sCompletionName];
-			// if(fnCallback && typeof fnCallback === 'function') fnCallback(result);
-			// document.getElementsByTagName('head')[0].removeChild(this);
-			// window[sCompletionName] = null;
+			let callbackValue = window[sCompletionName];
+			if(callbackValue && typeof callbackValue !== 'function') {
+				fnCallback(callbackValue);
+			}
 
-			//let result = window[sCompletionName];
-			//if(fnCallback && typeof fnCallback === 'function') fnCallback(result);
 			document.getElementsByTagName('head')[0].removeChild(this);
 			window[sCompletionName] = null;
 		}

@@ -30,7 +30,8 @@ class SmartSearch extends CommonComponent {
 		this._htDefaultOption 	= {
 			'autoComplete' 	: {
 				requestType 		: 'jsonp',
-				sAutoCompleteURL 	: ""
+				sAutoCompleteURL 	: "",
+				jsonp_callbackName  : ""
 			},
 			'RecentWordPlugin' 		: {
 				'usage' : false,
@@ -183,7 +184,8 @@ class SmartSearch extends CommonComponent {
 	makeAutoCompleteJSONPRequest(sQuery, sURL) {
 		//amazon
 		//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
-		_cu.sendSimpleJSONP(sURL, sQuery, "ac_done", this.execAfterAutoCompleteAjax.bind(this,sQuery));
+		let sCallbackName = this.option.autoComplete.jsonp_callbackName;
+		_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {
