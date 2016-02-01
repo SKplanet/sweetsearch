@@ -246,13 +246,9 @@
     <script>
     document.querySelector(".toggleMenu").addEventListener("click", function(evt) {
         if(evt.target.innerText.indexOf("Amazon") > -1) {
-            runAmazonSearch();
-            evt.target.innerText = "Syrup Table 검색으로 전환";
-            document.querySelector(".search-form-heading").innerText = "Amazon Product 자동완성(TEST API)";
+            location.href = "./amazonSearch.html"
         }else {
-            runSyrupSearch();
-            evt.target.innerText = "Amazon 검색으로 전환";
-            document.querySelector(".search-form-heading").innerText = "Syrup Table 자동완성(TEST API)";
+            location.href = "./syrupSearch.html"
         }
     });
 
