@@ -10,8 +10,9 @@
     <body>
 
     <div id="wrapper">
+        <div class="toggleMenu"><a href="#">Amazon검색으로 전환</a></div>
         <div class="search-form">
-            <div class="search-form-heading"> Smart Search </div>
+            <div class="search-form-heading">Syrup Table Search (TEST API)</div>
             <div class="formContainer">
                 <form id="search-form" action="" method="post">
                     <div class="inputWrap">
@@ -19,7 +20,7 @@
                             autocomplete="off"
                             autocapitalize="off"
                             autocorrect="off"
-                            placeholder="Amazon product"
+                            placeholder="스파게티"
                         />
                         <div class="clearQuery" style="display:none;">X</div>
                     </div>
@@ -51,19 +52,17 @@
 
     <script>
 
-    var oSS= null;
-
-    (function(doc){
+        var oSS= null;
+        var doc = document;
         var elForm = doc.querySelector("#search-form");
         var elFormComtainer = doc.querySelector(".search-form");
         var elAutoCompleteLayer = doc.querySelector(".auto-complete-wrap");
         var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
         var elInputField        = doc.querySelector(".input-field");
-        var sAutoCompleteURL = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
-
+     
         /*
         // callback 4 Ajax (local)
-        var fnInsertAutoCompleteWord = function(sData) {
+        var fnInsertAutoCompleteWordAjax = function(sData) {
             var result  = "";
             var sHTML   = "";
             var sTemplate = "<li><span>[%sKeyword%]</span></li>";
@@ -79,7 +78,7 @@
 
         //callback 4 JSONP (Amazon)
         //자동완성레이어에 보여줄 HTML (사용자정의)
-        var fnInsertAutoCompleteWord = function(sData) {
+        var fnInsertAutoCompleteWordAmazonProduct = function(sData) {
             console.log("fnInsertAutoCompleteWord");
             var result  = "";
             var sHTML   = "";
@@ -93,6 +92,36 @@
             sData[1].forEach( function(v) {
 
                 result = sTemplate.replace(/\[%sKeyword%\]/, v);       
+
+                if(bHighlightMatchedWord) { 
+                    if(v.indexOf(sInputValue) > -1) { 
+                        result = result.replace(sInputValue, "<b>"+sInputValue+"</b>");
+                    } else { 
+                        result = result.replace(sInputValueNoBlank, "<b>"+sInputValueNoBlank+"</b>");
+                    }
+                }
+
+                sHTML += result;
+
+            });
+            elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
+        }
+
+        //callback 4 JSONP (planet)
+        var fnInsertAutoCompleteWordSyrupTable = function(sData) {
+            console.log("fnInsertAutoCompleteWord");
+            var result  = "";
+            var sHTML   = "";
+            var sTemplate = "<li><span>[%sKeyword%]</span></li>";
+            var sInputValue = elInputField.value;
+            var sInputValueNoBlank = sInputValue.replace(/\s+/g, ""); 
+
+            var bHighlightMatchedWord = true;
+
+            if(!sData) return;
+            sData['kwds'].forEach( function(v) {
+
+                result = sTemplate.replace(/\[%sKeyword%\]/, v[0]);       
 
                 if(bHighlightMatchedWord) { 
                     if(v.indexOf(sInputValue) > -1) { 
@@ -155,103 +184,81 @@
              location.href = url;
         }
 
-        // Component initialize.
-        oSS = new SmartSearch(elFormComtainer, {
-            'autoComplete'  : {
-                sAutoCompleteURL    : sAutoCompleteURL,
-                requestType         : 'jsonp'
-            },
-            'RecentWordPlugin'          : {
-                'usage' : true,
-                'maxList' : 7
-            }
-        });
-    
-        oSS.onMethod({
-            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWord,
-            'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
-            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
-            'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
-            'fnSubmitForm' : fnSubmitForm
-        });
+        /*****************************/
+        /* Component initialize.
+        /*****************************/
 
+           //amazon
+        var sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+        var sAutoCompleteURLSyrupTable = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
 
-    })(document);
+        function runSyrupSearch() { 
+            oSS = new SmartSearch(elFormComtainer, {
+                'autoComplete'  : {
+                    'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
+                    'requestType'         : 'jsonp',
+                    'jsonp_callbackName'  : 'ac_done'
+
+                },
+                'RecentWordPlugin'          : {
+                    'usage' : true,
+                    'maxList' : 7
+                }
+            });
+        
+            oSS.onMethod({
+                'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWordSyrupTable,
+                'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
+                'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+                'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
+                'fnSubmitForm' : fnSubmitForm
+            });
+        }
+
+         function runAmazonSearch() { 
+            oSS = new SmartSearch(elFormComtainer, {
+                'autoComplete'  : {
+                    'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
+                    'requestType'         : 'jsonp',
+                    'jsonp_callbackName'  : 'completion'
+
+                },
+                'RecentWordPlugin'          : {
+                    'usage' : true,
+                    'maxList' : 7
+                }
+            });
+
+            oSS.onMethod({
+                'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWordAmazonProduct,
+                'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
+                'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
+                'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
+                'fnSubmitForm' : fnSubmitForm
+            });
+        }
+
+        runSyrupSearch();
 
     </script>
+
 
     <script>
-    //support Desktop ENV.
-    (function (doc) {
-
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) return;
-
-        var _u = {
-            on : function(el,eType, handler) {
-                doc.querySelector(el).addEventListener(eType, handler);
-            }
+    document.querySelector(".toggleMenu").addEventListener("click", function(evt) {
+        if(evt.target.innerText.indexOf("Amazon") > -1) {
+            runAmazonSearch();
+            evt.target.innerText = "Syrup Table 검색으로 전환";
+            document.querySelector(".search-form-heading").innerText = "Amazon Product 자동완성(TEST API)";
+        }else {
+            runSyrupSearch();
+            evt.target.innerText = "Amazon 검색으로 전환";
+            document.querySelector(".search-form-heading").innerText = "Syrup Table 자동완성(TEST API)";
         }
-
-        var _h = {
-            toggleSelectedBG : function(evt) {
-                var _el = evt.target;
-                var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
-                var _oldSelectedLI = elCurrentLI.parentElement.querySelector(".selectedLI");
-
-                if(_oldSelectedLI) _oldSelectedLI.className = "";
-                elCurrentLI.className += "selectedLI";
-            },
-            clearSelectedGB : function(evt) {
-                var _oldSelectedLI = this.querySelector(".selectedLI");
-                if(_oldSelectedLI) _oldSelectedLI.className = "";
-            },
-        }
-
-        var _q = {
-            recentCloseLayer : ".recent-word-wrap .closeLayer",
-            autoCloseLayer   : ".auto-complete-wrap .closeLayer",
-            clearQuery       : ".clearQuery",
-            inputWrap        : ".inputWrap",
-            autoULWrap       : ".auto-complete-wrap .ul-wrap",
-            recentULWrap     : ".recent-word-wrap .ul-wrap",
-            realForm         : "#search-form",
-        }
-
-        // Support Mouse Events.
-        _u.on(_q.recentCloseLayer, "mousedown", function(){
-            oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
-        });
-
-        _u.on(_q.autoCloseLayer, "mousedown", oSS.handlerCloseLayer.bind(oSS));
-        _u.on(_q.clearQuery , "mousedown", oSS.handlerClearInputValue.bind(oSS));
-        _u.on(_q.inputWrap, "mousedown", oSS.handlerInputWrap.bind(oSS));
-
-        //change selected LI 
-        _u.on(_q.autoULWrap , "mouseover", _h.toggleSelectedBG);
-        _u.on(_q.recentULWrap, "mouseover", _h.toggleSelectedBG);
-     
-        //rollback backgroundColor when mouseover.
-        _u.on(_q.autoULWrap, "mouseout", _h.clearSelectedGB);
-        _u.on(_q.recentULWrap, "mouseout", _h.clearSelectedGB);
-
-        _u.on(_q.autoULWrap, "mouseup", function(evt) {
-            oSS.htFn.fnSelectAutoCompleteWord(evt.target)
-        });
-
-        _u.on(_q.recentULWrap, "mouseup", function(evt) {
-            oSS.htPluginInstance["RecentWordPlugin"].htFn.fnSelectRecentSearchWord(evt.target);
-        });
-
-        //Form submit.
-        // _u.on(_q.realForm, "submit", function(evt){ 
-        //     evt.preventDefault();
-        //     location.href = "./SearchResult.html?q=" + doc.querySelector(".inputWrap input").value;
-        // });
-
-    })(document); 
+    });
 
     </script>
 
+    <script src="./js/desktopSupport.js"></script>
     <!-- for WEINRE test -->
     <!-- script src="http://10.203.227.198:8081/target/target-script-min.js#anonymous"></script -->
 

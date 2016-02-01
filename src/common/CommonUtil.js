@@ -26,7 +26,11 @@ var _cu = {
 	},
 
 	sendSimpleJSONP(sURL, query, sCompletionName, fnCallback) {
-		window[sCompletionName] = null;
+
+		window[sCompletionName] = function(htData) {
+			fnCallback(htData);
+		};
+
 		let encodedQuery = encodeURIComponent(query);
 
 		var elScript = document.createElement('script');
@@ -34,8 +38,11 @@ var _cu = {
 		document.getElementsByTagName('head')[0].appendChild(elScript);
 
 		elScript.onload= function(evt) {
-			let result = window[sCompletionName];
-			if(fnCallback && typeof fnCallback === 'function') fnCallback(result);
+			let callbackValue = window[sCompletionName];
+			if(callbackValue && typeof callbackValue !== 'function') {
+				fnCallback(callbackValue);
+			}
+
 			document.getElementsByTagName('head')[0].removeChild(this);
 			window[sCompletionName] = null;
 		}

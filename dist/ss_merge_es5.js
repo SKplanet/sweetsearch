@@ -35,7 +35,11 @@ var _cu = {
 		xhr.send(sData);
 	},
 	sendSimpleJSONP: function sendSimpleJSONP(sURL, query, sCompletionName, fnCallback) {
-		window[sCompletionName] = null;
+
+		window[sCompletionName] = function (htData) {
+			fnCallback(htData);
+		};
+
 		var encodedQuery = encodeURIComponent(query);
 
 		var elScript = document.createElement('script');
@@ -43,8 +47,11 @@ var _cu = {
 		document.getElementsByTagName('head')[0].appendChild(elScript);
 
 		elScript.onload = function (evt) {
-			var result = window[sCompletionName];
-			if (fnCallback && typeof fnCallback === 'function') fnCallback(result);
+			var callbackValue = window[sCompletionName];
+			if (callbackValue && typeof callbackValue !== 'function') {
+				fnCallback(callbackValue);
+			}
+
 			document.getElementsByTagName('head')[0].removeChild(this);
 			window[sCompletionName] = null;
 		};
@@ -431,7 +438,8 @@ var SmartSearch = (function (_CommonComponent2) {
 			this._htDefaultOption = {
 				'autoComplete': {
 					requestType: 'jsonp',
-					sAutoCompleteURL: ""
+					sAutoCompleteURL: "",
+					jsonp_callbackName: ""
 				},
 				'RecentWordPlugin': {
 					'usage': false,
@@ -621,7 +629,10 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "makeAutoCompleteJSONPRequest",
 		value: function makeAutoCompleteJSONPRequest(sQuery, sURL) {
-			_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this, sQuery));
+			//amazon
+			//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
+			var sCallbackName = this.option.autoComplete.jsonp_callbackName;
+			_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this, sQuery));
 		}
 	}, {
 		key: "makeAutoCompleteAjaxRequest",
