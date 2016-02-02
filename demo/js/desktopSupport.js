@@ -31,6 +31,7 @@
             autoULWrap       : ".auto-complete-wrap .ul-wrap",
             recentULWrap     : ".recent-word-wrap .ul-wrap",
             realForm         : "#search-form",
+            clearRecentWordBtn  : ".recent-word-wrap .deleteWord"
         }
 
         // Support Mouse Events.
@@ -58,10 +59,9 @@
             oSS.htPluginInstance["RecentWordPlugin"].htFn.fnSelectRecentSearchWord(evt.target);
         });
 
-        //Form submit.
-        // _u.on(_q.realForm, "submit", function(evt){ 
-        //     evt.preventDefault();
-        //     location.href = "./SearchResult.html?q=" + doc.querySelector(".inputWrap input").value;
-        // });
+        _u.on(_q.clearRecentWordBtn, "mousedown", function(evt) {
+            oSS.htPluginInstance["RecentWordPlugin"].handlerClearRecentWord(evt);
+        });
+
 
     })(document); 
