@@ -36,7 +36,7 @@ class CommonComponent {
 		return htPluginInstance;
 	}
 
-	registerPluginCallback(htFn) {
+	onMethodSuper(htFn) {
 		Object.keys(this.htPluginInstance).forEach((v2) => {
 			let htPluginFunction = {};
 			Object.keys(htFn).forEach((v) => {
