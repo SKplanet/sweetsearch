@@ -1,3 +1,9 @@
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.3
+ * @UIComponent RecentWordPlugin 
+ */
+
 class RecentWordPlugin extends CommonComponent {
 
 	constructor(elTarget, htOption) {

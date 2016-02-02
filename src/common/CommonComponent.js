@@ -1,3 +1,9 @@
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.3
+ * @UIComponent common component
+ */
+
 class CommonComponent {
 	constructor(htOption) {
 		this.htOption = htOption;

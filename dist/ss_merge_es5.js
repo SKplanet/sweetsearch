@@ -10,6 +10,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * @nigayo. SKPlanet.
+ * @utiliy
+ */
+
 var _cu = {
 	getFnName: function getFnName(fn) {
 		if (typeof fn !== "function") return;
@@ -161,6 +166,11 @@ var _cu = {
 		return Object.prototype.toString.call(fn) === '[object Function]';
 	}
 };
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.3
+ * @UIComponent common component
+ */
 
 var CommonComponent = (function () {
 	function CommonComponent(htOption) {
@@ -226,6 +236,12 @@ var CommonComponent = (function () {
 
 	return CommonComponent;
 })();
+
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.3
+ * @UIComponent RecentWordPlugin 
+ */
 
 var RecentWordPlugin = (function (_CommonComponent) {
 	_inherits(RecentWordPlugin, _CommonComponent);
@@ -342,6 +358,10 @@ var RecentWordPlugin = (function (_CommonComponent) {
 
 	return RecentWordPlugin;
 })(CommonComponent);
+/**
+ * @nigayo. SKPlanet.
+ * @RecentWordPluginLocalStorageAddOn - dependency:RecentWordPlugin. 
+ */
 
 var RecentWordPluginLocalStorageAddOn = (function () {
 	function RecentWordPluginLocalStorageAddOn(sKey, nMaxList) {
@@ -396,6 +416,11 @@ var RecentWordPluginLocalStorageAddOn = (function () {
 
 	return RecentWordPluginLocalStorageAddOn;
 })();
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.3
+ * @UIComponent smartsearch
+ */
 
 var SmartSearch = (function (_CommonComponent2) {
 	_inherits(SmartSearch, _CommonComponent2);
@@ -409,8 +434,6 @@ var SmartSearch = (function (_CommonComponent2) {
 		_this5.init(htOption);
 		return _this5;
 	}
-
-	//TODO. think about moving super class.
 
 	_createClass(SmartSearch, [{
 		key: "init",

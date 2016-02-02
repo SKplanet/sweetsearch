@@ -1,3 +1,8 @@
+/**
+ * @nigayo. SKPlanet.
+ * @utiliy
+ */
+
 var _cu = {
 	
 	getFnName(fn){

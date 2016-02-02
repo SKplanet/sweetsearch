@@ -1,3 +1,9 @@
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.3
+ * @UIComponent smartsearch
+ */
+
 class SmartSearch extends CommonComponent {
 	
 	constructor(elTarget, htOption) {
@@ -6,7 +12,6 @@ class SmartSearch extends CommonComponent {
 		this.init(htOption);
 	}
 
-	//TODO. think about moving super class.
 	init(htOption) {
 		this.setInitValue();
 		super.setOption(htOption, this._htDefaultOption, this.option);
