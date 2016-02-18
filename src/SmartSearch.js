@@ -30,7 +30,7 @@ class SmartSearch extends CommonComponent {
 			realForm 			: "#search-form"
 		} 
 
-		let aDefaultFn = ['fnInsertAutoCompleteWord','fnSelectAutoCompleteWord', 'fnSubmitForm'];
+		let aDefaultFn = ['FN_AFTER_INSERT_AUTO_WORD','FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT'];
 
 		this._htDefaultOption 	= {
 			'autoComplete' 	: {
@@ -58,7 +58,7 @@ class SmartSearch extends CommonComponent {
 
 		this.htCachedData 		= {};
 		this.htDefaultFn 		= super.getDefaultCallbackList(aDefaultFn);
-		this.htFn 				= {};
+		this.htUserFn 			= {};
 
 		//plugins
 		this.htPluginList		= {'RecentWordPlugin' : RecentWordPlugin};
@@ -85,9 +85,9 @@ class SmartSearch extends CommonComponent {
 		this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.option, this.elTarget);
 	}
 
-	onMethod(htUserFn) {
-		super.setOption(htUserFn, this.htDefaultFn, this.htFn);
-		super.onMethodSuper(htUserFn);
+	onUserMethod(htFn) {
+		super.setOption(htFn, this.htDefaultFn, this.htUserFn);
+		super.onMethodSuper(htFn);
 	}
 
 
@@ -135,13 +135,13 @@ class SmartSearch extends CommonComponent {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
 
-		let sText = this.htFn.fnSelectAutoCompleteWord(evt.target);
+		let sText = this.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target);
 	}
 
 	handlerSubmitForm(evt, sQuery) {
         if(evt) evt.preventDefault();
         sQuery = sQuery || this.elInputField.value;
-		this.htFn.fnSubmitForm(sQuery);
+		this.htUserFn['FN_AFTER_FORM_SUBMIT'](sQuery);
 
 		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 		if(this.htPluginInstance["RecentWordPlugin"]) oRecentWordPlugin.saveQuery(sQuery);
@@ -163,7 +163,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
-		this.htFn.fnInsertAutoCompleteWord(sResult);
+		this.htUserFn['FN_AFTER_INSERT_AUTO_WORD'](sResult);
 		if(this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);
 		else _cu.closeLayer(this.elAutoCompleteLayer);
 

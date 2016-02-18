@@ -35,31 +35,31 @@
         }
 
         // Support Mouse Events.
-        _u.on(_q.recentCloseLayer, "mousedown", function(){
+        _u.on(_q.recentCloseLayer,  "mousedown", function(){
             oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
         });
 
-        _u.on(_q.autoCloseLayer, "mousedown", oSS.handlerCloseLayer.bind(oSS));
-        _u.on(_q.clearQuery , "mousedown", oSS.handlerClearInputValue.bind(oSS));
-        _u.on(_q.inputWrap, "mousedown", oSS.handlerInputWrap.bind(oSS));
+        _u.on(_q.autoCloseLayer,    "mousedown", oSS.handlerCloseLayer.bind(oSS));
+        _u.on(_q.clearQuery ,       "mousedown", oSS.handlerClearInputValue.bind(oSS));
+        _u.on(_q.inputWrap,         "mousedown", oSS.handlerInputWrap.bind(oSS));
 
         //change selected LI 
-        _u.on(_q.autoULWrap , "mouseover", _h.toggleSelectedBG);
-        _u.on(_q.recentULWrap, "mouseover", _h.toggleSelectedBG);
+        _u.on(_q.autoULWrap ,       "mouseover", _h.toggleSelectedBG);
+        _u.on(_q.recentULWrap,      "mouseover", _h.toggleSelectedBG);
      
         //rollback backgroundColor when mouseover.
-        _u.on(_q.autoULWrap, "mouseout", _h.clearSelectedGB);
-        _u.on(_q.recentULWrap, "mouseout", _h.clearSelectedGB);
+        _u.on(_q.autoULWrap,        "mouseout", _h.clearSelectedGB);
+        _u.on(_q.recentULWrap,      "mouseout", _h.clearSelectedGB);
 
-        _u.on(_q.autoULWrap, "mouseup", function(evt) {
-            oSS.htFn.fnSelectAutoCompleteWord(evt.target)
+        _u.on(_q.autoULWrap,        "mouseup", function(evt) {
+            oSS.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target)
         });
 
-        _u.on(_q.recentULWrap, "mouseup", function(evt) {
-            oSS.htPluginInstance["RecentWordPlugin"].htFn.fnSelectRecentSearchWord(evt.target);
+        _u.on(_q.recentULWrap,      "mouseup", function(evt) {
+            oSS.htPluginInstance["RecentWordPlugin"].htUserFn['FN_AFTER_SELECT_RECENT_WORD'](evt.target);
         });
 
-        _u.on(_q.clearRecentWordBtn, "mousedown", function(evt) {
+        _u.on(_q.clearRecentWordBtn,"mousedown", function(evt) {
             oSS.htPluginInstance["RecentWordPlugin"].handlerClearRecentWord(evt);
         });
 

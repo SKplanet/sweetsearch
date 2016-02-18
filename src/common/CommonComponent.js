@@ -50,7 +50,7 @@ class CommonComponent {
 					htPluginFunction[v] = htFn[v];
 				}
 			});
-			this.htPluginInstance[v2].onMethod(htPluginFunction);
+			this.htPluginInstance[v2].onUserMethod(htPluginFunction);
 		});
 	}
 	

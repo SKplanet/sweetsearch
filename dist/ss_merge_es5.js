@@ -229,7 +229,7 @@ var CommonComponent = (function () {
 						htPluginFunction[v] = htFn[v];
 					}
 				});
-				_this2.htPluginInstance[v2].onMethod(htPluginFunction);
+				_this2.htPluginInstance[v2].onUserMethod(htPluginFunction);
 			});
 		}
 	}]);
@@ -267,7 +267,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	}, {
 		key: "setInitValue",
 		value: function setInitValue() {
-			var htDefaultFn = ['fnInsertRecentSearchWord', 'fnSelectRecentSearchWord'];
+			var htDefaultFn = ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'];
 			this.htDefaultOption = {
 				'usage': true,
 				'maxList': 5
@@ -283,8 +283,8 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			this.option = {};
 		}
 	}, {
-		key: "onMethod",
-		value: function onMethod(htFn) {
+		key: "onUserMethod",
+		value: function onUserMethod(htFn) {
 			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "setOption", this).call(this, htFn, this.htDefaultFn, this.htFn);
 		}
 	}, {
@@ -330,7 +330,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 		value: function handlerSelectRecentWordTouchEnd(evt) {
 			var nowPageY = evt.changedTouches[0].pageY;
 			if (this.isExecuteTouchScroll(nowPageY)) return;
-			this.htFn.fnSelectRecentSearchWord(evt.target);
+			this.htFn['FN_AFTER_SELECT_RECENT_WORD'](evt.target);
 		}
 	}, {
 		key: "isExecuteTouchScroll",
@@ -352,7 +352,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			this.elRecentWordLayer.style.display = "block";
 			this.elClearRecentWordBtn.style.display = "block";
 			var aData = JSON.parse(sData);
-			this.htFn.fnInsertRecentSearchWord(aData, this.option.maxList);
+			this.htFn['FN_AFTER_INSERT_RECENT_WORD'](aData, this.option.maxList);
 		}
 	}]);
 
@@ -456,7 +456,7 @@ var SmartSearch = (function (_CommonComponent2) {
 				realForm: "#search-form"
 			};
 
-			var aDefaultFn = ['fnInsertAutoCompleteWord', 'fnSelectAutoCompleteWord', 'fnSubmitForm'];
+			var aDefaultFn = ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT'];
 
 			this._htDefaultOption = {
 				'autoComplete': {
@@ -484,7 +484,7 @@ var SmartSearch = (function (_CommonComponent2) {
 
 			this.htCachedData = {};
 			this.htDefaultFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultFn);
-			this.htFn = {};
+			this.htUserFn = {};
 
 			//plugins
 			this.htPluginList = { 'RecentWordPlugin': RecentWordPlugin };
@@ -533,10 +533,10 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.htPluginInstance = _get(Object.getPrototypeOf(SmartSearch.prototype), "getPluginInstance", this).call(this, this.htPluginList, this.option, this.elTarget);
 		}
 	}, {
-		key: "onMethod",
-		value: function onMethod(htUserFn) {
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htUserFn, this.htDefaultFn, this.htFn);
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "onMethodSuper", this).call(this, htUserFn);
+		key: "onUserMethod",
+		value: function onUserMethod(htFn) {
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htFn, this.htDefaultFn, this.htUserFn);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "onMethodSuper", this).call(this, htFn);
 		}
 
 		/***** START EventHandler *****/
@@ -595,14 +595,14 @@ var SmartSearch = (function (_CommonComponent2) {
 			var nowPageY = evt.changedTouches[0].pageY;
 			if (this.isExecuteTouchScroll(nowPageY)) return;
 
-			var sText = this.htFn.fnSelectAutoCompleteWord(evt.target);
+			var sText = this.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target);
 		}
 	}, {
 		key: "handlerSubmitForm",
 		value: function handlerSubmitForm(evt, sQuery) {
 			if (evt) evt.preventDefault();
 			sQuery = sQuery || this.elInputField.value;
-			this.htFn.fnSubmitForm(sQuery);
+			this.htUserFn['FN_AFTER_FORM_SUBMIT'](sQuery);
 
 			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
 			if (this.htPluginInstance["RecentWordPlugin"]) oRecentWordPlugin.saveQuery(sQuery);
@@ -627,7 +627,7 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
-			this.htFn.fnInsertAutoCompleteWord(sResult);
+			this.htUserFn['FN_AFTER_INSERT_AUTO_WORD'](sResult);
 			if (this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);else _cu.closeLayer(this.elAutoCompleteLayer);
 
 			//save history

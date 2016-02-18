@@ -142,23 +142,23 @@ var Service = (function(){
 
     function runSyrupSearch() { 
         oSS = new SmartSearch(elFormComtainer, {
-            'autoComplete'  : {
+            'autoComplete'      : {
                 'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
                 'requestType'         : 'jsonp',
                 'jsonp_callbackName'  : 'ac_done'
             },
-            'RecentWordPlugin'          : {
-                'usage' : true,
-                'maxList' : 7
+            'RecentWordPlugin'  : {
+                'usage'               : true,
+                'maxList'             : 7
             }
         });
 
-        oSS.onMethod({
-            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWordSyrupTable,
-            'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
-            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
-            'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
-            'fnSubmitForm' : fnSubmitForm
+        oSS.onUserMethod({
+            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordSyrupTable,
+            'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
+            'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord,
+            'FN_AFTER_FORM_SUBMIT'         : fnSubmitForm
         });
     }
 
@@ -176,12 +176,12 @@ var Service = (function(){
             }
         });
 
-        oSS.onMethod({
-            'fnInsertAutoCompleteWord' : fnInsertAutoCompleteWordAmazonProduct,
-            'fnSelectAutoCompleteWord' : fnSelectAutoCompleteWord,
-            'fnInsertRecentSearchWord' : fnInsertRecentSearchWord,
-            'fnSelectRecentSearchWord' : fnSelectRecentSearchWord,
-            'fnSubmitForm' : fnSubmitForm
+        oSS.onUserMethod({
+            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
+            'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
+            'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord,
+            'FN_AFTER_FORM_SUBMIT'         : fnSubmitForm
         });
     }
 

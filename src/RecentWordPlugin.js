@@ -21,7 +21,7 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	setInitValue() {
-		let htDefaultFn = ['fnInsertRecentSearchWord', 'fnSelectRecentSearchWord'];
+		let htDefaultFn = ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'];
 		this.htDefaultOption = {
 			'usage' : true,
             'maxList' : 5
@@ -37,7 +37,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.option 				= {};
 	}
 
-	onMethod(htFn) {
+	onUserMethod(htFn) {
 		super.setOption(htFn, this.htDefaultFn, this.htFn);
 	}
 
@@ -66,7 +66,7 @@ class RecentWordPlugin extends CommonComponent {
 	handlerSelectRecentWordTouchEnd(evt) {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
-		this.htFn.fnSelectRecentSearchWord(evt.target);
+		this.htFn['FN_AFTER_SELECT_RECENT_WORD'](evt.target);
 	}
 
 	isExecuteTouchScroll(pageY) {
@@ -85,7 +85,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer.style.display = "block";
 		this.elClearRecentWordBtn.style.display = "block";
 		let aData = JSON.parse(sData);
-		this.htFn.fnInsertRecentSearchWord(aData, this.option.maxList);
+		this.htFn['FN_AFTER_INSERT_RECENT_WORD'](aData, this.option.maxList);
 	}
 
 }
