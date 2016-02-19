@@ -434,7 +434,7 @@ var RecentWordPluginLocalStorageAddOn = (function () {
 })();
 /**
  * @nigayo. SKPlanet.
- * @v0.0.3
+ * @v0.0.4
  * @UIComponent smartsearch
  */
 
@@ -580,13 +580,13 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elInputField.focus();
 		}
 
-		//입력필드에 들어가는 값의 어떠한 처리가 필요할때 여기서 처리한다.
+		//if need something executing of inputed value
 
 	}, {
 		key: "handlerInputKeyPress",
 		value: function handlerInputKeyPress(evt) {}
 
-		//특수키(keycode 8인 backspace등) 작업 조정이 필요한 경우 여기서 처리.
+		//if need something executing of inputed special key value.(e.g. keycode 8: backspace)
 
 	}, {
 		key: "handlerInputKeydown",
