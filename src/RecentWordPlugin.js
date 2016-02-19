@@ -88,4 +88,13 @@ class RecentWordPlugin extends CommonComponent {
 		this.htFn['FN_AFTER_INSERT_RECENT_WORD'](aData, this.option.maxList);
 	}
 
+	dockingPluginMethod(oParent) {
+		oParent.onPluginMethod({
+			'FN_AFTER_FOCUS' 	: this.showRecentSearchWord.bind(this),
+			'FN_AFTER_INPUT'	: this.handlerCloseLayer.bind(this),
+			'FN_AFTER_SUBMIT'	: this.saveQuery.bind(this)
+		});
+	}
+
+
 }

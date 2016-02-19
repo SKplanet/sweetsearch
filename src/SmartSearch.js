@@ -5,7 +5,22 @@
  */
 
 class SmartSearch extends CommonComponent {
-	
+
+	COMPONENT_CONFIG() {
+		 this.COMPONENT_DATA = {
+			ELEMENT_SELECTOR 	: {
+				inputFieldWrap 		: ".inputWrap",
+				inputField 			: ".input-field",
+				autoCompleteWrap 	: ".auto-complete-wrap",
+				closeLayer 			: ".closeLayer",
+				clearQueryBtn 		: ".clearQuery",
+				autoULWrap			: ".auto-complete-wrap .ul-wrap",
+				realForm 			: "#search-form"
+			} 
+		}
+	}
+
+
 	constructor(elTarget, htOption) {
 		super(htOption)
 		this.elTarget = elTarget;
@@ -19,17 +34,25 @@ class SmartSearch extends CommonComponent {
 	}
 
 	setInitValue() {
-		let s = {
-			inputFieldWrap 		: ".inputWrap",
-			inputField 			: ".input-field",
-			autoCompleteWrap 	: ".auto-complete-wrap",
-			closeLayer 			: ".closeLayer",
-			clearQueryBtn 		: ".clearQuery",
-			autoULWrap			: ".auto-complete-wrap .ul-wrap",
-			realForm 			: "#search-form"
-		} 
+		let _el 				= this.elTarget;
 
-		let aDefaultFn = ['FN_AFTER_INSERT_AUTO_WORD','FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT'];
+		this.COMPONENT_CONFIG();
+
+		let s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+
+		//TODO. Separate data.
+		let aDefaultFnName = [	
+			'FN_AFTER_INSERT_AUTO_WORD',
+			'FN_AFTER_SELECT_AUTO_WORD', 
+			'FN_AFTER_FORM_SUBMIT',
+			'FN_AFTER_FOCUS'
+		];
+
+		let aDefaultPluginFnName = [	
+			'FN_AFTER_FOCUS',
+			'FN_AFTER_INPUT',
+			'FN_AFTER_SUBMIT'
+		];
 
 		this._htDefaultOption 	= {
 			"requestType" 		: 'jsonp',
@@ -38,7 +61,6 @@ class SmartSearch extends CommonComponent {
 		}
 
 		this.option 			= {};
-		let _el 				= this.elTarget;
 
 		this.elInputFieldWrap	= _el.querySelector(s.inputFieldWrap);
 		this.elInputField 		= _el.querySelector(s.inputField);
@@ -50,11 +72,14 @@ class SmartSearch extends CommonComponent {
 		this.elAutoULWrap		= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
 		this.htCachedData 		= {};
-		this.htDefaultFn 		= super.getDefaultCallbackList(aDefaultFn);
+		this.htDefaultFn 		= super.getDefaultCallbackList(aDefaultFnName);
+		this.htDefaultPluginFn	= super.getDefaultCallbackList(aDefaultPluginFnName);
+
 		this.htUserFn 			= {};
+		this.htPluginFn 		= {};
 
 		//plugins
-		this.aDefaultPlugin 	= ['RecentWordPlugin'];
+		this.aMyPluginName 		= ['RecentWordPlugin'];
 		this.htPluginInstance 	= {};
 	}
 
@@ -76,16 +101,20 @@ class SmartSearch extends CommonComponent {
 
 	onUserMethod(htFn) {
 		super.setOption(htFn, this.htDefaultFn, this.htUserFn);
-		super.onMethodSuper(htFn);
+	}
+
+	onPluginMethod(htFn) {
+		super.setOption(htFn, this.htDefaultPluginFn, this.htPluginFn);
 	}
 
 	onPlugins(aPluginList) {
-		this.htPluginInstance = super.initPlugins(this.aDefaultPlugin, aPluginList,  this.elTarget);
+		this.htPluginInstance = super.initPlugins(this.aMyPluginName, aPluginList,  this.elTarget);
 	}
 
 	/***** START EventHandler *****/
 	handlerInputWrap(evt) {
-		this.execAfterFocus(evt);
+		this.htUserFn['FN_AFTER_FOCUS']();
+		this.htPluginFn['FN_AFTER_FOCUS']();
 		this.elInputField.focus();
 	}
 
@@ -101,9 +130,7 @@ class SmartSearch extends CommonComponent {
 		if(sInputData.length > 0 ) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		else _cu.closeLayer(this.elClearQueryBtn);
 
-		//after input word, must hide a recent word layer
-		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-		if(oRecentWordPlugin) _cu.closeLayer(oRecentWordPlugin.elRecentWordLayer);
+		this.htPluginFn['FN_AFTER_INPUT']();
 
 		if (typeof this.htCachedData[sInputData] === "undefined") this.autoCompleteRequestManager(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
@@ -113,6 +140,7 @@ class SmartSearch extends CommonComponent {
 		this.elInputField.value = "";
 		this.handlerCloseLayer();
 		_cu.closeLayer(this.elClearQueryBtn);
+		//evt.stopPropagation();
 	}
 	
 	handlerCloseLayer(evt) {
@@ -134,9 +162,7 @@ class SmartSearch extends CommonComponent {
         if(evt) evt.preventDefault();
         sQuery = sQuery || this.elInputField.value;
 		this.htUserFn['FN_AFTER_FORM_SUBMIT'](sQuery);
-
-		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-		if(this.htPluginInstance["RecentWordPlugin"]) oRecentWordPlugin.saveQuery(sQuery);
+		this.htPluginFn['FN_AFTER_SUBMIT'](sQuery);
 	}
 	/***** End EventHandler *****/
 
@@ -145,13 +171,6 @@ class SmartSearch extends CommonComponent {
 		var nDiff = this.htTouchStartSelectedWord.y - pageY;
 		if(nDiff !== 0) return true;
 		return false;
-	}
-
-	execAfterFocus(evt) {
-		//execute RecentWordPlugin.
-		let oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-		if(!oRecentWordPlugin) return;
-		oRecentWordPlugin.showRecentSearchWord();
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
@@ -179,12 +198,11 @@ class SmartSearch extends CommonComponent {
 	}
 
 	makeAutoCompleteJSONPRequest(sQuery, sURL) {
-		//amazon
-		//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
 		let sCallbackName = this.option.jsonp_callbackName;
 		_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 
+	//TODO. 
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {
 		// hardcoded url for test.
 		let url = "../jsonMock/"+ sQuery +".json";

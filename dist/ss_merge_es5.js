@@ -208,41 +208,36 @@ var CommonComponent = (function () {
 			return htFn;
 		}
 	}, {
-		key: "getPluginInstance",
-		value: function getPluginInstance(htPluginList, htOptionList, elTarget) {
-			var htPluginInstance = {};
-			Object.keys(htPluginList).forEach(function (v) {
-				if (htOptionList[v] === "undefined" || !htOptionList[v].usage) return;
-				htPluginInstance[v] = new htPluginList[v](elTarget, htOptionList[v]);
-			});
-			return htPluginInstance;
-		}
-	}, {
 		key: "initPlugins",
-		value: function initPlugins(aDefaultPlugin, aPluginList, elTarget) {
+		value: function initPlugins(aMyPluginName, aPluginList, elTarget) {
+			var _this2 = this;
+
 			var htPluginInstance = {};
+			var oParent = this;
 			aPluginList.forEach(function (v) {
 				var sName = v.name;
-				if (aDefaultPlugin.indexOf(sName) < 0) return;
+				if (aMyPluginName.indexOf(sName) < 0) return;
 				htPluginInstance[sName] = new window[v.name](elTarget, v.option);
 				htPluginInstance[sName].onUserMethod(v.useMethod);
+				_this2._injectParentObject(oParent, htPluginInstance[sName]);
 			});
 			return htPluginInstance;
 		}
 	}, {
 		key: "onMethodSuper",
 		value: function onMethodSuper(htFn) {
-			var _this2 = this;
+			var _this3 = this;
 
-			Object.keys(this.htPluginInstance).forEach(function (v2) {
-				var htPluginFunction = {};
-				Object.keys(htFn).forEach(function (v) {
-					if (typeof _this2.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
-						htPluginFunction[v] = htFn[v];
-					}
-				});
-				_this2.htPluginInstance[v2].onUserMethod(htPluginFunction);
+			Object.keys(htFn).forEach(function (v) {
+				if (typeof _this3.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
+					htPluginFunction[v] = htFn[v];
+				}
 			});
+		}
+	}, {
+		key: "_injectParentObject",
+		value: function _injectParentObject(oParent, oChild) {
+			oChild.dockingPluginMethod(oParent);
 		}
 	}]);
 
@@ -261,11 +256,11 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	function RecentWordPlugin(elTarget, htOption) {
 		_classCallCheck(this, RecentWordPlugin);
 
-		var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(RecentWordPlugin).call(this, htOption));
+		var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(RecentWordPlugin).call(this, htOption));
 
-		_this3.elTarget = elTarget;
-		_this3.init(htOption);
-		return _this3;
+		_this4.elTarget = elTarget;
+		_this4.init(htOption);
+		return _this4;
 	}
 
 	_createClass(RecentWordPlugin, [{
@@ -302,19 +297,19 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	}, {
 		key: "registerEvents",
 		value: function registerEvents() {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.elClearRecentWordBtn.addEventListener("touchend", function (evt) {
-				_this4.handlerClearRecentWord(evt);
+				_this5.handlerClearRecentWord(evt);
 			});
 			this.elCloseButtonRWL.addEventListener("touchend", function (evt) {
-				_this4.handlerCloseLayer(evt);
+				_this5.handlerCloseLayer(evt);
 			});
 			this.elRecentULWrap.addEventListener("touchstart", function (evt) {
-				_this4.handlerSelectRecentWordTouchStart(evt);
+				_this5.handlerSelectRecentWordTouchStart(evt);
 			});
 			this.elRecentULWrap.addEventListener("touchend", function (evt) {
-				_this4.handlerSelectRecentWordTouchEnd(evt);
+				_this5.handlerSelectRecentWordTouchEnd(evt);
 			});
 		}
 	}, {
@@ -365,6 +360,15 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			this.elClearRecentWordBtn.style.display = "block";
 			var aData = JSON.parse(sData);
 			this.htFn['FN_AFTER_INSERT_RECENT_WORD'](aData, this.option.maxList);
+		}
+	}, {
+		key: "dockingPluginMethod",
+		value: function dockingPluginMethod(oParent) {
+			oParent.onPluginMethod({
+				'FN_AFTER_FOCUS': this.showRecentSearchWord.bind(this),
+				'FN_AFTER_INPUT': this.handlerCloseLayer.bind(this),
+				'FN_AFTER_SUBMIT': this.saveQuery.bind(this)
+			});
 		}
 	}]);
 
@@ -437,14 +441,31 @@ var RecentWordPluginLocalStorageAddOn = (function () {
 var SmartSearch = (function (_CommonComponent2) {
 	_inherits(SmartSearch, _CommonComponent2);
 
+	_createClass(SmartSearch, [{
+		key: "COMPONENT_CONFIG",
+		value: function COMPONENT_CONFIG() {
+			this.COMPONENT_DATA = {
+				ELEMENT_SELECTOR: {
+					inputFieldWrap: ".inputWrap",
+					inputField: ".input-field",
+					autoCompleteWrap: ".auto-complete-wrap",
+					closeLayer: ".closeLayer",
+					clearQueryBtn: ".clearQuery",
+					autoULWrap: ".auto-complete-wrap .ul-wrap",
+					realForm: "#search-form"
+				}
+			};
+		}
+	}]);
+
 	function SmartSearch(elTarget, htOption) {
 		_classCallCheck(this, SmartSearch);
 
-		var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
+		var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
 
-		_this5.elTarget = elTarget;
-		_this5.init(htOption);
-		return _this5;
+		_this6.elTarget = elTarget;
+		_this6.init(htOption);
+		return _this6;
 	}
 
 	_createClass(SmartSearch, [{
@@ -457,17 +478,16 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "setInitValue",
 		value: function setInitValue() {
-			var s = {
-				inputFieldWrap: ".inputWrap",
-				inputField: ".input-field",
-				autoCompleteWrap: ".auto-complete-wrap",
-				closeLayer: ".closeLayer",
-				clearQueryBtn: ".clearQuery",
-				autoULWrap: ".auto-complete-wrap .ul-wrap",
-				realForm: "#search-form"
-			};
+			var _el = this.elTarget;
 
-			var aDefaultFn = ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT'];
+			this.COMPONENT_CONFIG();
+
+			var s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+
+			//TODO. Separate data.
+			var aDefaultFnName = ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT', 'FN_AFTER_FOCUS'];
+
+			var aDefaultPluginFnName = ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT'];
 
 			this._htDefaultOption = {
 				"requestType": 'jsonp',
@@ -476,7 +496,6 @@ var SmartSearch = (function (_CommonComponent2) {
 			};
 
 			this.option = {};
-			var _el = this.elTarget;
 
 			this.elInputFieldWrap = _el.querySelector(s.inputFieldWrap);
 			this.elInputField = _el.querySelector(s.inputField);
@@ -488,60 +507,67 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elAutoULWrap = this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
 			this.htCachedData = {};
-			this.htDefaultFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultFn);
+			this.htDefaultFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultFnName);
+			this.htDefaultPluginFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultPluginFnName);
+
 			this.htUserFn = {};
+			this.htPluginFn = {};
 
 			//plugins
-			this.aDefaultPlugin = ['RecentWordPlugin'];
+			this.aMyPluginName = ['RecentWordPlugin'];
 			this.htPluginInstance = {};
 		}
 	}, {
 		key: "registerEvents",
 		value: function registerEvents() {
-			var _this6 = this;
+			var _this7 = this;
 
 			this.elInputFieldWrap.addEventListener("touchend", function (evt) {
-				return _this6.handlerInputWrap(evt);
+				return _this7.handlerInputWrap(evt);
 			});
 
 			this.elInputField.addEventListener("keypress", function (evt) {
-				return _this6.handlerInputKeyPress(evt);
+				return _this7.handlerInputKeyPress(evt);
 			});
 			this.elInputField.addEventListener("keydown", function (evt) {
-				return _this6.handlerInputKeydown(evt);
+				return _this7.handlerInputKeydown(evt);
 			});
 			this.elInputField.addEventListener("input", function (evt) {
-				return _this6.handlerInputKeyInput(evt);
+				return _this7.handlerInputKeyInput(evt);
 			});
 
 			this.elCloseButton.addEventListener("touchend", function (evt) {
-				return _this6.handlerCloseLayer(evt);
+				return _this7.handlerCloseLayer(evt);
 			});
 			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
-				return _this6.handlerClearInputValue(evt);
+				return _this7.handlerClearInputValue(evt);
 			});
 
 			this.elAutoULWrap.addEventListener("touchstart", function (evt) {
-				return _this6.handlerSelectAutoCompletedWordTouchStart(evt);
+				return _this7.handlerSelectAutoCompletedWordTouchStart(evt);
 			});
 			this.elAutoULWrap.addEventListener("touchend", function (evt) {
-				return _this6.handlerSelectAutoCompletedWordTouchEnd(evt);
+				return _this7.handlerSelectAutoCompletedWordTouchEnd(evt);
 			});
 
 			this.elForm.addEventListener("submit", function (evt) {
-				return _this6.handlerSubmitForm(evt);
+				return _this7.handlerSubmitForm(evt);
 			});
 		}
 	}, {
 		key: "onUserMethod",
 		value: function onUserMethod(htFn) {
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htFn, this.htDefaultFn, this.htUserFn);
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "onMethodSuper", this).call(this, htFn);
+		}
+	}, {
+		key: "onPluginMethod",
+		value: function onPluginMethod(htFn) {
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htFn, this.htDefaultPluginFn, this.htPluginFn);
 		}
 	}, {
 		key: "onPlugins",
 		value: function onPlugins(aPluginList) {
-			this.htPluginInstance = _get(Object.getPrototypeOf(SmartSearch.prototype), "initPlugins", this).call(this, this.aDefaultPlugin, aPluginList, this.elTarget);
+			this.htPluginInstance = _get(Object.getPrototypeOf(SmartSearch.prototype), "initPlugins", this).call(this, this.aMyPluginName, aPluginList, this.elTarget);
 		}
 
 		/***** START EventHandler *****/
@@ -549,7 +575,8 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "handlerInputWrap",
 		value: function handlerInputWrap(evt) {
-			this.execAfterFocus(evt);
+			this.htUserFn['FN_AFTER_FOCUS']();
+			this.htPluginFn['FN_AFTER_FOCUS']();
 			this.elInputField.focus();
 		}
 
@@ -571,9 +598,7 @@ var SmartSearch = (function (_CommonComponent2) {
 
 			if (sInputData.length > 0) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");else _cu.closeLayer(this.elClearQueryBtn);
 
-			//after input word, must hide a recent word layer
-			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-			if (oRecentWordPlugin) _cu.closeLayer(oRecentWordPlugin.elRecentWordLayer);
+			this.htPluginFn['FN_AFTER_INPUT']();
 
 			if (typeof this.htCachedData[sInputData] === "undefined") this.autoCompleteRequestManager(sInputData);else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 		}
@@ -583,6 +608,7 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elInputField.value = "";
 			this.handlerCloseLayer();
 			_cu.closeLayer(this.elClearQueryBtn);
+			//evt.stopPropagation();
 		}
 	}, {
 		key: "handlerCloseLayer",
@@ -608,9 +634,7 @@ var SmartSearch = (function (_CommonComponent2) {
 			if (evt) evt.preventDefault();
 			sQuery = sQuery || this.elInputField.value;
 			this.htUserFn['FN_AFTER_FORM_SUBMIT'](sQuery);
-
-			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-			if (this.htPluginInstance["RecentWordPlugin"]) oRecentWordPlugin.saveQuery(sQuery);
+			this.htPluginFn['FN_AFTER_SUBMIT'](sQuery);
 		}
 		/***** End EventHandler *****/
 
@@ -620,14 +644,6 @@ var SmartSearch = (function (_CommonComponent2) {
 			var nDiff = this.htTouchStartSelectedWord.y - pageY;
 			if (nDiff !== 0) return true;
 			return false;
-		}
-	}, {
-		key: "execAfterFocus",
-		value: function execAfterFocus(evt) {
-			//execute RecentWordPlugin.
-			var oRecentWordPlugin = this.htPluginInstance["RecentWordPlugin"];
-			if (!oRecentWordPlugin) return;
-			oRecentWordPlugin.showRecentSearchWord();
 		}
 	}, {
 		key: "execAfterAutoCompleteAjax",
@@ -657,11 +673,12 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "makeAutoCompleteJSONPRequest",
 		value: function makeAutoCompleteJSONPRequest(sQuery, sURL) {
-			//amazon
-			//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
 			var sCallbackName = this.option.jsonp_callbackName;
 			_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this, sQuery));
 		}
+
+		//TODO.
+
 	}, {
 		key: "makeAutoCompleteAjaxRequest",
 		value: function makeAutoCompleteAjaxRequest(sQuery, sURL) {

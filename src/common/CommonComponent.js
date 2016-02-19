@@ -33,37 +33,29 @@ class CommonComponent {
 		return htFn;
 	}
 
-	getPluginInstance(htPluginList, htOptionList, elTarget) {
+	initPlugins(aMyPluginName, aPluginList, elTarget) {
 		let htPluginInstance = {};
-		Object.keys(htPluginList).forEach((v) => {
-			if(htOptionList[v] === "undefined" || !htOptionList[v].usage) return;
-			htPluginInstance[v] = new htPluginList[v](elTarget, htOptionList[v]);
-		});
-		return htPluginInstance;
-	}
-
-	initPlugins(aDefaultPlugin, aPluginList, elTarget) {
-		let htPluginInstance = {};
+		let oParent = this;
 		aPluginList.forEach((v) => {
 			let sName = v.name;
-			if(aDefaultPlugin.indexOf(sName) < 0) return;
+			if(aMyPluginName.indexOf(sName) < 0) return;
 			htPluginInstance[sName] = new window[v.name](elTarget, v.option);
 			htPluginInstance[sName].onUserMethod(v.useMethod);
+			this._injectParentObject(oParent, htPluginInstance[sName]);
 		});
 		return htPluginInstance;
 	}
 
 	onMethodSuper(htFn) {
-		Object.keys(this.htPluginInstance).forEach((v2) => {
-			let htPluginFunction = {};
-			Object.keys(htFn).forEach((v) => {
-				if(typeof this.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
-					htPluginFunction[v] = htFn[v];
-				}
-			});
-			this.htPluginInstance[v2].onUserMethod(htPluginFunction);
+		Object.keys(htFn).forEach((v) => {
+			if(typeof this.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
+				htPluginFunction[v] = htFn[v];
+			}
 		});
 	}
-	
+
+	_injectParentObject(oParent, oChild) {
+		oChild.dockingPluginMethod(oParent);
+	}
 }
 
