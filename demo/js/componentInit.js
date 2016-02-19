@@ -169,25 +169,29 @@ var Service = (function(){
 
      function runAmazonSearch() { 
         oSS = new SmartSearch(elFormComtainer, {
-            'autoComplete'  : {
-                'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
-                'requestType'         : 'jsonp',
-                'jsonp_callbackName'  : 'completion'
-
-            },
-            'RecentWordPlugin'          : {
-                'usage' : true,
-                'maxList' : 7
-            }
+            'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
+            'requestType'         : 'jsonp',
+            'jsonp_callbackName'  : 'completion'
         });
 
         oSS.onUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
-            'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord,
             'FN_AFTER_FORM_SUBMIT'         : fnSubmitForm
         });
+
+        oSS.onPlugins([
+            { 
+                'name'      : 'RecentWordPlugin',
+                'option'    : {
+                    'maxList' : 7,
+                },
+                'useMethod' : {
+                    'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
+                    'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord
+                }
+            }
+        ]);
     }
 
     document.querySelector(".toggleMenu").addEventListener("click", function(evt) {
