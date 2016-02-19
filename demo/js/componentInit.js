@@ -142,24 +142,29 @@ var Service = (function(){
 
     function runSyrupSearch() { 
         oSS = new SmartSearch(elFormComtainer, {
-            'autoComplete'      : {
-                'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
-                'requestType'         : 'jsonp',
-                'jsonp_callbackName'  : 'ac_done'
-            },
-            'RecentWordPlugin'  : {
-                'usage'               : true,
-                'maxList'             : 7
-            }
+            'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
+            'requestType'         : 'jsonp',
+            'jsonp_callbackName'  : 'ac_done'
         });
 
         oSS.onUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordSyrupTable,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
-            'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord,
             'FN_AFTER_FORM_SUBMIT'         : fnSubmitForm
         });
+
+        oSS.onPlugins([
+            { 
+                'name'      : 'RecentWordPlugin',
+                'option'    : {
+                    'maxList' : 7,
+                },
+                'useMethod' : {
+                    'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
+                    'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord
+                }
+            }
+        ]);
     }
 
      function runAmazonSearch() { 

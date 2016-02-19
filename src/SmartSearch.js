@@ -16,7 +16,6 @@ class SmartSearch extends CommonComponent {
 		this.setInitValue();
 		super.setOption(htOption, this._htDefaultOption, this.option);
 		this.registerEvents();
-		this.initPlugins();
 	}
 
 	setInitValue() {
@@ -33,15 +32,9 @@ class SmartSearch extends CommonComponent {
 		let aDefaultFn = ['FN_AFTER_INSERT_AUTO_WORD','FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT'];
 
 		this._htDefaultOption 	= {
-			'autoComplete' 	: {
-				requestType 		: 'jsonp',
-				sAutoCompleteURL 	: "",
-				jsonp_callbackName  : ""
-			},
-			'RecentWordPlugin' 		: {
-				'usage' : false,
-                'maxList' : 5
-			}
+			"requestType" 		: 'jsonp',
+			"sAutoCompleteURL" 	: "",
+			"jsonp_callbackName": ""
 		}
 
 		this.option 			= {};
@@ -61,7 +54,7 @@ class SmartSearch extends CommonComponent {
 		this.htUserFn 			= {};
 
 		//plugins
-		this.htPluginList		= {'RecentWordPlugin' : RecentWordPlugin};
+		this.aDefaultPlugin 	= ['RecentWordPlugin'];
 		this.htPluginInstance 	= {};
 	}
 
@@ -81,15 +74,14 @@ class SmartSearch extends CommonComponent {
 		this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 	}
 
-	initPlugins() {
-		this.htPluginInstance 	= super.getPluginInstance(this.htPluginList, this.option, this.elTarget);
-	}
-
 	onUserMethod(htFn) {
 		super.setOption(htFn, this.htDefaultFn, this.htUserFn);
 		super.onMethodSuper(htFn);
 	}
 
+	onPlugins(aPluginList) {
+		this.htPluginInstance = super.initPlugins(this.aDefaultPlugin, aPluginList,  this.elTarget);
+	}
 
 	/***** START EventHandler *****/
 	handlerInputWrap(evt) {
@@ -172,8 +164,8 @@ class SmartSearch extends CommonComponent {
 	}
 
 	autoCompleteRequestManager(sQuery) {
-		let type = this.option.autoComplete.requestType;
-		let url = this.option.autoComplete.sAutoCompleteURL;
+		let type = this.option.requestType;
+		let url = this.option.sAutoCompleteURL;
 		switch(type) {
 			case 'jsonp':
 				this.makeAutoCompleteJSONPRequest(sQuery,url);
@@ -189,7 +181,7 @@ class SmartSearch extends CommonComponent {
 	makeAutoCompleteJSONPRequest(sQuery, sURL) {
 		//amazon
 		//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
-		let sCallbackName = this.option.autoComplete.jsonp_callbackName;
+		let sCallbackName = this.option.jsonp_callbackName;
 		_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 

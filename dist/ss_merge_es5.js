@@ -218,6 +218,18 @@ var CommonComponent = (function () {
 			return htPluginInstance;
 		}
 	}, {
+		key: "initPlugins",
+		value: function initPlugins(aDefaultPlugin, aPluginList, elTarget) {
+			var htPluginInstance = {};
+			aPluginList.forEach(function (v) {
+				var sName = v.name;
+				if (aDefaultPlugin.indexOf(sName) < 0) return;
+				htPluginInstance[sName] = new window[v.name](elTarget, v.option);
+				htPluginInstance[sName].onUserMethod(v.useMethod);
+			});
+			return htPluginInstance;
+		}
+	}, {
 		key: "onMethodSuper",
 		value: function onMethodSuper(htFn) {
 			var _this2 = this;
@@ -441,7 +453,6 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.setInitValue();
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htOption, this._htDefaultOption, this.option);
 			this.registerEvents();
-			this.initPlugins();
 		}
 	}, {
 		key: "setInitValue",
@@ -459,15 +470,9 @@ var SmartSearch = (function (_CommonComponent2) {
 			var aDefaultFn = ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FORM_SUBMIT'];
 
 			this._htDefaultOption = {
-				'autoComplete': {
-					requestType: 'jsonp',
-					sAutoCompleteURL: "",
-					jsonp_callbackName: ""
-				},
-				'RecentWordPlugin': {
-					'usage': false,
-					'maxList': 5
-				}
+				"requestType": 'jsonp',
+				"sAutoCompleteURL": "",
+				"jsonp_callbackName": ""
 			};
 
 			this.option = {};
@@ -487,7 +492,7 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.htUserFn = {};
 
 			//plugins
-			this.htPluginList = { 'RecentWordPlugin': RecentWordPlugin };
+			this.aDefaultPlugin = ['RecentWordPlugin'];
 			this.htPluginInstance = {};
 		}
 	}, {
@@ -528,15 +533,15 @@ var SmartSearch = (function (_CommonComponent2) {
 			});
 		}
 	}, {
-		key: "initPlugins",
-		value: function initPlugins() {
-			this.htPluginInstance = _get(Object.getPrototypeOf(SmartSearch.prototype), "getPluginInstance", this).call(this, this.htPluginList, this.option, this.elTarget);
-		}
-	}, {
 		key: "onUserMethod",
 		value: function onUserMethod(htFn) {
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htFn, this.htDefaultFn, this.htUserFn);
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "onMethodSuper", this).call(this, htFn);
+		}
+	}, {
+		key: "onPlugins",
+		value: function onPlugins(aPluginList) {
+			this.htPluginInstance = _get(Object.getPrototypeOf(SmartSearch.prototype), "initPlugins", this).call(this, this.aDefaultPlugin, aPluginList, this.elTarget);
 		}
 
 		/***** START EventHandler *****/
@@ -636,8 +641,8 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "autoCompleteRequestManager",
 		value: function autoCompleteRequestManager(sQuery) {
-			var type = this.option.autoComplete.requestType;
-			var url = this.option.autoComplete.sAutoCompleteURL;
+			var type = this.option.requestType;
+			var url = this.option.sAutoCompleteURL;
 			switch (type) {
 				case 'jsonp':
 					this.makeAutoCompleteJSONPRequest(sQuery, url);
@@ -654,7 +659,7 @@ var SmartSearch = (function (_CommonComponent2) {
 		value: function makeAutoCompleteJSONPRequest(sQuery, sURL) {
 			//amazon
 			//_cu.sendSimpleJSONP(sURL, sQuery, "completion", this.execAfterAutoCompleteAjax.bind(this,sQuery));
-			var sCallbackName = this.option.autoComplete.jsonp_callbackName;
+			var sCallbackName = this.option.jsonp_callbackName;
 			_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this, sQuery));
 		}
 	}, {

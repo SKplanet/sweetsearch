@@ -42,6 +42,17 @@ class CommonComponent {
 		return htPluginInstance;
 	}
 
+	initPlugins(aDefaultPlugin, aPluginList, elTarget) {
+		let htPluginInstance = {};
+		aPluginList.forEach((v) => {
+			let sName = v.name;
+			if(aDefaultPlugin.indexOf(sName) < 0) return;
+			htPluginInstance[sName] = new window[v.name](elTarget, v.option);
+			htPluginInstance[sName].onUserMethod(v.useMethod);
+		});
+		return htPluginInstance;
+	}
+
 	onMethodSuper(htFn) {
 		Object.keys(this.htPluginInstance).forEach((v2) => {
 			let htPluginFunction = {};
