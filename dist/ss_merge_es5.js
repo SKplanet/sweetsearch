@@ -243,10 +243,10 @@ var CommonComponent = (function () {
 
 			var args = [].slice.call(arguments, 2);
 			switch (type) {
-				case "user":
+				case "USER":
 					(_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
 					break;
-				case "plugin":
+				case "PLUGIN":
 					(_htPluginFn = this.htPluginFn)[eventname].apply(_htPluginFn, _toConsumableArray(args));
 					break;
 				default:
@@ -274,12 +274,17 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	_createClass(RecentWordPlugin, [{
 		key: "COMPONENT_CONFIG",
 		value: function COMPONENT_CONFIG() {
-			this.COMPONENT_DATA = {
+			return {
 				ELEMENT_SELECTOR: {
 					recentWordWrap: ".recent-word-wrap",
 					deletwWordBtn: ".deleteWord",
 					closeLayerBtn: ".closeLayer",
 					recentULWrap: ".ul-wrap"
+				},
+				DEFAULT_EVENT: ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'],
+				OPTIONS: {
+					'usage': true,
+					'maxList': 5
 				}
 			};
 		}
@@ -306,14 +311,11 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	}, {
 		key: "setInitValue",
 		value: function setInitValue() {
-			this.COMPONENT_CONFIG();
-			var s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+			var _d = this.COMPONENT_CONFIG();
+			var s = _d.ELEMENT_SELECTOR;
 
-			var htDefaultFn = ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'];
-			this.htDefaultOption = {
-				'usage': true,
-				'maxList': 5
-			};
+			var htDefaultFn = _d.DEFAULT_EVENT;
+			this.htDefaultOption = _d.OPTIONS;
 
 			this.elRecentWordLayer = this.elTarget.querySelector(s.recentWordWrap);
 			this.elClearRecentWordBtn = this.elTarget.querySelector(s.deletwWordBtn);
@@ -372,7 +374,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 		value: function handlerSelectRecentWordTouchEnd(evt) {
 			var nowPageY = evt.changedTouches[0].pageY;
 			if (this.isExecuteTouchScroll(nowPageY)) return;
-			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "runCustomFn", this).call(this, "user", 'FN_AFTER_SELECT_RECENT_WORD', evt.target);
+			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "runCustomFn", this).call(this, "USER", 'FN_AFTER_SELECT_RECENT_WORD', evt.target);
 		}
 	}, {
 		key: "isExecuteTouchScroll",
@@ -394,7 +396,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			this.elRecentWordLayer.style.display = "block";
 			this.elClearRecentWordBtn.style.display = "block";
 			var aData = JSON.parse(sData);
-			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "runCustomFn", this).call(this, "user", "FN_AFTER_INSERT_RECENT_WORD", aData, this.option.maxList);
+			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_INSERT_RECENT_WORD", aData, this.option.maxList);
 		}
 	}, {
 		key: "dockingPluginMethod",
@@ -479,8 +481,8 @@ var SmartSearch = (function (_CommonComponent2) {
 	_createClass(SmartSearch, [{
 		key: "COMPONENT_CONFIG",
 		value: function COMPONENT_CONFIG() {
-			this.COMPONENT_DATA = {
-				ELEMENT_SELECTOR: {
+			return {
+				SELECTOR: {
 					inputFieldWrap: ".inputWrap",
 					inputField: ".input-field",
 					autoCompleteWrap: ".auto-complete-wrap",
@@ -489,13 +491,14 @@ var SmartSearch = (function (_CommonComponent2) {
 					autoULWrap: ".auto-complete-wrap .ul-wrap",
 					realForm: "#search-form"
 				},
-				aDefaultFnName: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS'],
-				aDefaultPluginFnName: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT'],
-				htDefaultOption: {
+				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS'],
+				DEFAULT_PLUGIN_EVENT: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT'],
+				DEFAULT_OPTION: {
 					"requestType": 'jsonp',
 					"sAutoCompleteURL": "",
 					"jsonp_callbackName": ""
-				}
+				},
+				PLUGINS: ['RecentWordPlugin']
 			};
 		}
 	}]);
@@ -520,15 +523,15 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "setInitValue",
 		value: function setInitValue() {
-			this.COMPONENT_CONFIG();
-
 			var _el = this.elTarget;
-			var _d = this.COMPONENT_DATA;
-			var s = _d.ELEMENT_SELECTOR;
 
-			var aDefaultFnName = _d.aDefaultFnName;
-			var aDefaultPluginFnName = _d.aDefaultPluginFnName;
-			this._htDefaultOption = _d.htDefaultOption;
+			var _d = this.COMPONENT_CONFIG();
+			var s = _d.SELECTOR;
+
+			var aDefaultFnName = _d.DEFAULT_EVENT;
+			var aDefaultPluginFnName = _d.DEFAULT_PLUGIN_EVENT;
+			this._htDefaultOption = _d.DEFAULT_OPTION;
+			this.aMyPluginName = _d.PLUGINS;
 
 			this.option = {};
 			this.elInputFieldWrap = _el.querySelector(s.inputFieldWrap);
@@ -540,15 +543,12 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elCloseButton = this.elAutoCompleteLayer.querySelector(s.closeLayer);
 			this.elAutoULWrap = this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
-			this.htCachedData = {};
 			this.htDefaultFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultFnName);
 			this.htDefaultPluginFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultPluginFnName);
 
+			this.htCachedData = {};
 			this.htUserFn = {};
 			this.htPluginFn = {};
-
-			//plugins
-			this.aMyPluginName = ['RecentWordPlugin'];
 			this.htPluginInstance = {};
 		}
 	}, {
@@ -609,8 +609,8 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "handlerInputWrap",
 		value: function handlerInputWrap(evt) {
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "user", 'FN_AFTER_FOCUS');
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "plugin", 'FN_AFTER_FOCUS');
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "USER", 'FN_AFTER_FOCUS');
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", 'FN_AFTER_FOCUS');
 			this.elInputField.focus();
 		}
 
@@ -632,7 +632,7 @@ var SmartSearch = (function (_CommonComponent2) {
 
 			if (sInputData.length > 0) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");else _cu.closeLayer(this.elClearQueryBtn);
 
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "plugin", "FN_AFTER_INPUT");
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_INPUT");
 
 			if (typeof this.htCachedData[sInputData] === "undefined") this.autoCompleteRequestManager(sInputData);else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
 		}
@@ -660,15 +660,15 @@ var SmartSearch = (function (_CommonComponent2) {
 			var nowPageY = evt.changedTouches[0].pageY;
 			if (this.isExecuteTouchScroll(nowPageY)) return;
 
-			var sText = _get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "user", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
+			var sText = _get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 		}
 	}, {
 		key: "handlerSubmitForm",
 		value: function handlerSubmitForm(evt, sQuery) {
 			if (evt) evt.preventDefault();
 			sQuery = sQuery || this.elInputField.value;
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "user", "FN_AFTER_SUBMIT", sQuery);
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "plugin", "FN_AFTER_SUBMIT", sQuery);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SUBMIT", sQuery);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_SUBMIT", sQuery);
 		}
 		/***** End EventHandler *****/
 
@@ -682,7 +682,7 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "user", "FN_AFTER_INSERT_AUTO_WORD", sResult);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_INSERT_AUTO_WORD", sResult);
 			if (this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);else _cu.closeLayer(this.elAutoCompleteLayer);
 
 			//save history

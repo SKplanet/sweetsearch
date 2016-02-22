@@ -57,10 +57,10 @@ class CommonComponent {
 	runCustomFn(type, eventname) {
 		let args = [].slice.call(arguments, 2);
 		switch(type) {
-			case "user" : 
+			case "USER" : 
 				this.htUserFn[eventname](...args);
 				break
-			case "plugin": 
+			case "PLUGIN": 
 				this.htPluginFn[eventname](...args);
 				break
 			default : 

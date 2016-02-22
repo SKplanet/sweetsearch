@@ -7,8 +7,8 @@
 class SmartSearch extends CommonComponent {
 
 	COMPONENT_CONFIG() {
-		 this.COMPONENT_DATA = {
-			ELEMENT_SELECTOR 	: {
+		 return {
+			SELECTOR 	: {
 				inputFieldWrap 		: ".inputWrap",
 				inputField 			: ".input-field",
 				autoCompleteWrap 	: ".auto-complete-wrap",
@@ -17,22 +17,23 @@ class SmartSearch extends CommonComponent {
 				autoULWrap			: ".auto-complete-wrap .ul-wrap",
 				realForm 			: "#search-form"
 			}, 
-			aDefaultFnName : [	
+			DEFAULT_EVENT : [	
 					'FN_AFTER_INSERT_AUTO_WORD',
 					'FN_AFTER_SELECT_AUTO_WORD', 
 					'FN_AFTER_SUBMIT',
 					'FN_AFTER_FOCUS'
 			],
-			aDefaultPluginFnName : [	
+			DEFAULT_PLUGIN_EVENT : [	
 					'FN_AFTER_FOCUS',
 					'FN_AFTER_INPUT',
 					'FN_AFTER_SUBMIT'
 			],
-			htDefaultOption 	: {
+			DEFAULT_OPTION : {
 					"requestType" 		: 'jsonp',
 					"sAutoCompleteURL" 	: "",
 					"jsonp_callbackName": ""
-			}
+			},
+			PLUGINS 	: ['RecentWordPlugin']
 		}
 	}
 
@@ -49,15 +50,15 @@ class SmartSearch extends CommonComponent {
 	}
 
 	setInitValue() {
-		this.COMPONENT_CONFIG();
-
 		let _el 				= this.elTarget;
-		let _d 					= this.COMPONENT_DATA;
-		let s 					= _d.ELEMENT_SELECTOR;
 
-		let aDefaultFnName 		= _d.aDefaultFnName;
-		let aDefaultPluginFnName= _d.aDefaultPluginFnName;
-		this._htDefaultOption 	= _d.htDefaultOption;
+		let _d 					= this.COMPONENT_CONFIG();
+		let s 					= _d.SELECTOR;
+
+		let aDefaultFnName 		= _d.DEFAULT_EVENT;
+		let aDefaultPluginFnName= _d.DEFAULT_PLUGIN_EVENT;
+		this._htDefaultOption 	= _d.DEFAULT_OPTION;
+		this.aMyPluginName 		= _d.PLUGINS;
 
 		this.option 			= {};
 		this.elInputFieldWrap	= _el.querySelector(s.inputFieldWrap);
@@ -69,15 +70,12 @@ class SmartSearch extends CommonComponent {
 		this.elCloseButton 		= this.elAutoCompleteLayer.querySelector(s.closeLayer);
 		this.elAutoULWrap		= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
-		this.htCachedData 		= {};
 		this.htDefaultFn 		= super.getDefaultCallbackList(aDefaultFnName);
 		this.htDefaultPluginFn	= super.getDefaultCallbackList(aDefaultPluginFnName);
 
+		this.htCachedData 		= {};
 		this.htUserFn 			= {};
 		this.htPluginFn 		= {};
-
-		//plugins
-		this.aMyPluginName 		= ['RecentWordPlugin'];
 		this.htPluginInstance 	= {};
 	}
 
@@ -111,8 +109,8 @@ class SmartSearch extends CommonComponent {
 
 	/***** START EventHandler *****/
 	handlerInputWrap(evt) {
-		super.runCustomFn("user", 'FN_AFTER_FOCUS');
-		super.runCustomFn("plugin", 'FN_AFTER_FOCUS');
+		super.runCustomFn("USER", 'FN_AFTER_FOCUS');
+		super.runCustomFn("PLUGIN", 'FN_AFTER_FOCUS');
 		this.elInputField.focus();
 	}
 
@@ -128,7 +126,7 @@ class SmartSearch extends CommonComponent {
 		if(sInputData.length > 0 ) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		else _cu.closeLayer(this.elClearQueryBtn);
 
-		super.runCustomFn("plugin", "FN_AFTER_INPUT");
+		super.runCustomFn("PLUGIN", "FN_AFTER_INPUT");
 
 		if (typeof this.htCachedData[sInputData] === "undefined") this.autoCompleteRequestManager(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
@@ -153,14 +151,14 @@ class SmartSearch extends CommonComponent {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
 
-		let sText = super.runCustomFn("user", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
+		let sText = super.runCustomFn("USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 	}
 
 	handlerSubmitForm(evt, sQuery) {
         if(evt) evt.preventDefault();
         sQuery = sQuery || this.elInputField.value;
-        super.runCustomFn("user", "FN_AFTER_SUBMIT", sQuery);
-        super.runCustomFn("plugin", "FN_AFTER_SUBMIT", sQuery);
+        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
+        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
 	}
 	/***** End EventHandler *****/
 
@@ -172,7 +170,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
-		super.runCustomFn("user", "FN_AFTER_INSERT_AUTO_WORD", sResult);
+		super.runCustomFn("USER", "FN_AFTER_INSERT_AUTO_WORD", sResult);
 		if(this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);
 		else _cu.closeLayer(this.elAutoCompleteLayer);
 
