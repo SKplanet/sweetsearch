@@ -40,7 +40,7 @@ class CommonComponent {
 			let sName = v.name;
 			if(aMyPluginName.indexOf(sName) < 0) return;
 			htPluginInstance[sName] = new window[v.name](elTarget, v.option);
-			htPluginInstance[sName].onUserMethod(v.useMethod);
+			htPluginInstance[sName].registerUserMethod(v.useMethod);
 			this._injectParentObject(oParent, htPluginInstance[sName]);
 		});
 		return htPluginInstance;
@@ -52,6 +52,19 @@ class CommonComponent {
 				htPluginFunction[v] = htFn[v];
 			}
 		});
+	}
+
+	runCustomFn(type, eventname, args) {
+		if(!Array.isArray(args)) args = [args];
+		switch(type) {
+			case "user" : 
+				this.htUserFn[eventname](...args);
+				break
+			case "plugin": 
+				this.htPluginFn[eventname](...args);
+				break
+			default : 
+		}
 	}
 
 	_injectParentObject(oParent, oChild) {

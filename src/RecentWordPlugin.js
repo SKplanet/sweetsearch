@@ -33,12 +33,12 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(".ul-wrap");
 
 		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
-		this.htFn 					= {};
+		this.htUserFn 				= {};
 		this.option 				= {};
 	}
 
-	onUserMethod(htFn) {
-		super.setOption(htFn, this.htDefaultFn, this.htFn);
+	registerUserMethod(htFn) {
+		super.setOption(htFn, this.htDefaultFn, this.htUserFn);
 	}
 
 	registerEvents() {
@@ -66,7 +66,7 @@ class RecentWordPlugin extends CommonComponent {
 	handlerSelectRecentWordTouchEnd(evt) {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
-		this.htFn['FN_AFTER_SELECT_RECENT_WORD'](evt.target);
+		super.runCustomFn("user", 'FN_AFTER_SELECT_RECENT_WORD', evt.target);
 	}
 
 	isExecuteTouchScroll(pageY) {
@@ -85,11 +85,11 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer.style.display = "block";
 		this.elClearRecentWordBtn.style.display = "block";
 		let aData = JSON.parse(sData);
-		this.htFn['FN_AFTER_INSERT_RECENT_WORD'](aData, this.option.maxList);
+		super.runCustomFn("user", "FN_AFTER_INSERT_RECENT_WORD", [aData, this.option.maxList]);
 	}
 
 	dockingPluginMethod(oParent) {
-		oParent.onPluginMethod({
+		oParent.registerPluginMethod({
 			'FN_AFTER_FOCUS' 	: this.showRecentSearchWord.bind(this),
 			'FN_AFTER_INPUT'	: this.handlerCloseLayer.bind(this),
 			'FN_AFTER_SUBMIT'	: this.saveQuery.bind(this)

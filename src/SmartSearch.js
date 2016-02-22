@@ -44,7 +44,7 @@ class SmartSearch extends CommonComponent {
 		let aDefaultFnName = [	
 			'FN_AFTER_INSERT_AUTO_WORD',
 			'FN_AFTER_SELECT_AUTO_WORD', 
-			'FN_AFTER_FORM_SUBMIT',
+			'FN_AFTER_SUBMIT',
 			'FN_AFTER_FOCUS'
 		];
 
@@ -99,11 +99,11 @@ class SmartSearch extends CommonComponent {
 		this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 	}
 
-	onUserMethod(htFn) {
+	registerUserMethod(htFn) {
 		super.setOption(htFn, this.htDefaultFn, this.htUserFn);
 	}
 
-	onPluginMethod(htFn) {
+	registerPluginMethod(htFn) {
 		super.setOption(htFn, this.htDefaultPluginFn, this.htPluginFn);
 	}
 
@@ -113,8 +113,8 @@ class SmartSearch extends CommonComponent {
 
 	/***** START EventHandler *****/
 	handlerInputWrap(evt) {
-		this.htUserFn['FN_AFTER_FOCUS']();
-		this.htPluginFn['FN_AFTER_FOCUS']();
+		super.runCustomFn("user", 'FN_AFTER_FOCUS');
+		super.runCustomFn("plugin", 'FN_AFTER_FOCUS');
 		this.elInputField.focus();
 	}
 
@@ -130,7 +130,7 @@ class SmartSearch extends CommonComponent {
 		if(sInputData.length > 0 ) _cu.setCSS(this.elClearQueryBtn, "display", "inline-block");
 		else _cu.closeLayer(this.elClearQueryBtn);
 
-		this.htPluginFn['FN_AFTER_INPUT']();
+		super.runCustomFn("plugin", "FN_AFTER_INPUT");
 
 		if (typeof this.htCachedData[sInputData] === "undefined") this.autoCompleteRequestManager(sInputData);
 		else this.execAfterAutoCompleteAjax(sInputData, this.htCachedData[sInputData]);
@@ -155,14 +155,14 @@ class SmartSearch extends CommonComponent {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
 
-		let sText = this.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target);
+		let sText = super.runCustomFn("user", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 	}
 
 	handlerSubmitForm(evt, sQuery) {
         if(evt) evt.preventDefault();
         sQuery = sQuery || this.elInputField.value;
-		this.htUserFn['FN_AFTER_FORM_SUBMIT'](sQuery);
-		this.htPluginFn['FN_AFTER_SUBMIT'](sQuery);
+        super.runCustomFn("user", "FN_AFTER_SUBMIT", sQuery);
+        super.runCustomFn("plugin", "FN_AFTER_SUBMIT", sQuery);
 	}
 	/***** End EventHandler *****/
 
@@ -174,7 +174,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
-		this.htUserFn['FN_AFTER_INSERT_AUTO_WORD'](sResult);
+		super.runCustomFn("user", "FN_AFTER_INSERT_AUTO_WORD", sResult);
 		if(this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);
 		else _cu.closeLayer(this.elAutoCompleteLayer);
 

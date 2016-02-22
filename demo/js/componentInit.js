@@ -147,10 +147,10 @@ var Service = (function(){
             'jsonp_callbackName'  : 'ac_done'
         });
 
-        oSS.onUserMethod({
+        oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordSyrupTable,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_FORM_SUBMIT'         : fnSubmitForm
+            'FN_AFTER_SUBMIT'         : fnSubmitForm
         });
 
         oSS.onPlugins([
@@ -174,10 +174,10 @@ var Service = (function(){
             'jsonp_callbackName'  : 'completion'
         });
 
-        oSS.onUserMethod({
+        oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_FORM_SUBMIT'         : fnSubmitForm
+            'FN_AFTER_SUBMIT'         : fnSubmitForm
         });
 
         oSS.onPlugins([
