@@ -238,10 +238,10 @@ var CommonComponent = (function () {
 		}
 	}, {
 		key: "runCustomFn",
-		value: function runCustomFn(type, eventname, args) {
+		value: function runCustomFn(type, eventname) {
 			var _htUserFn, _htPluginFn;
 
-			if (!Array.isArray(args)) args = [args];
+			var args = [].slice.call(arguments, 2);
 			switch (type) {
 				case "user":
 					(_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
@@ -271,6 +271,20 @@ var CommonComponent = (function () {
 var RecentWordPlugin = (function (_CommonComponent) {
 	_inherits(RecentWordPlugin, _CommonComponent);
 
+	_createClass(RecentWordPlugin, [{
+		key: "COMPONENT_CONFIG",
+		value: function COMPONENT_CONFIG() {
+			this.COMPONENT_DATA = {
+				ELEMENT_SELECTOR: {
+					recentWordWrap: ".recent-word-wrap",
+					deletwWordBtn: ".deleteWord",
+					closeLayerBtn: ".closeLayer",
+					recentULWrap: ".ul-wrap"
+				}
+			};
+		}
+	}]);
+
 	function RecentWordPlugin(elTarget, htOption) {
 		_classCallCheck(this, RecentWordPlugin);
 
@@ -292,16 +306,19 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	}, {
 		key: "setInitValue",
 		value: function setInitValue() {
+			this.COMPONENT_CONFIG();
+			var s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+
 			var htDefaultFn = ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'];
 			this.htDefaultOption = {
 				'usage': true,
 				'maxList': 5
 			};
 
-			this.elRecentWordLayer = this.elTarget.querySelector(".recent-word-wrap");
-			this.elClearRecentWordBtn = this.elTarget.querySelector(".deleteWord");
-			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(".closeLayer");
-			this.elRecentULWrap = this.elRecentWordLayer.querySelector(".ul-wrap");
+			this.elRecentWordLayer = this.elTarget.querySelector(s.recentWordWrap);
+			this.elClearRecentWordBtn = this.elTarget.querySelector(s.deletwWordBtn);
+			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(s.closeLayerBtn);
+			this.elRecentULWrap = this.elRecentWordLayer.querySelector(s.recentULWrap);
 
 			this.htDefaultFn = _get(Object.getPrototypeOf(RecentWordPlugin.prototype), "getDefaultCallbackList", this).call(this, htDefaultFn);
 			this.htUserFn = {};
@@ -377,7 +394,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			this.elRecentWordLayer.style.display = "block";
 			this.elClearRecentWordBtn.style.display = "block";
 			var aData = JSON.parse(sData);
-			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "runCustomFn", this).call(this, "user", "FN_AFTER_INSERT_RECENT_WORD", [aData, this.option.maxList]);
+			_get(Object.getPrototypeOf(RecentWordPlugin.prototype), "runCustomFn", this).call(this, "user", "FN_AFTER_INSERT_RECENT_WORD", aData, this.option.maxList);
 		}
 	}, {
 		key: "dockingPluginMethod",
@@ -471,6 +488,13 @@ var SmartSearch = (function (_CommonComponent2) {
 					clearQueryBtn: ".clearQuery",
 					autoULWrap: ".auto-complete-wrap .ul-wrap",
 					realForm: "#search-form"
+				},
+				aDefaultFnName: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS'],
+				aDefaultPluginFnName: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT'],
+				htDefaultOption: {
+					"requestType": 'jsonp',
+					"sAutoCompleteURL": "",
+					"jsonp_callbackName": ""
 				}
 			};
 		}
@@ -496,25 +520,17 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "setInitValue",
 		value: function setInitValue() {
-			var _el = this.elTarget;
-
 			this.COMPONENT_CONFIG();
 
-			var s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+			var _el = this.elTarget;
+			var _d = this.COMPONENT_DATA;
+			var s = _d.ELEMENT_SELECTOR;
 
-			//TODO. Separate data.
-			var aDefaultFnName = ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS'];
-
-			var aDefaultPluginFnName = ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT'];
-
-			this._htDefaultOption = {
-				"requestType": 'jsonp',
-				"sAutoCompleteURL": "",
-				"jsonp_callbackName": ""
-			};
+			var aDefaultFnName = _d.aDefaultFnName;
+			var aDefaultPluginFnName = _d.aDefaultPluginFnName;
+			this._htDefaultOption = _d.htDefaultOption;
 
 			this.option = {};
-
 			this.elInputFieldWrap = _el.querySelector(s.inputFieldWrap);
 			this.elInputField = _el.querySelector(s.inputField);
 			this.elAutoCompleteLayer = _el.querySelector(s.autoCompleteWrap);

@@ -16,10 +16,25 @@ class SmartSearch extends CommonComponent {
 				clearQueryBtn 		: ".clearQuery",
 				autoULWrap			: ".auto-complete-wrap .ul-wrap",
 				realForm 			: "#search-form"
-			} 
+			}, 
+			aDefaultFnName : [	
+					'FN_AFTER_INSERT_AUTO_WORD',
+					'FN_AFTER_SELECT_AUTO_WORD', 
+					'FN_AFTER_SUBMIT',
+					'FN_AFTER_FOCUS'
+			],
+			aDefaultPluginFnName : [	
+					'FN_AFTER_FOCUS',
+					'FN_AFTER_INPUT',
+					'FN_AFTER_SUBMIT'
+			],
+			htDefaultOption 	: {
+					"requestType" 		: 'jsonp',
+					"sAutoCompleteURL" 	: "",
+					"jsonp_callbackName": ""
+			}
 		}
 	}
-
 
 	constructor(elTarget, htOption) {
 		super(htOption)
@@ -34,34 +49,17 @@ class SmartSearch extends CommonComponent {
 	}
 
 	setInitValue() {
-		let _el 				= this.elTarget;
-
 		this.COMPONENT_CONFIG();
 
-		let s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+		let _el 				= this.elTarget;
+		let _d 					= this.COMPONENT_DATA;
+		let s 					= _d.ELEMENT_SELECTOR;
 
-		//TODO. Separate data.
-		let aDefaultFnName = [	
-			'FN_AFTER_INSERT_AUTO_WORD',
-			'FN_AFTER_SELECT_AUTO_WORD', 
-			'FN_AFTER_SUBMIT',
-			'FN_AFTER_FOCUS'
-		];
-
-		let aDefaultPluginFnName = [	
-			'FN_AFTER_FOCUS',
-			'FN_AFTER_INPUT',
-			'FN_AFTER_SUBMIT'
-		];
-
-		this._htDefaultOption 	= {
-			"requestType" 		: 'jsonp',
-			"sAutoCompleteURL" 	: "",
-			"jsonp_callbackName": ""
-		}
+		let aDefaultFnName 		= _d.aDefaultFnName;
+		let aDefaultPluginFnName= _d.aDefaultPluginFnName;
+		this._htDefaultOption 	= _d.htDefaultOption;
 
 		this.option 			= {};
-
 		this.elInputFieldWrap	= _el.querySelector(s.inputFieldWrap);
 		this.elInputField 		= _el.querySelector(s.inputField);
 		this.elAutoCompleteLayer= _el.querySelector(s.autoCompleteWrap);

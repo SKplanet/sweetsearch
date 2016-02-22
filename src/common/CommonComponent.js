@@ -54,8 +54,8 @@ class CommonComponent {
 		});
 	}
 
-	runCustomFn(type, eventname, args) {
-		if(!Array.isArray(args)) args = [args];
+	runCustomFn(type, eventname) {
+		let args = [].slice.call(arguments, 2);
 		switch(type) {
 			case "user" : 
 				this.htUserFn[eventname](...args);

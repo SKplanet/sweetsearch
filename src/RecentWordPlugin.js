@@ -6,6 +6,17 @@
 
 class RecentWordPlugin extends CommonComponent {
 
+	COMPONENT_CONFIG() {
+		 this.COMPONENT_DATA = {
+			ELEMENT_SELECTOR 	: {
+				recentWordWrap 		: ".recent-word-wrap",
+				deletwWordBtn 		: ".deleteWord",
+				closeLayerBtn 		: ".closeLayer",
+				recentULWrap 		: ".ul-wrap"
+			} 
+		}
+	}
+
 	constructor(elTarget, htOption) {
 		super(htOption);
 		this.elTarget = elTarget;
@@ -21,16 +32,19 @@ class RecentWordPlugin extends CommonComponent {
 	}
 
 	setInitValue() {
+		this.COMPONENT_CONFIG();
+		let s = this.COMPONENT_DATA.ELEMENT_SELECTOR;
+
 		let htDefaultFn = ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'];
 		this.htDefaultOption = {
 			'usage' : true,
             'maxList' : 5
         }
 
-		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
-		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
-		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
-		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(".ul-wrap");
+		this.elRecentWordLayer 		= this.elTarget.querySelector(s.recentWordWrap);
+		this.elClearRecentWordBtn 	= this.elTarget.querySelector(s.deletwWordBtn);
+		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(s.closeLayerBtn);
+		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(s.recentULWrap);
 
 		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
 		this.htUserFn 				= {};
@@ -85,7 +99,7 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer.style.display = "block";
 		this.elClearRecentWordBtn.style.display = "block";
 		let aData = JSON.parse(sData);
-		super.runCustomFn("user", "FN_AFTER_INSERT_RECENT_WORD", [aData, this.option.maxList]);
+		super.runCustomFn("user", "FN_AFTER_INSERT_RECENT_WORD", aData, this.option.maxList);
 	}
 
 	dockingPluginMethod(oParent) {
