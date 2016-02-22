@@ -482,6 +482,7 @@ var SmartSearch = (function (_CommonComponent2) {
 		key: "COMPONENT_CONFIG",
 		value: function COMPONENT_CONFIG() {
 			return {
+				PLUGINS: ['RecentWordPlugin'],
 				SELECTOR: {
 					inputFieldWrap: ".inputWrap",
 					inputField: ".input-field",
@@ -497,8 +498,7 @@ var SmartSearch = (function (_CommonComponent2) {
 					"requestType": 'jsonp',
 					"sAutoCompleteURL": "",
 					"jsonp_callbackName": ""
-				},
-				PLUGINS: ['RecentWordPlugin']
+				}
 			};
 		}
 	}]);

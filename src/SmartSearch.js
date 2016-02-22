@@ -8,32 +8,32 @@ class SmartSearch extends CommonComponent {
 
 	COMPONENT_CONFIG() {
 		 return {
-			SELECTOR 	: {
-				inputFieldWrap 		: ".inputWrap",
-				inputField 			: ".input-field",
-				autoCompleteWrap 	: ".auto-complete-wrap",
-				closeLayer 			: ".closeLayer",
-				clearQueryBtn 		: ".clearQuery",
-				autoULWrap			: ".auto-complete-wrap .ul-wrap",
-				realForm 			: "#search-form"
+			PLUGINS 				: ['RecentWordPlugin'],
+			SELECTOR 				: {
+					inputFieldWrap 		: ".inputWrap",
+					inputField 			: ".input-field",
+					autoCompleteWrap 	: ".auto-complete-wrap",
+					closeLayer 			: ".closeLayer",
+					clearQueryBtn 		: ".clearQuery",
+					autoULWrap			: ".auto-complete-wrap .ul-wrap",
+					realForm 			: "#search-form"
 			}, 
-			DEFAULT_EVENT : [	
+			DEFAULT_EVENT 			: [	
 					'FN_AFTER_INSERT_AUTO_WORD',
 					'FN_AFTER_SELECT_AUTO_WORD', 
 					'FN_AFTER_SUBMIT',
 					'FN_AFTER_FOCUS'
 			],
-			DEFAULT_PLUGIN_EVENT : [	
+			DEFAULT_PLUGIN_EVENT 	: [	
 					'FN_AFTER_FOCUS',
 					'FN_AFTER_INPUT',
 					'FN_AFTER_SUBMIT'
 			],
-			DEFAULT_OPTION : {
+			DEFAULT_OPTION 			: {
 					"requestType" 		: 'jsonp',
 					"sAutoCompleteURL" 	: "",
 					"jsonp_callbackName": ""
-			},
-			PLUGINS 	: ['RecentWordPlugin']
+			}
 		}
 	}
 

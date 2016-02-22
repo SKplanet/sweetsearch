@@ -44,12 +44,12 @@
         _u.on(_q.inputWrap,         "mousedown", oSS.handlerInputWrap.bind(oSS));
 
         //change selected LI 
-        _u.on(_q.autoULWrap ,       "mouseover", _h.toggleSelectedBG);
-        _u.on(_q.recentULWrap,      "mouseover", _h.toggleSelectedBG);
+        // _u.on(_q.autoULWrap ,       "mouseover", _h.toggleSelectedBG);
+        // _u.on(_q.recentULWrap,      "mouseover", _h.toggleSelectedBG);
      
-        //rollback backgroundColor when mouseover.
-        _u.on(_q.autoULWrap,        "mouseout", _h.clearSelectedGB);
-        _u.on(_q.recentULWrap,      "mouseout", _h.clearSelectedGB);
+        // //rollback backgroundColor when mouseover.
+        // _u.on(_q.autoULWrap,        "mouseout", _h.clearSelectedGB);
+        // _u.on(_q.recentULWrap,      "mouseout", _h.clearSelectedGB);
 
         _u.on(_q.autoULWrap,        "mouseup", function(evt) {
             oSS.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target)
