@@ -8,7 +8,7 @@ class SmartSearch extends CommonComponent {
 
 	COMPONENT_CONFIG() {
 		 return {
-			PLUGINS 				: ['RecentWordPlugin'],
+			PLUGINS 				: ['RecentWordPlugin', 'TTViewPlugin'],
 			SELECTOR 				: {
 					inputFieldWrap 		: ".inputWrap",
 					inputField 			: ".input-field",
@@ -27,7 +27,9 @@ class SmartSearch extends CommonComponent {
 			DEFAULT_PLUGIN_EVENT 	: [	
 					'FN_AFTER_FOCUS',
 					'FN_AFTER_INPUT',
-					'FN_AFTER_SUBMIT'
+					'FN_AFTER_SUBMIT',
+					'FN_AFTER_AC_SHOW',
+					'FN_AFTER_AC_NONE'
 			],
 			DEFAULT_OPTION 			: {
 					"requestType" 		: 'jsonp',
@@ -55,10 +57,11 @@ class SmartSearch extends CommonComponent {
 		let _d 					= this.COMPONENT_CONFIG();
 		let s 					= _d.SELECTOR;
 
-		let aDefaultFnName 		= _d.DEFAULT_EVENT;
-		let aDefaultPluginFnName= _d.DEFAULT_PLUGIN_EVENT;
 		this._htDefaultOption 	= _d.DEFAULT_OPTION;
 		this.aMyPluginName 		= _d.PLUGINS;
+
+		this.htDefaultFn 		= super.getDefaultCallbackList(_d.DEFAULT_EVENT);
+		this.htDefaultPluginFn	= super.getDefaultCallbackList(_d.DEFAULT_PLUGIN_EVENT);
 
 		this.option 			= {};
 		this.elInputFieldWrap	= _el.querySelector(s.inputFieldWrap);
@@ -70,13 +73,9 @@ class SmartSearch extends CommonComponent {
 		this.elCloseButton 		= this.elAutoCompleteLayer.querySelector(s.closeLayer);
 		this.elAutoULWrap		= this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
-		this.htDefaultFn 		= super.getDefaultCallbackList(aDefaultFnName);
-		this.htDefaultPluginFn	= super.getDefaultCallbackList(aDefaultPluginFnName);
-
 		this.htCachedData 		= {};
 		this.htUserFn 			= {};
 		this.htPluginFn 		= {};
-		this.htPluginInstance 	= {};
 	}
 
 	registerEvents() {
@@ -104,7 +103,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	onPlugins(aPluginList) {
-		this.htPluginInstance = super.initPlugins(this.aMyPluginName, aPluginList,  this.elTarget);
+		super.initPlugins(this.aMyPluginName, aPluginList,  this.elTarget);
 	}
 
 	/***** START EventHandler *****/
@@ -171,8 +170,13 @@ class SmartSearch extends CommonComponent {
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
 		super.runCustomFn("USER", "FN_AFTER_INSERT_AUTO_WORD", sResult);
-		if(this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);
-		else _cu.closeLayer(this.elAutoCompleteLayer);
+		if(this.elAutoCompleteLayer.querySelector("li") !== null) {
+			_cu.showLayer(this.elAutoCompleteLayer);
+			super.runCustomFn("PLUGIN", "FN_AFTER_AC_SHOW");
+		} else  {
+			_cu.closeLayer(this.elAutoCompleteLayer);
+			super.runCustomFn("PLUGIN", "FN_AFTER_AC_NONE");
+		}
 
 		//save history
 		this.htCachedData[sQuery] = sResult;

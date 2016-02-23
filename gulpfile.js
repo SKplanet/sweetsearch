@@ -14,6 +14,7 @@ var allJS = ['src/common/commonUtil.js',
 	 			 'src/common/commonComponent.js',
 	 			 'src/RecentWordPlugin.js',
 	 			 'src/RecentWordPluginLocalStorageAddOn.js',
+	 			 'src/TTViewPlugin.js',
 	 			 'src/SmartSearch.js'];
 
 

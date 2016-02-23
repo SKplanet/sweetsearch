@@ -220,7 +220,7 @@ var CommonComponent = (function () {
 				var sName = v.name;
 				if (aMyPluginName.indexOf(sName) < 0) return;
 				htPluginInstance[sName] = new window[v.name](elTarget, v.option);
-				htPluginInstance[sName].registerUserMethod(v.useMethod);
+				htPluginInstance[sName].registerUserMethod(v.userMethod);
 				_this2._injectParentObject(oParent, htPluginInstance[sName]);
 			});
 			return htPluginInstance;
@@ -264,7 +264,7 @@ var CommonComponent = (function () {
 
 /**
  * @nigayo. SKPlanet.
- * @v0.0.3
+ * @v0.0.4
  * @UIComponent RecentWordPlugin 
  */
 
@@ -277,7 +277,7 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			return {
 				ELEMENT_SELECTOR: {
 					recentWordWrap: ".recent-word-wrap",
-					deletwWordBtn: ".deleteWord",
+					deleteWordBtn: ".deleteWord",
 					closeLayerBtn: ".closeLayer",
 					recentULWrap: ".ul-wrap"
 				},
@@ -314,15 +314,14 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			var _d = this.COMPONENT_CONFIG();
 			var s = _d.ELEMENT_SELECTOR;
 
-			var htDefaultFn = _d.DEFAULT_EVENT;
+			this.htDefaultFn = _get(Object.getPrototypeOf(RecentWordPlugin.prototype), "getDefaultCallbackList", this).call(this, _d.DEFAULT_EVENT);
 			this.htDefaultOption = _d.OPTIONS;
 
 			this.elRecentWordLayer = this.elTarget.querySelector(s.recentWordWrap);
-			this.elClearRecentWordBtn = this.elTarget.querySelector(s.deletwWordBtn);
+			this.elClearRecentWordBtn = this.elTarget.querySelector(s.deleteWordBtn);
 			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(s.closeLayerBtn);
 			this.elRecentULWrap = this.elRecentWordLayer.querySelector(s.recentULWrap);
 
-			this.htDefaultFn = _get(Object.getPrototypeOf(RecentWordPlugin.prototype), "getDefaultCallbackList", this).call(this, htDefaultFn);
 			this.htUserFn = {};
 			this.option = {};
 		}
@@ -472,17 +471,110 @@ var RecentWordPluginLocalStorageAddOn = (function () {
 /**
  * @nigayo. SKPlanet.
  * @v0.0.4
+ * @UIComponent TTViewPlugin
+ */
+
+var TTViewPlugin = (function (_CommonComponent2) {
+	_inherits(TTViewPlugin, _CommonComponent2);
+
+	_createClass(TTViewPlugin, [{
+		key: "COMPONENT_CONFIG",
+		value: function COMPONENT_CONFIG() {
+			return {
+				SELECTOR: {
+					TTWrap: ".tt-wrap",
+					TTWrapCloseBtn: ".tt-wrap .closeLayer"
+				},
+				DEFAULT_EVENT: ['FN_AFTER_RECEIVE_DATA'],
+				OPTIONS: {
+					'usage': true
+				}
+			};
+		}
+	}]);
+
+	function TTViewPlugin(elTarget, htOption) {
+		_classCallCheck(this, TTViewPlugin);
+
+		var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(TTViewPlugin).call(this, htOption));
+
+		_this6.elTarget = elTarget;
+		_this6.init(htOption);
+		return _this6;
+	}
+
+	_createClass(TTViewPlugin, [{
+		key: "init",
+		value: function init(htOption) {
+			this.setInitValue();
+			_get(Object.getPrototypeOf(TTViewPlugin.prototype), "setOption", this).call(this, htOption, this.htDefaultOption, this.option);
+			this.registerEvents();
+		}
+	}, {
+		key: "setInitValue",
+		value: function setInitValue() {
+			var _d = this.COMPONENT_CONFIG();
+			var s = _d.SELECTOR;
+			this.htDefaultOption = _d.OPTIONS;
+			this.htDefaultFn = _get(Object.getPrototypeOf(TTViewPlugin.prototype), "getDefaultCallbackList", this).call(this, _d.DEFAULT_EVENT);
+
+			this.elTTWrap = this.elTarget.querySelector(s.TTWrap);
+			this.elTTWrapCloseBtn = this.elTarget.querySelector(s.TTWrapCloseBtn);
+
+			this.htUserFn = {};
+			this.option = {};
+		}
+	}, {
+		key: "registerUserMethod",
+		value: function registerUserMethod(htFn) {
+			_get(Object.getPrototypeOf(TTViewPlugin.prototype), "setOption", this).call(this, htFn, this.htDefaultFn, this.htUserFn);
+		}
+	}, {
+		key: "closeLayer",
+		value: function closeLayer() {
+			this.closeTTView();
+		}
+	}, {
+		key: "registerEvents",
+		value: function registerEvents() {
+			this.elTTWrapCloseBtn.addEventListener("click", this.closeLayer.bind(this), false);
+		}
+	}, {
+		key: "showTTView",
+		value: function showTTView() {
+			this.elTTWrap.style.display = "block";
+		}
+	}, {
+		key: "closeTTView",
+		value: function closeTTView() {
+			this.elTTWrap.style.display = "none";
+		}
+	}, {
+		key: "dockingPluginMethod",
+		value: function dockingPluginMethod(oParent) {
+			oParent.registerPluginMethod({
+				'FN_AFTER_AC_NONE': this.showTTView.bind(this),
+				'FN_AFTER_AC_SHOW': this.closeTTView.bind(this)
+			});
+		}
+	}]);
+
+	return TTViewPlugin;
+})(CommonComponent);
+/**
+ * @nigayo. SKPlanet.
+ * @v0.0.4
  * @UIComponent smartsearch
  */
 
-var SmartSearch = (function (_CommonComponent2) {
-	_inherits(SmartSearch, _CommonComponent2);
+var SmartSearch = (function (_CommonComponent3) {
+	_inherits(SmartSearch, _CommonComponent3);
 
 	_createClass(SmartSearch, [{
 		key: "COMPONENT_CONFIG",
 		value: function COMPONENT_CONFIG() {
 			return {
-				PLUGINS: ['RecentWordPlugin'],
+				PLUGINS: ['RecentWordPlugin', 'TTViewPlugin'],
 				SELECTOR: {
 					inputFieldWrap: ".inputWrap",
 					inputField: ".input-field",
@@ -493,7 +585,7 @@ var SmartSearch = (function (_CommonComponent2) {
 					realForm: "#search-form"
 				},
 				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS'],
-				DEFAULT_PLUGIN_EVENT: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT'],
+				DEFAULT_PLUGIN_EVENT: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT', 'FN_AFTER_AC_SHOW', 'FN_AFTER_AC_NONE'],
 				DEFAULT_OPTION: {
 					"requestType": 'jsonp',
 					"sAutoCompleteURL": "",
@@ -506,11 +598,11 @@ var SmartSearch = (function (_CommonComponent2) {
 	function SmartSearch(elTarget, htOption) {
 		_classCallCheck(this, SmartSearch);
 
-		var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
+		var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
 
-		_this6.elTarget = elTarget;
-		_this6.init(htOption);
-		return _this6;
+		_this7.elTarget = elTarget;
+		_this7.init(htOption);
+		return _this7;
 	}
 
 	_createClass(SmartSearch, [{
@@ -528,10 +620,11 @@ var SmartSearch = (function (_CommonComponent2) {
 			var _d = this.COMPONENT_CONFIG();
 			var s = _d.SELECTOR;
 
-			var aDefaultFnName = _d.DEFAULT_EVENT;
-			var aDefaultPluginFnName = _d.DEFAULT_PLUGIN_EVENT;
 			this._htDefaultOption = _d.DEFAULT_OPTION;
 			this.aMyPluginName = _d.PLUGINS;
+
+			this.htDefaultFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, _d.DEFAULT_EVENT);
+			this.htDefaultPluginFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, _d.DEFAULT_PLUGIN_EVENT);
 
 			this.option = {};
 			this.elInputFieldWrap = _el.querySelector(s.inputFieldWrap);
@@ -543,49 +636,45 @@ var SmartSearch = (function (_CommonComponent2) {
 			this.elCloseButton = this.elAutoCompleteLayer.querySelector(s.closeLayer);
 			this.elAutoULWrap = this.elAutoCompleteLayer.querySelector(s.autoULWrap);
 
-			this.htDefaultFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultFnName);
-			this.htDefaultPluginFn = _get(Object.getPrototypeOf(SmartSearch.prototype), "getDefaultCallbackList", this).call(this, aDefaultPluginFnName);
-
 			this.htCachedData = {};
 			this.htUserFn = {};
 			this.htPluginFn = {};
-			this.htPluginInstance = {};
 		}
 	}, {
 		key: "registerEvents",
 		value: function registerEvents() {
-			var _this7 = this;
+			var _this8 = this;
 
 			this.elInputFieldWrap.addEventListener("touchend", function (evt) {
-				return _this7.handlerInputWrap(evt);
+				return _this8.handlerInputWrap(evt);
 			});
 
 			this.elInputField.addEventListener("keypress", function (evt) {
-				return _this7.handlerInputKeyPress(evt);
+				return _this8.handlerInputKeyPress(evt);
 			});
 			this.elInputField.addEventListener("keydown", function (evt) {
-				return _this7.handlerInputKeydown(evt);
+				return _this8.handlerInputKeydown(evt);
 			});
 			this.elInputField.addEventListener("input", function (evt) {
-				return _this7.handlerInputKeyInput(evt);
+				return _this8.handlerInputKeyInput(evt);
 			});
 
 			this.elCloseButton.addEventListener("touchend", function (evt) {
-				return _this7.handlerCloseLayer(evt);
+				return _this8.handlerCloseLayer(evt);
 			});
 			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
-				return _this7.handlerClearInputValue(evt);
+				return _this8.handlerClearInputValue(evt);
 			});
 
 			this.elAutoULWrap.addEventListener("touchstart", function (evt) {
-				return _this7.handlerSelectAutoCompletedWordTouchStart(evt);
+				return _this8.handlerSelectAutoCompletedWordTouchStart(evt);
 			});
 			this.elAutoULWrap.addEventListener("touchend", function (evt) {
-				return _this7.handlerSelectAutoCompletedWordTouchEnd(evt);
+				return _this8.handlerSelectAutoCompletedWordTouchEnd(evt);
 			});
 
 			this.elForm.addEventListener("submit", function (evt) {
-				return _this7.handlerSubmitForm(evt);
+				return _this8.handlerSubmitForm(evt);
 			});
 		}
 	}, {
@@ -601,7 +690,7 @@ var SmartSearch = (function (_CommonComponent2) {
 	}, {
 		key: "onPlugins",
 		value: function onPlugins(aPluginList) {
-			this.htPluginInstance = _get(Object.getPrototypeOf(SmartSearch.prototype), "initPlugins", this).call(this, this.aMyPluginName, aPluginList, this.elTarget);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "initPlugins", this).call(this, this.aMyPluginName, aPluginList, this.elTarget);
 		}
 
 		/***** START EventHandler *****/
@@ -683,7 +772,13 @@ var SmartSearch = (function (_CommonComponent2) {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
 			_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_INSERT_AUTO_WORD", sResult);
-			if (this.elAutoCompleteLayer.querySelector("li") !== null) _cu.showLayer(this.elAutoCompleteLayer);else _cu.closeLayer(this.elAutoCompleteLayer);
+			if (this.elAutoCompleteLayer.querySelector("li") !== null) {
+				_cu.showLayer(this.elAutoCompleteLayer);
+				_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_AC_SHOW");
+			} else {
+				_cu.closeLayer(this.elAutoCompleteLayer);
+				_get(Object.getPrototypeOf(SmartSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_AC_NONE");
+			}
 
 			//save history
 			this.htCachedData[sQuery] = sResult;

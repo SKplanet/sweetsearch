@@ -1,6 +1,6 @@
 /**
  * @nigayo. SKPlanet.
- * @v0.0.3
+ * @v0.0.4
  * @UIComponent RecentWordPlugin 
  */
 
@@ -10,7 +10,7 @@ class RecentWordPlugin extends CommonComponent {
 		 return {
 			ELEMENT_SELECTOR 	: {
 				recentWordWrap 		: ".recent-word-wrap",
-				deletwWordBtn 		: ".deleteWord",
+				deleteWordBtn 		: ".deleteWord",
 				closeLayerBtn 		: ".closeLayer",
 				recentULWrap 		: ".ul-wrap"
 			},
@@ -42,15 +42,14 @@ class RecentWordPlugin extends CommonComponent {
 		let _d 						= this.COMPONENT_CONFIG();
 		let s 						= _d.ELEMENT_SELECTOR;
 
-		let htDefaultFn 			= _d.DEFAULT_EVENT;
+		this.htDefaultFn 			= super.getDefaultCallbackList(_d.DEFAULT_EVENT);
 		this.htDefaultOption 		= _d.OPTIONS;
 
 		this.elRecentWordLayer 		= this.elTarget.querySelector(s.recentWordWrap);
-		this.elClearRecentWordBtn 	= this.elTarget.querySelector(s.deletwWordBtn);
+		this.elClearRecentWordBtn 	= this.elTarget.querySelector(s.deleteWordBtn);
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(s.closeLayerBtn);
 		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(s.recentULWrap);
 
-		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
 		this.htUserFn 				= {};
 		this.option 				= {};
 	}

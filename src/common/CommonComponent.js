@@ -40,7 +40,7 @@ class CommonComponent {
 			let sName = v.name;
 			if(aMyPluginName.indexOf(sName) < 0) return;
 			htPluginInstance[sName] = new window[v.name](elTarget, v.option);
-			htPluginInstance[sName].registerUserMethod(v.useMethod);
+			htPluginInstance[sName].registerUserMethod(v.userMethod);
 			this._injectParentObject(oParent, htPluginInstance[sName]);
 		});
 		return htPluginInstance;
