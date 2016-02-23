@@ -219,11 +219,10 @@ var CommonComponent = (function () {
 			aPluginList.forEach(function (v) {
 				var sName = v.name;
 				if (aMyPluginName.indexOf(sName) < 0) return;
-				htPluginInstance[sName] = new window[v.name](elTarget, v.option);
-				htPluginInstance[sName].registerUserMethod(v.userMethod);
-				_this2._injectParentObject(oParent, htPluginInstance[sName]);
+				var oPlugin = new window[v.name](elTarget, v.option);
+				oPlugin.registerUserMethod(v.userMethod);
+				_this2._injectParentObject(oParent, oPlugin);
 			});
-			return htPluginInstance;
 		}
 	}, {
 		key: "onMethodSuper",
