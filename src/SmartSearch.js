@@ -99,8 +99,7 @@ class SmartSearch extends CommonComponent {
 	}
 
 	registerPluginMethod(htFn) {
-		//super.setOption(htFn, this.htDefaultPluginFn, this.htPluginFn);
-		super.setPluginMethod(htFn, this.htDefaultPluginFn, this.htPluginFn);
+		super.appendPluginMethod(htFn, this.htDefaultPluginFn, this.htPluginFn);
 	}
 
 	onPlugins(aPluginList) {

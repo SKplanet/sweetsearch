@@ -25,7 +25,7 @@ class CommonComponent {
 		});
 	}
 
-	setPluginMethod (htValue, htDefaultValue, htStorage) {
+	appendPluginMethod (htValue, htDefaultValue, htStorage) {
 		Object.keys(htDefaultValue).forEach((v) => {
 			if(!Array.isArray(htStorage[v])) htStorage[v] = [];
 
@@ -60,27 +60,6 @@ class CommonComponent {
 			this.htPluginInstance[v.name] = oPlugin;
 		});
 	}
-
-	onMethodSuper(htFn) {
-		Object.keys(htFn).forEach((v) => {
-			if(typeof this.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
-				htPluginFunction[v] = htFn[v];
-			}
-		});
-	}
-
-	// runCustomFn(type, eventname) {
-	// 	let args = [].slice.call(arguments, 2);
-	// 	switch(type) {
-	// 		case "USER" : 
-	// 			this.htUserFn[eventname](...args);
-	// 			break
-	// 		case "PLUGIN": 
-	// 			this.htPluginFn[eventname](...args);
-	// 			break
-	// 		default : 
-	// 	}
-	// }
 
 	runCustomFn(type, eventname) {
 		let args = [].slice.call(arguments, 2);

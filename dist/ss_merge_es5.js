@@ -201,8 +201,8 @@ var CommonComponent = (function () {
 			});
 		}
 	}, {
-		key: "setPluginMethod",
-		value: function setPluginMethod(htValue, htDefaultValue, htStorage) {
+		key: "appendPluginMethod",
+		value: function appendPluginMethod(htValue, htDefaultValue, htStorage) {
 			Object.keys(htDefaultValue).forEach(function (v) {
 				if (!Array.isArray(htStorage[v])) htStorage[v] = [];
 
@@ -241,31 +241,6 @@ var CommonComponent = (function () {
 				_this2.htPluginInstance[v.name] = oPlugin;
 			});
 		}
-	}, {
-		key: "onMethodSuper",
-		value: function onMethodSuper(htFn) {
-			var _this3 = this;
-
-			Object.keys(htFn).forEach(function (v) {
-				if (typeof _this3.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
-					htPluginFunction[v] = htFn[v];
-				}
-			});
-		}
-
-		// runCustomFn(type, eventname) {
-		// 	let args = [].slice.call(arguments, 2);
-		// 	switch(type) {
-		// 		case "USER" :
-		// 			this.htUserFn[eventname](...args);
-		// 			break
-		// 		case "PLUGIN":
-		// 			this.htPluginFn[eventname](...args);
-		// 			break
-		// 		default :
-		// 	}
-		// }
-
 	}, {
 		key: "runCustomFn",
 		value: function runCustomFn(type, eventname) {
@@ -325,11 +300,11 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	function RecentWordPlugin(elTarget, htOption) {
 		_classCallCheck(this, RecentWordPlugin);
 
-		var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(RecentWordPlugin).call(this, htOption));
+		var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(RecentWordPlugin).call(this, htOption));
 
-		_this4.elTarget = elTarget;
-		_this4.init(htOption);
-		return _this4;
+		_this3.elTarget = elTarget;
+		_this3.init(htOption);
+		return _this3;
 	}
 
 	_createClass(RecentWordPlugin, [{
@@ -365,19 +340,19 @@ var RecentWordPlugin = (function (_CommonComponent) {
 	}, {
 		key: "registerEvents",
 		value: function registerEvents() {
-			var _this5 = this;
+			var _this4 = this;
 
 			this.elClearRecentWordBtn.addEventListener("touchend", function (evt) {
-				_this5.handlerClearRecentWord(evt);
+				_this4.handlerClearRecentWord(evt);
 			});
 			this.elCloseButtonRWL.addEventListener("touchend", function (evt) {
-				_this5.handlerCloseLayer(evt);
+				_this4.handlerCloseLayer(evt);
 			});
 			this.elRecentULWrap.addEventListener("touchstart", function (evt) {
-				_this5.handlerSelectRecentWordTouchStart(evt);
+				_this4.handlerSelectRecentWordTouchStart(evt);
 			});
 			this.elRecentULWrap.addEventListener("touchend", function (evt) {
-				_this5.handlerSelectRecentWordTouchEnd(evt);
+				_this4.handlerSelectRecentWordTouchEnd(evt);
 			});
 		}
 	}, {
@@ -528,11 +503,11 @@ var TTViewPlugin = (function (_CommonComponent2) {
 	function TTViewPlugin(elTarget, htOption) {
 		_classCallCheck(this, TTViewPlugin);
 
-		var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(TTViewPlugin).call(this, htOption));
+		var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(TTViewPlugin).call(this, htOption));
 
-		_this6.elTarget = elTarget;
-		_this6.init(htOption);
-		return _this6;
+		_this5.elTarget = elTarget;
+		_this5.init(htOption);
+		return _this5;
 	}
 
 	_createClass(TTViewPlugin, [{
@@ -630,11 +605,11 @@ var SmartSearch = (function (_CommonComponent3) {
 	function SmartSearch(elTarget, htOption) {
 		_classCallCheck(this, SmartSearch);
 
-		var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
+		var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartSearch).call(this, htOption));
 
-		_this7.elTarget = elTarget;
-		_this7.init(htOption);
-		return _this7;
+		_this6.elTarget = elTarget;
+		_this6.init(htOption);
+		return _this6;
 	}
 
 	_createClass(SmartSearch, [{
@@ -675,38 +650,38 @@ var SmartSearch = (function (_CommonComponent3) {
 	}, {
 		key: "registerEvents",
 		value: function registerEvents() {
-			var _this8 = this;
+			var _this7 = this;
 
 			this.elInputFieldWrap.addEventListener("touchend", function (evt) {
-				return _this8.handlerInputWrap(evt);
+				return _this7.handlerInputWrap(evt);
 			});
 
 			this.elInputField.addEventListener("keypress", function (evt) {
-				return _this8.handlerInputKeyPress(evt);
+				return _this7.handlerInputKeyPress(evt);
 			});
 			this.elInputField.addEventListener("keydown", function (evt) {
-				return _this8.handlerInputKeydown(evt);
+				return _this7.handlerInputKeydown(evt);
 			});
 			this.elInputField.addEventListener("input", function (evt) {
-				return _this8.handlerInputKeyInput(evt);
+				return _this7.handlerInputKeyInput(evt);
 			});
 
 			this.elCloseButton.addEventListener("touchend", function (evt) {
-				return _this8.handlerCloseLayer(evt);
+				return _this7.handlerCloseLayer(evt);
 			});
 			this.elClearQueryBtn.addEventListener("touchend", function (evt) {
-				return _this8.handlerClearInputValue(evt);
+				return _this7.handlerClearInputValue(evt);
 			});
 
 			this.elAutoULWrap.addEventListener("touchstart", function (evt) {
-				return _this8.handlerSelectAutoCompletedWordTouchStart(evt);
+				return _this7.handlerSelectAutoCompletedWordTouchStart(evt);
 			});
 			this.elAutoULWrap.addEventListener("touchend", function (evt) {
-				return _this8.handlerSelectAutoCompletedWordTouchEnd(evt);
+				return _this7.handlerSelectAutoCompletedWordTouchEnd(evt);
 			});
 
 			this.elForm.addEventListener("submit", function (evt) {
-				return _this8.handlerSubmitForm(evt);
+				return _this7.handlerSubmitForm(evt);
 			});
 		}
 	}, {
@@ -717,8 +692,7 @@ var SmartSearch = (function (_CommonComponent3) {
 	}, {
 		key: "registerPluginMethod",
 		value: function registerPluginMethod(htFn) {
-			//super.setOption(htFn, this.htDefaultPluginFn, this.htPluginFn);
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "setPluginMethod", this).call(this, htFn, this.htDefaultPluginFn, this.htPluginFn);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "appendPluginMethod", this).call(this, htFn, this.htDefaultPluginFn, this.htPluginFn);
 		}
 	}, {
 		key: "onPlugins",
