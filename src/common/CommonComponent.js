@@ -25,6 +25,19 @@ class CommonComponent {
 		});
 	}
 
+	setPluginMethod (htValue, htDefaultValue, htStorage) {
+		Object.keys(htDefaultValue).forEach((v) => {
+			if(!Array.isArray(htStorage[v])) htStorage[v] = [];
+
+			if(typeof htValue[v] === "undefined") {
+				htStorage[v].push(htDefaultValue[v]);
+			} else {
+                htStorage[v].push(htValue[v]);
+                return;
+			}
+		});
+	}
+
 	getDefaultCallbackList(aFn) {
 		let htFn = {};
 		aFn.forEach((v) => {
@@ -34,7 +47,8 @@ class CommonComponent {
 	}
 
 	initPlugins(aMyPluginName, aPluginList, elTarget) {
-		let htPluginInstance = {};
+		//TODO. remove instance relation.
+		this.htPluginInstance = {};
 		let oParent = this;
 		aPluginList.forEach((v) => {
 			let sName = v.name;
@@ -42,6 +56,8 @@ class CommonComponent {
 			let oPlugin = new window[v.name](elTarget, v.option);
 			oPlugin.registerUserMethod(v.userMethod);
 			this._injectParentObject(oParent, oPlugin);
+			//TODO. remove instance relation.
+			this.htPluginInstance[v.name] = oPlugin;
 		});
 	}
 
@@ -53,6 +69,19 @@ class CommonComponent {
 		});
 	}
 
+	// runCustomFn(type, eventname) {
+	// 	let args = [].slice.call(arguments, 2);
+	// 	switch(type) {
+	// 		case "USER" : 
+	// 			this.htUserFn[eventname](...args);
+	// 			break
+	// 		case "PLUGIN": 
+	// 			this.htPluginFn[eventname](...args);
+	// 			break
+	// 		default : 
+	// 	}
+	// }
+
 	runCustomFn(type, eventname) {
 		let args = [].slice.call(arguments, 2);
 		switch(type) {
@@ -60,7 +89,9 @@ class CommonComponent {
 				this.htUserFn[eventname](...args);
 				break
 			case "PLUGIN": 
-				this.htPluginFn[eventname](...args);
+				this.htPluginFn[eventname].forEach((fn) => {
+					fn(...args);
+				});
 				break
 			default : 
 		}

@@ -201,6 +201,20 @@ var CommonComponent = (function () {
 			});
 		}
 	}, {
+		key: "setPluginMethod",
+		value: function setPluginMethod(htValue, htDefaultValue, htStorage) {
+			Object.keys(htDefaultValue).forEach(function (v) {
+				if (!Array.isArray(htStorage[v])) htStorage[v] = [];
+
+				if (typeof htValue[v] === "undefined") {
+					htStorage[v].push(htDefaultValue[v]);
+				} else {
+					htStorage[v].push(htValue[v]);
+					return;
+				}
+			});
+		}
+	}, {
 		key: "getDefaultCallbackList",
 		value: function getDefaultCallbackList(aFn) {
 			var htFn = {};
@@ -214,7 +228,8 @@ var CommonComponent = (function () {
 		value: function initPlugins(aMyPluginName, aPluginList, elTarget) {
 			var _this2 = this;
 
-			var htPluginInstance = {};
+			//TODO. remove instance relation.
+			this.htPluginInstance = {};
 			var oParent = this;
 			aPluginList.forEach(function (v) {
 				var sName = v.name;
@@ -222,6 +237,8 @@ var CommonComponent = (function () {
 				var oPlugin = new window[v.name](elTarget, v.option);
 				oPlugin.registerUserMethod(v.userMethod);
 				_this2._injectParentObject(oParent, oPlugin);
+				//TODO. remove instance relation.
+				_this2.htPluginInstance[v.name] = oPlugin;
 			});
 		}
 	}, {
@@ -235,10 +252,24 @@ var CommonComponent = (function () {
 				}
 			});
 		}
+
+		// runCustomFn(type, eventname) {
+		// 	let args = [].slice.call(arguments, 2);
+		// 	switch(type) {
+		// 		case "USER" :
+		// 			this.htUserFn[eventname](...args);
+		// 			break
+		// 		case "PLUGIN":
+		// 			this.htPluginFn[eventname](...args);
+		// 			break
+		// 		default :
+		// 	}
+		// }
+
 	}, {
 		key: "runCustomFn",
 		value: function runCustomFn(type, eventname) {
-			var _htUserFn, _htPluginFn;
+			var _htUserFn;
 
 			var args = [].slice.call(arguments, 2);
 			switch (type) {
@@ -246,7 +277,9 @@ var CommonComponent = (function () {
 					(_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
 					break;
 				case "PLUGIN":
-					(_htPluginFn = this.htPluginFn)[eventname].apply(_htPluginFn, _toConsumableArray(args));
+					this.htPluginFn[eventname].forEach(function (fn) {
+						fn.apply(undefined, _toConsumableArray(args));
+					});
 					break;
 				default:
 			}
@@ -684,7 +717,8 @@ var SmartSearch = (function (_CommonComponent3) {
 	}, {
 		key: "registerPluginMethod",
 		value: function registerPluginMethod(htFn) {
-			_get(Object.getPrototypeOf(SmartSearch.prototype), "setOption", this).call(this, htFn, this.htDefaultPluginFn, this.htPluginFn);
+			//super.setOption(htFn, this.htDefaultPluginFn, this.htPluginFn);
+			_get(Object.getPrototypeOf(SmartSearch.prototype), "setPluginMethod", this).call(this, htFn, this.htDefaultPluginFn, this.htPluginFn);
 		}
 	}, {
 		key: "onPlugins",
