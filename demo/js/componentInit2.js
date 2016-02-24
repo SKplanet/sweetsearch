@@ -110,7 +110,7 @@ var Service = (function(){
                 'option'    : {
                     'maxList' : 7,
                 },
-                'useMethod' : {
+                'userMethod' : {
                     'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
                     'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord
                 }
