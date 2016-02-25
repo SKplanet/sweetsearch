@@ -1,10 +1,29 @@
 /**
  * @nigayo. SKPlanet.
- * @v0.0.3
+ * @v0.0.4
  * @UIComponent RecentWordPlugin 
  */
 
 class RecentWordPlugin extends CommonComponent {
+
+	COMPONENT_CONFIG() {
+		 return {
+			ELEMENT_SELECTOR 	: {
+				recentWordWrap 		: ".recent-word-wrap",
+				deleteWordBtn 		: ".deleteWord",
+				closeLayerBtn 		: ".closeLayer",
+				recentULWrap 		: ".ul-wrap"
+			},
+			DEFAULT_EVENT : [	
+					'FN_AFTER_INSERT_RECENT_WORD',
+					'FN_AFTER_SELECT_RECENT_WORD'
+			],
+			OPTIONS : {
+					'usage' : true,
+		            'maxList' : 5
+        	}
+		}
+	}
 
 	constructor(elTarget, htOption) {
 		super(htOption);
@@ -17,28 +36,26 @@ class RecentWordPlugin extends CommonComponent {
 		super.setOption(htOption, this.htDefaultOption, this.option);
 		this.registerEvents();
 		this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery", this.option.maxList);
-
 	}
 
 	setInitValue() {
-		let htDefaultFn = ['fnInsertRecentSearchWord', 'fnSelectRecentSearchWord'];
-		this.htDefaultOption = {
-			'usage' : true,
-            'maxList' : 5
-        }
+		let _d 						= this.COMPONENT_CONFIG();
+		let s 						= _d.ELEMENT_SELECTOR;
 
-		this.elRecentWordLayer 		= this.elTarget.querySelector(".recent-word-wrap");
-		this.elClearRecentWordBtn 	= this.elTarget.querySelector(".deleteWord");
-		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(".closeLayer");
-		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(".ul-wrap");
+		this.htDefaultFn 			= super.getDefaultCallbackList(_d.DEFAULT_EVENT);
+		this.htDefaultOption 		= _d.OPTIONS;
 
-		this.htDefaultFn 			= super.getDefaultCallbackList(htDefaultFn);
-		this.htFn 					= {};
+		this.elRecentWordLayer 		= this.elTarget.querySelector(s.recentWordWrap);
+		this.elClearRecentWordBtn 	= this.elTarget.querySelector(s.deleteWordBtn);
+		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(s.closeLayerBtn);
+		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(s.recentULWrap);
+
+		this.htUserFn 				= {};
 		this.option 				= {};
 	}
 
-	onMethod(htFn) {
-		super.setOption(htFn, this.htDefaultFn, this.htFn);
+	registerUserMethod(htFn) {
+		super.setOption(htFn, this.htDefaultFn, this.htUserFn);
 	}
 
 	registerEvents() {
@@ -66,7 +83,7 @@ class RecentWordPlugin extends CommonComponent {
 	handlerSelectRecentWordTouchEnd(evt) {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
-		this.htFn.fnSelectRecentSearchWord(evt.target);
+		super.runCustomFn("USER", 'FN_AFTER_SELECT_RECENT_WORD', evt.target);
 	}
 
 	isExecuteTouchScroll(pageY) {
@@ -85,7 +102,16 @@ class RecentWordPlugin extends CommonComponent {
 		this.elRecentWordLayer.style.display = "block";
 		this.elClearRecentWordBtn.style.display = "block";
 		let aData = JSON.parse(sData);
-		this.htFn.fnInsertRecentSearchWord(aData, this.option.maxList);
+		super.runCustomFn("USER", "FN_AFTER_INSERT_RECENT_WORD", aData, this.option.maxList);
 	}
+
+	dockingPluginMethod(oParent) {
+		oParent.registerPluginMethod({
+			'FN_AFTER_FOCUS' 	: this.showRecentSearchWord.bind(this),
+			'FN_AFTER_INPUT'	: this.handlerCloseLayer.bind(this),
+			'FN_AFTER_SUBMIT'	: this.saveQuery.bind(this)
+		});
+	}
+
 
 }

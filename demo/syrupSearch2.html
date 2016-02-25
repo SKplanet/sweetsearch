@@ -5,12 +5,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
         <title></title>
         <link rel="stylesheet" href="./css/demo.css">
+        <style>
+            /* for view2 */
+            .ul-wrap > li {
+                width: 30%;
+                float: left;
+            }
+
+            .ul-wrap {
+                overflow: auto;
+            }
+
+            .ul-wrap > li:nth-child(odd) {
+                background: lightpink;
+            }
+
+            .ul-wrap > li:nth-child(even) {
+                background: lightblue;
+            }
+
+        </style>
 
     </head>
     <body>
 
     <div id="wrapper">
-        <div class="toggleMenu"><a href="#">Amazon검색으로 전환</a></div>
         <div class="search-form">
             <div class="search-form-heading">Syrup Table Search (TEST API)</div>
             <div class="formContainer">
@@ -44,28 +63,18 @@
                     <button class="deleteWord" style="display:none">전체삭제</button>
                 </div>
             </section>
-
-            <section class="tt-wrap" style="display:none;">
-                <div class="tt-message">당신에게 추천할 단어가 없네요..</div>
-                 <div class="footer-button-wrap">
-                    <button class="closeLayer">닫기</button>
-                </div>
-            </section>
         </div>
     </div>
 
 
     <script src="../dist/ss_merge_es5.js"></script>
-    <script src="./js/componentInit.js"></script>
+    <script src="./js/componentInit2.js"></script>
 
     <script>
         Service.runSyrup();
     </script>
 
-    <script src="./js/desktopSupport.js"></script>
-    <!-- for WEINRE test -->
-    <!-- script src="http://10.203.227.198:8081/target/target-script-min.js#anonymous"></script -->
-
+    <script src="./js/desktopSupport2.js"></script>
     </body>
 </html>
 

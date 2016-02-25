@@ -124,7 +124,7 @@ a:link {
     color: #fff;
 }
 
-.auto-complete-wrap, .recent-word-wrap {
+.auto-complete-wrap, .recent-word-wrap, .tt-wrap {
     width: 85%;
     height: auto;
     border: 1px solid rgba(115, 115, 115, 0.31);
@@ -180,6 +180,13 @@ a:link {
 
 .selectedLI {
     background-color: rgba(206, 206, 206, 0.70);
+}
+
+.tt-message {
+    text-align: center;
+    padding: 5%;
+    font-size: 1.4em;
+    color: gray;
 }
 
 @media only screen and (max-width: 500px) {

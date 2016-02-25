@@ -25,6 +25,19 @@ class CommonComponent {
 		});
 	}
 
+	appendPluginMethod (htValue, htDefaultValue, htStorage) {
+		Object.keys(htDefaultValue).forEach((v) => {
+			if(!Array.isArray(htStorage[v])) htStorage[v] = [];
+
+			if(typeof htValue[v] === "undefined") {
+				htStorage[v].push(htDefaultValue[v]);
+			} else {
+                htStorage[v].push(htValue[v]);
+                return;
+			}
+		});
+	}
+
 	getDefaultCallbackList(aFn) {
 		let htFn = {};
 		aFn.forEach((v) => {
@@ -33,26 +46,38 @@ class CommonComponent {
 		return htFn;
 	}
 
-	getPluginInstance(htPluginList, htOptionList, elTarget) {
-		let htPluginInstance = {};
-		Object.keys(htPluginList).forEach((v) => {
-			if(htOptionList[v] === "undefined" || !htOptionList[v].usage) return;
-			htPluginInstance[v] = new htPluginList[v](elTarget, htOptionList[v]);
+	initPlugins(aMyPluginName, aPluginList, elTarget) {
+		//TODO. remove instance relation.
+		this.htPluginInstance = {};
+		let oParent = this;
+		aPluginList.forEach((v) => {
+			let sName = v.name;
+			if(aMyPluginName.indexOf(sName) < 0) return;
+			let oPlugin = new window[v.name](elTarget, v.option);
+			oPlugin.registerUserMethod(v.userMethod);
+			this._injectParentObject(oParent, oPlugin);
+			//TODO. remove instance relation.
+			this.htPluginInstance[v.name] = oPlugin;
 		});
-		return htPluginInstance;
 	}
 
-	onMethodSuper(htFn) {
-		Object.keys(this.htPluginInstance).forEach((v2) => {
-			let htPluginFunction = {};
-			Object.keys(htFn).forEach((v) => {
-				if(typeof this.htPluginInstance[v2].htDefaultFn[v] !== "undefined") {
-					htPluginFunction[v] = htFn[v];
-				}
-			});
-			this.htPluginInstance[v2].onMethod(htPluginFunction);
-		});
+	runCustomFn(type, eventname) {
+		let args = [].slice.call(arguments, 2);
+		switch(type) {
+			case "USER" : 
+				this.htUserFn[eventname](...args);
+				break
+			case "PLUGIN": 
+				this.htPluginFn[eventname].forEach((fn) => {
+					fn(...args);
+				});
+				break
+			default : 
+		}
 	}
-	
+
+	_injectParentObject(oParent, oChild) {
+		oChild.dockingPluginMethod(oParent);
+	}
 }
 
