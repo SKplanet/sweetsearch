@@ -90,11 +90,3 @@ describe("CommonComponent methods test", function() {
 
 });
 
-
-
-
-
-
-
-
-
