@@ -1,10 +1,10 @@
 /**
  * @nigayo. SKPlanet.
- * @v0.0.4
- * @UIComponent smartsearch
+ * @v0.0.6
+ * @UIComponent SweetSearch
  */
 
-class SmartSearch extends CommonComponent {
+class SweetSearch extends CommonComponent {
 
 	COMPONENT_CONFIG() {
 		 return {

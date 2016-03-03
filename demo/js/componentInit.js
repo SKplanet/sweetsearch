@@ -141,7 +141,7 @@ var Service = (function(){
     var sAutoCompleteURLSyrupTable = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
 
     function runSyrupSearch() { 
-        oSS = new SmartSearch(elFormComtainer, {
+        oSS = new SweetSearch(elFormComtainer, {
             'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
             'requestType'         : 'jsonp',
             'jsonp_callbackName'  : 'ac_done'
@@ -175,7 +175,7 @@ var Service = (function(){
     }
 
      function runAmazonSearch() { 
-        oSS = new SmartSearch(elFormComtainer, {
+        oSS = new SweetSearch(elFormComtainer, {
             'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
             'requestType'         : 'jsonp',
             'jsonp_callbackName'  : 'completion'

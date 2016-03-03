@@ -15,7 +15,7 @@ var allJS = ['src/common/commonUtil.js',
 	 			 'src/RecentWordPlugin.js',
 	 			 'src/RecentWordPluginLocalStorageAddOn.js',
 	 			 'src/TTViewPlugin.js',
-	 			 'src/SmartSearch.js'];
+	 			 'src/SweetSearch.js'];
 
 
 gulp.task('cleanDist', function() {
