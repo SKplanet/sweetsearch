@@ -1,6 +1,6 @@
 /**
  * @nigayo. SKPlanet.
- * @v0.0.4
+ * @v0.0.6
  * @UIComponent TTViewPlugin
  */
 

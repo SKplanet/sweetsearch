@@ -1,5 +1,6 @@
 /**
  * @nigayo. SKPlanet.
+ * @v0.0.6
  * @RecentWordPluginLocalStorageAddOn - dependency:RecentWordPlugin. 
  */
 
