@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="description" content="sweetSearch">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>sweetChart Jasmine test</title>
+        <title>SweetSearch test</title>
 
         <link rel="shortcut icon" type="image/png" href="../jasmine/lib/jasmine-2.4.1/jasmine_favicon.png">
         <link rel="stylesheet" type="text/css" href="../jasmine/lib/jasmine-2.4.1/jasmine.css">
@@ -14,8 +14,53 @@
         <script type="text/javascript" src="../jasmine/lib/jasmine-2.4.1/boot.js"></script>
     </head>
     <body>
+   
+        <!-- COMPONENT CODE -->
+         <div class="search-form">
+            <div class="search-form-heading">Syrup Table Search (TEST API)</div>
+            <div class="formContainer">
+                <form id="search-form" action="" method="post">
+                    <div class="inputWrap">
+                        <input type="text" class="input-field" name="field1" value="" 
+                            autocomplete="off"
+                            autocapitalize="off"
+                            autocorrect="off"
+                            placeholder="스파게티"
+                        />
+                        <div class="clearQuery" style="display:none;">X</div>
+                    </div>
+                    <div class="buttonWrap">
+                        <button type="submit" value="Submit" /> 검색
+                    </div>
+                </form>
+            </div>
+
+            <section class="auto-complete-wrap" style="display:none;">
+                <ul class="ul-wrap"></ul>
+                <div class="footer-button-wrap">
+                    <button class="closeLayer">닫기</button>
+                </div>
+            </section>
+
+            <section class="recent-word-wrap" style="display:none;">
+                <ul class="ul-wrap"></ul>
+                 <div class="footer-button-wrap">
+                    <button class="closeLayer">닫기</button>
+                    <button class="deleteWord" style="display:none">전체삭제</button>
+                </div>
+            </section>
+
+            <section class="tt-wrap" style="display:none;">
+                <div class="tt-message">당신에게 추천할 단어가 없네요..</div>
+                 <div class="footer-button-wrap">
+                    <button class="closeLayer">닫기</button>
+                </div>
+            </section>
+        </div>
+        <!-- COMPONENT CODE END -->
 
     	<script src="../dist/ss_merge_es5.js"></script>
+
     	<script src="test.js"></script>
     </body>
 </html>

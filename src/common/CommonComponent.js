@@ -1,6 +1,6 @@
 /**
  * @nigayo. SKPlanet.
- * @v0.0.1
+ * @v0.0.2.prefetch
  * @UIComponent common component
  */
 
@@ -65,12 +65,16 @@ class CommonComponent {
 		let args = [].slice.call(arguments, 2);
 		switch(type) {
 			case "USER" : 
-				this.htUserFn[eventname](...args);
+				if((typeof this.htUserFn ==="object") && (typeof this.htUserFn[eventname] ==="function")) {
+					this.htUserFn[eventname](...args);
+				}
 				break
 			case "PLUGIN": 
-				this.htPluginFn[eventname].forEach((fn) => {
-					fn(...args);
-				});
+				if( (typeof this.htPluginFn ==="object") && (typeof this.htPluginFn[eventname] ==="object")) {
+					this.htPluginFn[eventname].forEach((fn) => {
+						fn(...args);
+					});
+				}
 				break
 			default : 
 		}
