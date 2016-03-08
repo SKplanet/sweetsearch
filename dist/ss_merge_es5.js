@@ -10,6 +10,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -170,7 +172,7 @@ var _cu = {
 };
 /**
  * @nigayo. SKPlanet.
- * @v0.0.1
+ * @v0.0.2.prefetch
  * @UIComponent common component
  */
 
@@ -244,17 +246,21 @@ var CommonComponent = (function () {
 	}, {
 		key: "runCustomFn",
 		value: function runCustomFn(type, eventname) {
-			var _htUserFn;
-
 			var args = [].slice.call(arguments, 2);
 			switch (type) {
 				case "USER":
-					(_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
+					if (_typeof(this.htUserFn) === "object" && typeof this.htUserFn[eventname] === "function") {
+						var _htUserFn;
+
+						(_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
+					}
 					break;
 				case "PLUGIN":
-					this.htPluginFn[eventname].forEach(function (fn) {
-						fn.apply(undefined, _toConsumableArray(args));
-					});
+					if (_typeof(this.htPluginFn) === "object" && _typeof(this.htPluginFn[eventname]) === "object") {
+						this.htPluginFn[eventname].forEach(function (fn) {
+							fn.apply(undefined, _toConsumableArray(args));
+						});
+					}
 					break;
 				default:
 			}
