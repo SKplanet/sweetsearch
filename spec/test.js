@@ -1,9 +1,16 @@
 'use strict'
 
+describe("constructor", function() {
+  it("touchEnd event on inputarea", function() {
+    expect(true).toBe(true);
+  });
+});
 
-let util = {
+
+
+var util = {
   simpleFireEvent : function(eventType) {
-    let ev;
+    var ev;
     try {
       ev = document.createEvent('TouchEvent');
       ev.initTouchEvent(eventType, true, true);
@@ -16,16 +23,12 @@ let util = {
   }
 };
 
-let oSS = null;
+var oSS = null;
 
 describe("constructor", function() {
-
-  //prepare setting
-	//let oSS = null;
-  let elTarget = document.querySelector(".search-form");
-  let sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
-
-  let htOption = {
+  var elTarget = document.querySelector(".search-form");
+  var sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+  var htOption = {
             'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
             'requestType'         : 'jsonp',
             'jsonp_callbackName'  : 'completion'
@@ -33,37 +36,40 @@ describe("constructor", function() {
 
   beforeAll(function() {
     oSS = new SweetSearch(elTarget, htOption);
-
   });
 
-  it("initialize constructor ", function() {
+  it("touchEnd event on inputarea", function() {
     expect(oSS.elTarget).toBe(elTarget);
     expect(oSS.option.requestType).toBe(htOption.requestType);
     expect(oSS.elClearQueryBtn.className).toBe("clearQuery");
   });
 
   it("trigger touchend event after initialization ", function() {
-    let bFocus = false;
+    var bFocus = false;
 
-    function _handler() {bFocus = true;}
-    oSS.elInputField.addEventListener("focus", _handler);
+    function fnAfterFocus() { 
+      bFocus = true;
+    }
 
-    let ev = util.simpleFireEvent('touchend');
-    oSS.elInputField.dispatchEvent(ev);
+    oSS.registerUserMethod({
+      'FN_AFTER_FOCUS' : fnAfterFocus,
+    });
+
+    var ev = util.simpleFireEvent('touchend');
+    oSS.elInputFieldWrap.dispatchEvent(ev);
 
     expect(bFocus).toBe(true);
-
-    oSS.elInputField.removeEventListener("focus", _handler);
   });
  
 });
 
 
- describe("request Ajax", function() {
-  let bInsertWord = false;
+describe("auto-complete JSONP request", function() {
+  var bInsertWord = false;
 
   beforeEach(function(done) {
     oSS.elInputField.value = "mouse";
+
     setTimeout(function() {
        function fnInsertAutoCompleteWord() {
           bInsertWord = true;
@@ -79,7 +85,51 @@ describe("constructor", function() {
     },0);
   });
 
-  it("should have a valid season", function() { 
+  it("callback function should execute after JSONP request", function() { 
       expect(bInsertWord).toEqual(true);
+  });
+});
+
+
+describe("clear button", function() {
+  it("should clear input text when clear button", function() { 
+    var ev = util.simpleFireEvent('touchend');
+    oSS.elClearQueryBtn.dispatchEvent(ev);
+
+    var sText = oSS.elInputField.value;
+    expect(sText.length).toEqual(0);
+  });
+});
+
+
+describe("ajax test", function() {
+
+  var elTarget = document.querySelector(".search-form");
+  var ajaxURL = '../jsonMock/javascript.json';
+  var htOption = {
+            'sAutoCompleteURL'    : ajaxURL,
+            'requestType'         : 'ajax'
+  }
+  var sResult = null;
+
+  beforeEach(function(done) {
+    setTimeout(function() {
+      function fnInsertAutoCompleteWord(sQuery, sResponseObj) {
+        console.log('fnInsertAutoCompleteWord');
+        sResult = sResponseObj;
+        done();
+      }
+
+      oSS = new SweetSearch(elTarget, htOption);
+      oSS.registerUserMethod({
+        'FN_AFTER_INSERT_AUTO_WORD' : fnInsertAutoCompleteWord,
+      });
+      oSS.makeAutoCompleteAjaxRequest("javascript", ajaxURL);
+    },0);
+  });
+
+  it("should success AJAX request", function() { 
+    expect(true).toEqual(true);
+    expect(sResult.items[0][0][0]).toEqual("html javascript 삽입");
   });
 });
