@@ -169,7 +169,7 @@ class SweetSearch extends CommonComponent {
 	}
 
 	execAfterAutoCompleteAjax(sQuery, sResult) {
-		super.runCustomFn("USER", "FN_AFTER_INSERT_AUTO_WORD", sResult);
+		super.runCustomFn("USER", "FN_AFTER_INSERT_AUTO_WORD", sQuery, sResult);
 		if(this.elAutoCompleteLayer.querySelector("li") !== null) {
 			_cu.showLayer(this.elAutoCompleteLayer);
 			super.runCustomFn("PLUGIN", "FN_AFTER_AC_SHOW");
@@ -204,15 +204,13 @@ class SweetSearch extends CommonComponent {
 
 	//TODO. 
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {
-		// hardcoded url for test.
-		let url = "../jsonMock/"+ sQuery +".json";
+		sURL = sURL+"?qs="+sQuery;
 		let aHeaders = [["Content-Type", "application/json"]];
-		_cu.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
+		_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this), 
 			JSON.stringify({
 				sQuery : sQuery,
 				nTime : Date.now() 
 			}), 
 		"get", aHeaders, sQuery);
 	}
-
 }
