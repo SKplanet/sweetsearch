@@ -38,7 +38,7 @@ var _cu = {
 		xhr.addEventListener("load", (function () {
 			if (xhr.status === 200) {
 				var sResult = JSON.parse(xhr.responseText);
-				if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
+				if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sQuery, sResult);
 			}
 		}).bind(this));
 		xhr.send(sData);
@@ -785,7 +785,7 @@ var SweetSearch = (function (_CommonComponent3) {
 	}, {
 		key: "execAfterAutoCompleteAjax",
 		value: function execAfterAutoCompleteAjax(sQuery, sResult) {
-			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_INSERT_AUTO_WORD", sResult);
+			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_INSERT_AUTO_WORD", sQuery, sResult);
 			if (this.elAutoCompleteLayer.querySelector("li") !== null) {
 				_cu.showLayer(this.elAutoCompleteLayer);
 				_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_AC_SHOW");
@@ -825,10 +825,9 @@ var SweetSearch = (function (_CommonComponent3) {
 	}, {
 		key: "makeAutoCompleteAjaxRequest",
 		value: function makeAutoCompleteAjaxRequest(sQuery, sURL) {
-			// hardcoded url for test.
-			var url = "../jsonMock/" + sQuery + ".json";
+			sURL = sURL + "?qs=" + sQuery;
 			var aHeaders = [["Content-Type", "application/json"]];
-			_cu.sendSimpleAjax(url, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
+			_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this), JSON.stringify({
 				sQuery: sQuery,
 				nTime: Date.now()
 			}), "get", aHeaders, sQuery);
