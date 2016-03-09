@@ -24,7 +24,7 @@ var _cu = {
 		xhr.addEventListener("load", function() {
 			if (xhr.status === 200) {
 				var sResult = JSON.parse(xhr.responseText);
-				if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
+				if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this,sQuery,sResult);
 			}
 		}.bind(this));
 		xhr.send(sData);
