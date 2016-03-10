@@ -10,7 +10,7 @@ var Service = (function(){
 
 
     //callback 4 JSONP (planet)
-    var fnInsertAutoCompleteWordSyrupTable = function(sData) {
+    var fnInsertAutoCompleteWordSyrupTable = function(sQuery, sData) {
         var result  = "";
         var sHTML   = "";
         var sTemplate = "<li><span>[%sKeyword%]</span></li>";
