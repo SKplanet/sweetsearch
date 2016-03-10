@@ -800,20 +800,23 @@ var SweetSearch = (function (_CommonComponent3) {
 	}, {
 		key: "autoCompleteRequestManager",
 		value: function autoCompleteRequestManager(sQuery) {
+			var url = null;
 			var type = this.option.requestType;
-			var url = this.option.sAutoCompleteURL;
+
 			switch (type) {
 				case 'jsonp':
+					url = this.option.sAutoCompleteURL;
 					this.makeAutoCompleteJSONPRequest(sQuery, url);
 					break;
 				case 'ajax':
+					url = this.option.sAutoCompleteURL;
 					this.makeAutoCompleteAjaxRequest(sQuery, url);
 					break;
 				case 'user':
-					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE");
+					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE", sQuery);
 					break;
 				default:
-					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE");
+					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE", sQuery);
 			}
 		}
 	}, {

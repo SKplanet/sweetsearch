@@ -146,7 +146,7 @@ var Service = (function(){
     function runSyrupSearch() { 
         oSS = new SweetSearch(elFormComtainer, {
             'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
-            'requestType'         : 'no', //jsonp, ajax, user
+            'requestType'         : 'user', //jsonp, ajax, user
             'jsonp_callbackName'  : 'ac_done'
         });
 

@@ -184,20 +184,23 @@ class SweetSearch extends CommonComponent {
 	}
 
 	autoCompleteRequestManager(sQuery) {
+		let url = null;
 		let type = this.option.requestType;
-		let url = this.option.sAutoCompleteURL;
+
 		switch(type) {
 			case 'jsonp':
+				url = this.option.sAutoCompleteURL;
 				this.makeAutoCompleteJSONPRequest(sQuery,url);
 				break;
 			case 'ajax':
+				url = this.option.sAutoCompleteURL;
 				this.makeAutoCompleteAjaxRequest(sQuery,url);
 				break;
 			case 'user':
-				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE");
+				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE", sQuery);
 				break;
 			default: 
-				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE");
+				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE", sQuery);
 		}
 	}
 
