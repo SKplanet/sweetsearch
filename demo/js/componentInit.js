@@ -57,7 +57,6 @@ var Service = (function(){
 
     //callback 4 JSONP (planet)
     var fnInsertAutoCompleteWordSyrupTable = function(sQuery, sData) {
-        console.log("fnInsertAutoCompleteWord");
         var result  = "";
         var sHTML   = "";
         var sTemplate = "<li><span>[%sKeyword%]</span></li>";

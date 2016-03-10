@@ -91,17 +91,6 @@ describe("auto-complete JSONP request", function() {
 });
 
 
-describe("clear button", function() {
-  it("should clear input text when clear button", function() { 
-    var ev = util.simpleFireEvent('touchend');
-    oSS.elClearQueryBtn.dispatchEvent(ev);
-
-    var sText = oSS.elInputField.value;
-    expect(sText.length).toEqual(0);
-  });
-});
-
-
 describe("ajax test", function() {
 
   var elTarget = document.querySelector(".search-form");
@@ -115,7 +104,6 @@ describe("ajax test", function() {
   beforeEach(function(done) {
     setTimeout(function() {
       function fnInsertAutoCompleteWord(sQuery, sResponseObj) {
-        console.log('fnInsertAutoCompleteWord');
         sResult = sResponseObj;
         done();
       }
@@ -131,5 +119,16 @@ describe("ajax test", function() {
   it("should success AJAX request", function() { 
     expect(true).toEqual(true);
     expect(sResult.items[0][0][0]).toEqual("html javascript 삽입");
+  });
+});
+
+
+describe("clear button", function() {
+  it("should clear input text when clear button", function() { 
+    var ev = util.simpleFireEvent('touchend');
+    oSS.elClearQueryBtn.dispatchEvent(ev);
+
+    var sText = oSS.elInputField.value;
+    expect(sText.length).toEqual(0);
   });
 });
