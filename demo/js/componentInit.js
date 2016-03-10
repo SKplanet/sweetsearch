@@ -131,6 +131,10 @@ var Service = (function(){
          location.href = url;
     }
 
+    var fnMyAjax = function() {
+        console.log("send custom ajax");
+    }
+
     /*****************************/
     /* Component initialize.
     /*****************************/
@@ -142,14 +146,15 @@ var Service = (function(){
     function runSyrupSearch() { 
         oSS = new SweetSearch(elFormComtainer, {
             'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
-            'requestType'         : 'jsonp',
+            'requestType'         : 'no', //jsonp, ajax, user
             'jsonp_callbackName'  : 'ac_done'
         });
 
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordSyrupTable,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'         : fnSubmitForm
+            'FN_AFTER_SUBMIT'              : fnSubmitForm,
+            'FN_RUN_AJAX_EXECUTE'          : fnMyAjax
         });
 
         oSS.onPlugins([

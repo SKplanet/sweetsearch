@@ -22,7 +22,8 @@ class SweetSearch extends CommonComponent {
 					'FN_AFTER_INSERT_AUTO_WORD',
 					'FN_AFTER_SELECT_AUTO_WORD', 
 					'FN_AFTER_SUBMIT',
-					'FN_AFTER_FOCUS'
+					'FN_AFTER_FOCUS',
+					'FN_RUN_AJAX_EXECUTE'
 			],
 			DEFAULT_PLUGIN_EVENT 	: [	
 					'FN_AFTER_FOCUS',
@@ -192,8 +193,11 @@ class SweetSearch extends CommonComponent {
 			case 'ajax':
 				this.makeAutoCompleteAjaxRequest(sQuery,url);
 				break;
+			case 'user':
+				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE");
+				break;
 			default: 
-				//do something..
+				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE");
 		}
 	}
 

@@ -598,7 +598,7 @@ var SweetSearch = (function (_CommonComponent3) {
 					autoULWrap: ".auto-complete-wrap .ul-wrap",
 					realForm: "#search-form"
 				},
-				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS'],
+				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS', 'FN_RUN_AJAX_EXECUTE'],
 				DEFAULT_PLUGIN_EVENT: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT', 'FN_AFTER_AC_SHOW', 'FN_AFTER_AC_NONE'],
 				DEFAULT_OPTION: {
 					"requestType": 'jsonp',
@@ -809,8 +809,11 @@ var SweetSearch = (function (_CommonComponent3) {
 				case 'ajax':
 					this.makeAutoCompleteAjaxRequest(sQuery, url);
 					break;
+				case 'user':
+					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE");
+					break;
 				default:
-				//do something..
+					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE");
 			}
 		}
 	}, {
