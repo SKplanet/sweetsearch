@@ -75,6 +75,7 @@ describe("clear button", function() {
 });
 
 
+
 describe("JSONP request", function() {
   var bInsertWord = false;
 
@@ -90,6 +91,46 @@ describe("JSONP request", function() {
        oSS.registerUserMethod({
         'FN_AFTER_INSERT_AUTO_WORD' : fnInsertAutoCompleteWord,
        });
+
+       var clickEvent = new Event('input');
+       oSS.elInputField.dispatchEvent(clickEvent);
+    },0);
+  });
+
+  it("callback function should execute after JSONP request", function() { 
+      expect(bInsertWord).toEqual(true);
+  });
+});
+
+
+describe("JSONP request (user custom)", function() {
+  var bInsertWord = false;
+  var elTarget = document.querySelector(".search-form");
+  var sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+
+  beforeEach(function(done) {
+    oSS.elInputField.value = "mouse";
+
+    setTimeout(function() {
+      function fnInsertAutoCompleteWord(sQuery, sResponseObj) {
+          bInsertWord = true;
+          done();
+      }
+
+      var fnMyJSONP = function(sQuery, COMPONENT_CALLBACK) {
+        var callback_name = "completion";
+        //can use ajax-method of other libraries.
+        _cu.sendSimpleJSONP(sAutoCompleteURLAmazon, sQuery, callback_name, COMPONENT_CALLBACK);
+      }
+
+       oSS.registerUserMethod({
+        'FN_AFTER_INSERT_AUTO_WORD' : fnInsertAutoCompleteWord,
+        'FN_RUN_AJAX_EXECUTE'          : fnMyJSONP
+       });
+
+       oSS = new SweetSearch(elTarget, {
+            'AjaxRequestType'         : 'user', //jsonp, ajax, user
+      });
 
        var clickEvent = new Event('input');
        oSS.elInputField.dispatchEvent(clickEvent);
