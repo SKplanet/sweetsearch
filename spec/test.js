@@ -30,7 +30,7 @@ describe("constructor", function() {
   var sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
   var htOption = {
             'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
-            'requestType'         : 'jsonp',
+            'AjaxRequestType'         : 'jsonp',
             'jsonp_callbackName'  : 'completion'
   }
 
@@ -40,7 +40,7 @@ describe("constructor", function() {
 
   it("touchEnd event on inputarea", function() {
     expect(oSS.elTarget).toBe(elTarget);
-    expect(oSS.option.requestType).toBe(htOption.requestType);
+    expect(oSS.option.AjaxRequestType).toBe(htOption.AjaxRequestType);
     expect(oSS.elClearQueryBtn.className).toBe("clearQuery");
   });
 

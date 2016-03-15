@@ -38,7 +38,8 @@ var _cu = {
 		xhr.addEventListener("load", (function () {
 			if (xhr.status === 200) {
 				var sResult = JSON.parse(xhr.responseText);
-				if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sQuery, sResult);
+				//if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this,sQuery,sResult);
+				if (fnCallback && typeof fnCallback === 'function') fnCallback.call(this, sResult);
 			}
 		}).bind(this));
 		xhr.send(sData);
@@ -601,7 +602,7 @@ var SweetSearch = (function (_CommonComponent3) {
 				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS', 'FN_RUN_AJAX_EXECUTE'],
 				DEFAULT_PLUGIN_EVENT: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT', 'FN_AFTER_AC_SHOW', 'FN_AFTER_AC_NONE'],
 				DEFAULT_OPTION: {
-					"requestType": 'jsonp',
+					"AjaxRequestType": 'jsonp',
 					"sAutoCompleteURL": "",
 					"jsonp_callbackName": ""
 				}
@@ -801,7 +802,7 @@ var SweetSearch = (function (_CommonComponent3) {
 		key: "autoCompleteRequestManager",
 		value: function autoCompleteRequestManager(sQuery) {
 			var url = null;
-			var type = this.option.requestType;
+			var type = this.option.AjaxRequestType;
 
 			switch (type) {
 				case 'jsonp':
@@ -813,7 +814,7 @@ var SweetSearch = (function (_CommonComponent3) {
 					this.makeAutoCompleteAjaxRequest(sQuery, url);
 					break;
 				case 'user':
-					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE", sQuery);
+					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE", sQuery, this.execAfterAutoCompleteAjax.bind(this, sQuery));
 					break;
 				default:
 					_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_RUN_AJAX_EXECUTE", sQuery);
@@ -833,7 +834,7 @@ var SweetSearch = (function (_CommonComponent3) {
 		value: function makeAutoCompleteAjaxRequest(sQuery, sURL) {
 			sURL = sURL + "?qs=" + sQuery;
 			var aHeaders = [["Content-Type", "application/json"]];
-			_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this), JSON.stringify({
+			_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
 				sQuery: sQuery,
 				nTime: Date.now()
 			}), "get", aHeaders, sQuery);

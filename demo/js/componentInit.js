@@ -1,5 +1,9 @@
 var oSS= null;
 
+var sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
+var sAutoCompleteURLSyrupTable = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
+var sAutoCompleteURLLocal = '../jsonMock/javascript.json';
+
 var Service = (function(){
     var doc = document;
     var elForm = doc.querySelector("#search-form");
@@ -8,9 +12,9 @@ var Service = (function(){
     var elRecentWordLayer   = doc.querySelector(".recent-word-wrap");
     var elInputField        = doc.querySelector(".input-field");
 
-    /*
+    
     // callback 4 Ajax (local)
-    var fnInsertAutoCompleteWordAjax = function(sData) {
+    var fnInsertAutoCompleteWordAjax = function(sQuery, sData) {
         var result  = "";
         var sHTML   = "";
         var sTemplate = "<li><span>[%sKeyword%]</span></li>";
@@ -22,7 +26,7 @@ var Service = (function(){
 
         elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
     }
-    */
+    
 
     //callback 4 JSONP (Amazon)
     //자동완성레이어에 보여줄 HTML (사용자정의)
@@ -131,30 +135,89 @@ var Service = (function(){
          location.href = url;
     }
 
-    var fnMyAjax = function() {
-        console.log("send custom ajax");
+
+
+    /***** CUSTOM AJAX LOGIC START *****/
+    //this callback method is optional.
+    var fnMyJSONP = function(sQuery, COMPONENT_CALLBACK) {
+        var callback_name = "completion";
+   
+        //user can select one of the two way. (_cu.sendSimpleJSONP or other JSONP Library)
+        _cu.sendSimpleJSONP(sAutoCompleteURLAmazon, sQuery, callback_name, COMPONENT_CALLBACK);
     }
+
+    //this callback method is optional.
+    var fnMyAjax = function(sQuery, COMPONENT_CALLBACK) {
+        var ajaxURL = '../jsonMock/javascript.json';
+        ajaxURL = ajaxURL+"?qs="+sQuery;
+        var aHeaders = [["Content-Type", "application/json"]];
+
+        //user can select one of the two way. (_cu.sendSimpleJSONP or other Ajax Library)
+        _cu.sendSimpleAjax(ajaxURL, COMPONENT_CALLBACK, null, "get", aHeaders, sQuery);
+    }
+    /***** CUSTOM AJAX LOGIC END *****/
+
 
     /*****************************/
     /* Component initialize.
     /*****************************/
 
-       //amazon
-    var sAutoCompleteURLAmazon = 'http://completion.amazon.com/search/complete?mkt=1&client=amazon-search-ui&x=String&search-alias=aps&';
-    var sAutoCompleteURLSyrupTable = 'http://211.110.43.73:19200/PickatAutoCompleteServer/request?s=pickat&';
 
     function runSyrupSearch() { 
+        /*
+        //custom ajax logic (AJAX)
         oSS = new SweetSearch(elFormComtainer, {
-            'sAutoCompleteURL'    : sAutoCompleteURLSyrupTable,
-            'requestType'         : 'user', //jsonp, ajax, user
-            'jsonp_callbackName'  : 'ac_done'
+            'AjaxRequestType'         : 'user', //jsonp, ajax, user
         });
 
         oSS.registerUserMethod({
-            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordSyrupTable,
+            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
             'FN_AFTER_SUBMIT'              : fnSubmitForm,
             'FN_RUN_AJAX_EXECUTE'          : fnMyAjax
+        });
+        */
+
+        /*
+        //custom ajax logic (JSONP)
+        oSS = new SweetSearch(elFormComtainer, {
+            'AjaxRequestType'         : 'user', //jsonp, ajax, user
+        });
+
+        oSS.registerUserMethod({
+            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
+            'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_AFTER_SUBMIT'              : fnSubmitForm,
+            'FN_RUN_AJAX_EXECUTE'          : fnMyJSONP
+        });
+        */
+
+        /*
+        //delegated ajax logic (AJAX)
+        oSS = new SweetSearch(elFormComtainer, {
+            'sAutoCompleteURL'    : sAutoCompleteURLLocal,
+            'AjaxRequestType'     : 'ajax', //jsonp, ajax, user
+        });
+
+        oSS.registerUserMethod({
+            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
+            'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_AFTER_SUBMIT'              : fnSubmitForm,
+        });
+        */
+
+        //delegated ajax logic (JSONP)
+        oSS = new SweetSearch(elFormComtainer, {
+            'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
+            'AjaxRequestType'     : 'jsonp', //jsonp, ajax, user
+            'jsonp_callbackName'  : 'completion'
+        });
+        
+
+        oSS.registerUserMethod({
+            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
+            'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_AFTER_SUBMIT'              : fnSubmitForm,
         });
 
         oSS.onPlugins([
@@ -181,7 +244,7 @@ var Service = (function(){
      function runAmazonSearch() { 
         oSS = new SweetSearch(elFormComtainer, {
             'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
-            'requestType'         : 'jsonp',
+            'AjaxRequestType'         : 'jsonp',
             'jsonp_callbackName'  : 'completion'
         });
 

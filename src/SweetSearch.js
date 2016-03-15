@@ -33,7 +33,7 @@ class SweetSearch extends CommonComponent {
 					'FN_AFTER_AC_NONE'
 			],
 			DEFAULT_OPTION 			: {
-					"requestType" 		: 'jsonp',
+					"AjaxRequestType" 	: 'jsonp',
 					"sAutoCompleteURL" 	: "",
 					"jsonp_callbackName": ""
 			}
@@ -185,7 +185,7 @@ class SweetSearch extends CommonComponent {
 
 	autoCompleteRequestManager(sQuery) {
 		let url = null;
-		let type = this.option.requestType;
+		let type = this.option.AjaxRequestType;
 
 		switch(type) {
 			case 'jsonp':
@@ -197,7 +197,7 @@ class SweetSearch extends CommonComponent {
 				this.makeAutoCompleteAjaxRequest(sQuery,url);
 				break;
 			case 'user':
-				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE", sQuery);
+				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE", sQuery, this.execAfterAutoCompleteAjax.bind(this, sQuery));
 				break;
 			default: 
 				super.runCustomFn("USER", "FN_RUN_AJAX_EXECUTE", sQuery);
@@ -213,7 +213,7 @@ class SweetSearch extends CommonComponent {
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {
 		sURL = sURL+"?qs="+sQuery;
 		let aHeaders = [["Content-Type", "application/json"]];
-		_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this), 
+		_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
 			JSON.stringify({
 				sQuery : sQuery,
 				nTime : Date.now() 
