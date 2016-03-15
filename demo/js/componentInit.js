@@ -31,7 +31,6 @@ var Service = (function(){
     //callback 4 JSONP (Amazon)
     //자동완성레이어에 보여줄 HTML (사용자정의)
     var fnInsertAutoCompleteWordAmazonProduct = function(sQuery, sData) {
-        console.log("fnInsertAutoCompleteWord");
         var result  = "";
         var sHTML   = "";
         var sTemplate = "<li><span>[%sKeyword%]</span></li>";

@@ -64,14 +64,25 @@ describe("constructor", function() {
 });
 
 
-describe("auto-complete JSONP request", function() {
+describe("clear button", function() {
+  it("should clear input text when clear button", function() { 
+    var ev = util.simpleFireEvent('touchend');
+    oSS.elClearQueryBtn.dispatchEvent(ev);
+
+    var sText = oSS.elInputField.value;
+    expect(sText.length).toEqual(0);
+  });
+});
+
+
+describe("JSONP request", function() {
   var bInsertWord = false;
 
   beforeEach(function(done) {
     oSS.elInputField.value = "mouse";
 
     setTimeout(function() {
-       function fnInsertAutoCompleteWord() {
+       function fnInsertAutoCompleteWord(sQuery, sResponseObj) {
           bInsertWord = true;
           done();
        }
@@ -91,13 +102,14 @@ describe("auto-complete JSONP request", function() {
 });
 
 
-describe("ajax test", function() {
+
+describe("Ajax Request", function() {
 
   var elTarget = document.querySelector(".search-form");
   var ajaxURL = '../jsonMock/javascript.json';
   var htOption = {
             'sAutoCompleteURL'    : ajaxURL,
-            'requestType'         : 'ajax'
+            'AjaxRequestType'     : 'ajax'
   }
   var sResult = null;
 
@@ -112,7 +124,11 @@ describe("ajax test", function() {
       oSS.registerUserMethod({
         'FN_AFTER_INSERT_AUTO_WORD' : fnInsertAutoCompleteWord,
       });
-      oSS.makeAutoCompleteAjaxRequest("javascript", ajaxURL);
+
+
+      var clickEvent = new Event('input');
+      oSS.elInputField.dispatchEvent(clickEvent);
+
     },0);
   });
 
@@ -123,12 +139,54 @@ describe("ajax test", function() {
 });
 
 
-describe("clear button", function() {
-  it("should clear input text when clear button", function() { 
-    var ev = util.simpleFireEvent('touchend');
-    oSS.elClearQueryBtn.dispatchEvent(ev);
+describe("Ajax Request (user Custom)", function() {
 
-    var sText = oSS.elInputField.value;
-    expect(sText.length).toEqual(0);
+  var elTarget = document.querySelector(".search-form");
+  var ajaxURL = '../jsonMock/javascript.json';
+  var htOption = {
+            'AjaxRequestType'     : 'user'
+  }
+  var sResult = null;
+
+  beforeEach(function(done) {
+    setTimeout(function() {
+
+      function fnInsertAutoCompleteWord(sQuery, sResponseObj) {
+        sResult = sResponseObj;
+        done();
+      }
+
+      var fnMyAjax = function(sQuery, fnCallback) {
+        let method = "get";
+        let url = "../jsonMock/javascript.json";
+        let xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+
+        xhr.addEventListener("load", function() {
+          if (xhr.status === 200) {
+            var sResult = JSON.parse(xhr.responseText);
+            if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this,sResult);
+          }
+        }.bind(this));
+        xhr.send();
+      }
+
+      oSS = new SweetSearch(elTarget, htOption);
+      oSS.registerUserMethod({
+        'FN_AFTER_INSERT_AUTO_WORD' : fnInsertAutoCompleteWord,
+        'FN_RUN_AJAX_EXECUTE'       : fnMyAjax
+      });
+
+      var clickEvent = new Event('input');
+      oSS.elInputField.dispatchEvent(clickEvent);
+
+    },0);
+  });
+
+  it("should success AJAX request", function() { 
+    expect(true).toEqual(true);
+    expect(sResult.items[0][0][0]).toEqual("html javascript 삽입");
   });
 });
+
+
