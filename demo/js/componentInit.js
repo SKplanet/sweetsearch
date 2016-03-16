@@ -26,7 +26,6 @@ var Service = (function(){
 
         elAutoCompleteLayer.querySelector("ul").innerHTML = sHTML;
     }
-    
 
     //callback 4 JSONP (Amazon)
     //자동완성레이어에 보여줄 HTML (사용자정의)
@@ -109,10 +108,6 @@ var Service = (function(){
 
         //submit form with custom value.
         var sText = elCurrentLI.querySelector("span").innerText.trim();
-
-        elInputField.value = sText;
-        //oSS.handlerSubmitForm(null,sText);
-        fnSubmitForm(sText);
     }
 
     var fnSelectRecentSearchWord = function(_el) {

@@ -152,16 +152,15 @@ class SweetSearch extends CommonComponent {
 		if(this.isExecuteTouchScroll(nowPageY)) return;
 
 		let sText = super.runCustomFn("USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
+		this.handlerSubmitForm(evt, this.elInputField.value);
 	}
 
-	// handlerSubmitForm(evt, sQuery) {
- //        if(evt) evt.preventDefault();
- //        sQuery = sQuery || this.elInputField.value;
- //        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
- //        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
-	// }
-	/***** End EventHandler *****/
-
+	handlerSubmitForm(evt, sQuery) {
+        if(evt) evt.preventDefault();
+        sQuery = sQuery || this.elInputField.value;
+        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
+        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
+	}
 
 	isExecuteTouchScroll(pageY) {
 		var nDiff = this.htTouchStartSelectedWord.y - pageY;

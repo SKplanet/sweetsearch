@@ -763,16 +763,16 @@ var SweetSearch = (function (_CommonComponent3) {
 			if (this.isExecuteTouchScroll(nowPageY)) return;
 
 			var sText = _get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
+			this.handlerSubmitForm(evt, this.elInputField.value);
 		}
-
-		// handlerSubmitForm(evt, sQuery) {
-		//        if(evt) evt.preventDefault();
-		//        sQuery = sQuery || this.elInputField.value;
-		//        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
-		//        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
-		// }
-		/***** End EventHandler *****/
-
+	}, {
+		key: "handlerSubmitForm",
+		value: function handlerSubmitForm(evt, sQuery) {
+			if (evt) evt.preventDefault();
+			sQuery = sQuery || this.elInputField.value;
+			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SUBMIT", sQuery);
+			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_SUBMIT", sQuery);
+		}
 	}, {
 		key: "isExecuteTouchScroll",
 		value: function isExecuteTouchScroll(pageY) {
