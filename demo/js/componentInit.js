@@ -110,9 +110,9 @@ var Service = (function(){
         //submit form with custom value.
         var sText = elCurrentLI.querySelector("span").innerText.trim();
 
-        //must be code.
         elInputField.value = sText;
-        oSS.handlerSubmitForm(null,sText);
+        //oSS.handlerSubmitForm(null,sText);
+        fnSubmitForm(sText);
     }
 
     var fnSelectRecentSearchWord = function(_el) {
@@ -133,8 +133,6 @@ var Service = (function(){
         var url = "./SearchResult.html?q=" + sQuery;
          location.href = url;
     }
-
-
 
     /***** CUSTOM AJAX LOGIC START *****/
     //this callback method is optional.

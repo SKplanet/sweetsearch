@@ -92,7 +92,7 @@ class SweetSearch extends CommonComponent {
 		this.elAutoULWrap.addEventListener("touchstart", 	(evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
 		this.elAutoULWrap.addEventListener("touchend", 		(evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
 
-		this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
+		//this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 	}
 
 	registerUserMethod(htFn) {
@@ -154,12 +154,12 @@ class SweetSearch extends CommonComponent {
 		let sText = super.runCustomFn("USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 	}
 
-	handlerSubmitForm(evt, sQuery) {
-        if(evt) evt.preventDefault();
-        sQuery = sQuery || this.elInputField.value;
-        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
-        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
-	}
+	// handlerSubmitForm(evt, sQuery) {
+ //        if(evt) evt.preventDefault();
+ //        sQuery = sQuery || this.elInputField.value;
+ //        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
+ //        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
+	// }
 	/***** End EventHandler *****/
 
 
@@ -212,7 +212,7 @@ class SweetSearch extends CommonComponent {
 	//query name is 'qs'.
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {
 		sURL = sURL+"?qs="+sQuery;
-		aHeaders = "";
+		let aHeaders = "";
 		_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
 			JSON.stringify({
 				sQuery : sQuery,

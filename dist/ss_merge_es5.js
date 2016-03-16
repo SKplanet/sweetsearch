@@ -688,9 +688,7 @@ var SweetSearch = (function (_CommonComponent3) {
 				return _this7.handlerSelectAutoCompletedWordTouchEnd(evt);
 			});
 
-			this.elForm.addEventListener("submit", function (evt) {
-				return _this7.handlerSubmitForm(evt);
-			});
+			//this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 		}
 	}, {
 		key: "registerUserMethod",
@@ -766,14 +764,13 @@ var SweetSearch = (function (_CommonComponent3) {
 
 			var sText = _get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 		}
-	}, {
-		key: "handlerSubmitForm",
-		value: function handlerSubmitForm(evt, sQuery) {
-			if (evt) evt.preventDefault();
-			sQuery = sQuery || this.elInputField.value;
-			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SUBMIT", sQuery);
-			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_SUBMIT", sQuery);
-		}
+
+		// handlerSubmitForm(evt, sQuery) {
+		//        if(evt) evt.preventDefault();
+		//        sQuery = sQuery || this.elInputField.value;
+		//        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
+		//        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
+		// }
 		/***** End EventHandler *****/
 
 	}, {
@@ -827,13 +824,13 @@ var SweetSearch = (function (_CommonComponent3) {
 			_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this, sQuery));
 		}
 
-		//TODO.
+		//query name is 'qs'.
 
 	}, {
 		key: "makeAutoCompleteAjaxRequest",
 		value: function makeAutoCompleteAjaxRequest(sQuery, sURL) {
 			sURL = sURL + "?qs=" + sQuery;
-			var aHeaders = [["Content-Type", "application/json"]];
+			var aHeaders = "";
 			_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this, sQuery), JSON.stringify({
 				sQuery: sQuery,
 				nTime: Date.now()
