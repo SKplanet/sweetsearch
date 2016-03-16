@@ -209,10 +209,10 @@ class SweetSearch extends CommonComponent {
 		_cu.sendSimpleJSONP(sURL, sQuery, sCallbackName, this.execAfterAutoCompleteAjax.bind(this,sQuery));
 	}
 
-	//TODO. 
+	//query name is 'qs'.
 	makeAutoCompleteAjaxRequest(sQuery, sURL) {
 		sURL = sURL+"?qs="+sQuery;
-		let aHeaders = [["Content-Type", "application/json"]];
+		aHeaders = "";
 		_cu.sendSimpleAjax(sURL, this.execAfterAutoCompleteAjax.bind(this, sQuery), 
 			JSON.stringify({
 				sQuery : sQuery,
