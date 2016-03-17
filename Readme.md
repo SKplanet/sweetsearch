@@ -78,8 +78,13 @@ You can use two argument as follows.
 * aResultData(String) : Ajax(JSONP) response data.
 
 <br>
+**[Return]**
 
-#### 2. FN_AFTER_SELECT_AUTO_WORD
+* noting to return(undefined)
+
+<br>
+
+#### 2.FN_AFTER_SELECT_AUTO_WORD
 This callback function will be execute after selecting auto-complete word list.
 <img src="demo/img/sweetsearch_reference_desc_002.jpg" width="530">
 
@@ -153,34 +158,9 @@ You can add plugin on Component as follows :
 Plugin can also have callback functions.
 
 FN_AFTER_INSERT_RECENT_WORD is similar to [FN_AFTER_INSERT_AUTO_WORD](#1fn_after_insert_auto_word).
+FN_AFTER_SELECT_RECENT_WORD is similar to [FN_AFTER_SELECT_AUTO_WORD](#2fn_after_select_auto_word).
 
-```javascript
-    var fnInsertRecentSearchWord = function(aData, nMaxList) {
-        var result  = "";
-        var sHTML   = "";
-        var sTemplate = "<li><span>[%sKeyword%]</span></li>";
-        //5개만,
-        aData.length = nMaxList;
-        aData.forEach( function(v) {
-            result = sTemplate.replace(/\[%sKeyword%\]/, v);       
-            sHTML += result;
-        });
-        elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
-    }
-
-    var fnSelectRecentSearchWord = function(_el) {
-        //highlight selected item.
-        var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
-        elCurrentLI.className += "selectedLI";
-
-        //submit form with custom value.
-        var sText = elCurrentLI.querySelector("span").innerText.trim();
-
-        //must be code.
-        elInputField.value = sText;
-        oSS.handlerSubmitForm(null,sText);
-    }
-```
+<br>
 
 ## Other examples.
 
@@ -210,7 +190,6 @@ You can code own's Ajax function as follows:
     oSS.registerUserMethod({
         'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
         'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-        'FN_AFTER_SUBMIT'              : fnSubmitForm,
         'FN_RUN_AJAX_EXECUTE'          : fnMyAjax
     });
 ```
