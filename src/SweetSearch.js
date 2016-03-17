@@ -21,7 +21,6 @@ class SweetSearch extends CommonComponent {
 			DEFAULT_EVENT 			: [	
 					'FN_AFTER_INSERT_AUTO_WORD',
 					'FN_AFTER_SELECT_AUTO_WORD', 
-					'FN_AFTER_SUBMIT',
 					'FN_AFTER_FOCUS',
 					'FN_RUN_AJAX_EXECUTE'
 			],
@@ -151,15 +150,10 @@ class SweetSearch extends CommonComponent {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
 
-		let sText = super.runCustomFn("USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
-		this.handlerSubmitForm(evt, this.elInputField.value);
-	}
+		let sQueryText = super.runCustomFn("USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 
-	handlerSubmitForm(evt, sQuery) {
-        if(evt) evt.preventDefault();
-        sQuery = sQuery || this.elInputField.value;
-        super.runCustomFn("USER", "FN_AFTER_SUBMIT", sQuery);
-        super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQuery);
+		//if keyword is selected, save to storage.
+		super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQueryText);
 	}
 
 	isExecuteTouchScroll(pageY) {

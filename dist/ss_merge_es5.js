@@ -248,12 +248,14 @@ var CommonComponent = (function () {
 		key: "runCustomFn",
 		value: function runCustomFn(type, eventname) {
 			var args = [].slice.call(arguments, 2);
+			var returnValue = undefined;
+
 			switch (type) {
 				case "USER":
 					if (_typeof(this.htUserFn) === "object" && typeof this.htUserFn[eventname] === "function") {
 						var _htUserFn;
 
-						(_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
+						returnValue = (_htUserFn = this.htUserFn)[eventname].apply(_htUserFn, _toConsumableArray(args));
 					}
 					break;
 				case "PLUGIN":
@@ -265,6 +267,7 @@ var CommonComponent = (function () {
 					break;
 				default:
 			}
+			return returnValue;
 		}
 	}, {
 		key: "_injectParentObject",
@@ -600,7 +603,7 @@ var SweetSearch = (function (_CommonComponent3) {
 					autoULWrap: ".auto-complete-wrap .ul-wrap",
 					realForm: "#search-form"
 				},
-				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_SUBMIT', 'FN_AFTER_FOCUS', 'FN_RUN_AJAX_EXECUTE'],
+				DEFAULT_EVENT: ['FN_AFTER_INSERT_AUTO_WORD', 'FN_AFTER_SELECT_AUTO_WORD', 'FN_AFTER_FOCUS', 'FN_RUN_AJAX_EXECUTE'],
 				DEFAULT_PLUGIN_EVENT: ['FN_AFTER_FOCUS', 'FN_AFTER_INPUT', 'FN_AFTER_SUBMIT', 'FN_AFTER_AC_SHOW', 'FN_AFTER_AC_NONE'],
 				DEFAULT_OPTION: {
 					"AjaxRequestType": 'jsonp',
@@ -763,16 +766,10 @@ var SweetSearch = (function (_CommonComponent3) {
 			var nowPageY = evt.changedTouches[0].pageY;
 			if (this.isExecuteTouchScroll(nowPageY)) return;
 
-			var sText = _get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
-			this.handlerSubmitForm(evt, this.elInputField.value);
-		}
-	}, {
-		key: "handlerSubmitForm",
-		value: function handlerSubmitForm(evt, sQuery) {
-			if (evt) evt.preventDefault();
-			sQuery = sQuery || this.elInputField.value;
-			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SUBMIT", sQuery);
-			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_SUBMIT", sQuery);
+			var sQueryText = _get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
+
+			//if keyword is selected, save to storage.
+			_get(Object.getPrototypeOf(SweetSearch.prototype), "runCustomFn", this).call(this, "PLUGIN", "FN_AFTER_SUBMIT", sQueryText);
 		}
 	}, {
 		key: "isExecuteTouchScroll",
