@@ -135,6 +135,7 @@ After receiving Ajax response data, you can implement codes as follows codes.
 Plugin is a child component that parent Component use.
 
 SweetSearch have plugin by the name of 'RecentWordPlugin'.
+RecentWordPlugin use Localstorage to save data.
 
 You can add plugin on Component as follows :
 
