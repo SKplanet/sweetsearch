@@ -16,7 +16,7 @@ class RecentWordPlugin extends CommonComponent {
 			},
 			DEFAULT_EVENT : [	
 					'FN_AFTER_INSERT_RECENT_WORD',
-					'FN_AFTER_SELECT_RECENT_WORD'
+					'FN_AFTER_SELECT_RECENT_WORD',
 			],
 			OPTIONS : {
 					'usage' : true,
@@ -41,12 +41,13 @@ class RecentWordPlugin extends CommonComponent {
 	setInitValue() {
 		let _d 						= this.COMPONENT_CONFIG();
 		let s 						= _d.ELEMENT_SELECTOR;
+		let _el 					= this.elTarget;
 
 		this.htDefaultFn 			= super.getDefaultCallbackList(_d.DEFAULT_EVENT);
 		this.htDefaultOption 		= _d.OPTIONS;
 
-		this.elRecentWordLayer 		= this.elTarget.querySelector(s.recentWordWrap);
-		this.elClearRecentWordBtn 	= this.elTarget.querySelector(s.deleteWordBtn);
+		this.elRecentWordLayer 		= _el.querySelector(s.recentWordWrap);
+		this.elClearRecentWordBtn 	= _el.querySelector(s.deleteWordBtn);
 		this.elCloseButtonRWL		= this.elRecentWordLayer.querySelector(s.closeLayerBtn);
 		this.elRecentULWrap			= this.elRecentWordLayer.querySelector(s.recentULWrap);
 

@@ -327,12 +327,13 @@ var RecentWordPlugin = (function (_CommonComponent) {
 		value: function setInitValue() {
 			var _d = this.COMPONENT_CONFIG();
 			var s = _d.ELEMENT_SELECTOR;
+			var _el = this.elTarget;
 
 			this.htDefaultFn = _get(Object.getPrototypeOf(RecentWordPlugin.prototype), "getDefaultCallbackList", this).call(this, _d.DEFAULT_EVENT);
 			this.htDefaultOption = _d.OPTIONS;
 
-			this.elRecentWordLayer = this.elTarget.querySelector(s.recentWordWrap);
-			this.elClearRecentWordBtn = this.elTarget.querySelector(s.deleteWordBtn);
+			this.elRecentWordLayer = _el.querySelector(s.recentWordWrap);
+			this.elClearRecentWordBtn = _el.querySelector(s.deleteWordBtn);
 			this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(s.closeLayerBtn);
 			this.elRecentULWrap = this.elRecentWordLayer.querySelector(s.recentULWrap);
 

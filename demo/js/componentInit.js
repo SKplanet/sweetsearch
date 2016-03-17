@@ -100,6 +100,12 @@ var Service = (function(){
         elRecentWordLayer.querySelector("ul").innerHTML = sHTML;
     }
 
+    //set submit custom url.
+    var fnSubmitForm = function(sQuery) {
+        var url = "./SearchResult.html?q=" + sQuery;
+         location.href = url;
+    }
+
     //set css when select item and get text.
     var fnSelectAutoCompleteWord = function(_el) {
         //highlight selected item.
@@ -120,14 +126,11 @@ var Service = (function(){
 
         //must be code.
         elInputField.value = sText;
-        oSS.handlerSubmitForm(null,sText);
+
+        fnSubmitForm(sText);
     }
 
-    //set submit custom url.
-    var fnSubmitForm = function(sQuery) {
-        var url = "./SearchResult.html?q=" + sQuery;
-         location.href = url;
-    }
+
 
     /***** CUSTOM AJAX LOGIC START *****/
     //this callback method is optional.
@@ -220,7 +223,8 @@ var Service = (function(){
                 },
                 'userMethod' : {
                     'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
-                    'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord
+                    'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord,
+                    'FN_AFTER_SUBMIT'              : fnSubmitForm
                 }
             },
             { 
