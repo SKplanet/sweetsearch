@@ -114,6 +114,10 @@ var Service = (function(){
 
         //submit form with custom value.
         var sText = elCurrentLI.querySelector("span").innerText.trim();
+
+        fnSubmitForm(sText);
+
+        return sText;
     }
 
     var fnSelectRecentSearchWord = function(_el) {
@@ -128,6 +132,8 @@ var Service = (function(){
         elInputField.value = sText;
 
         fnSubmitForm(sText);
+
+        return sText;
     }
 
 
@@ -168,7 +174,6 @@ var Service = (function(){
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'              : fnSubmitForm,
             'FN_RUN_AJAX_EXECUTE'          : fnMyAjax
         });
         */
@@ -182,7 +187,6 @@ var Service = (function(){
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'              : fnSubmitForm,
             'FN_RUN_AJAX_EXECUTE'          : fnMyJSONP
         });
         */
@@ -197,7 +201,6 @@ var Service = (function(){
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'              : fnSubmitForm,
         });
         */
 
@@ -212,7 +215,6 @@ var Service = (function(){
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'              : fnSubmitForm,
         });
 
         oSS.onPlugins([
@@ -224,7 +226,6 @@ var Service = (function(){
                 'userMethod' : {
                     'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
                     'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord,
-                    'FN_AFTER_SUBMIT'              : fnSubmitForm
                 }
             },
             { 
@@ -247,7 +248,6 @@ var Service = (function(){
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'         : fnSubmitForm
         });
 
         oSS.onPlugins([

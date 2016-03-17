@@ -37,7 +37,6 @@ Initialize Component and register callback.
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-            'FN_AFTER_SUBMIT'              : fnSubmitForm
         });
 
 ```
@@ -49,7 +48,6 @@ Arguments of registerUserMethod function used above are all callback function.
 ```JAVASCRIPT
         'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
         'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-        'FN_AFTER_SUBMIT'              : fnSubmitForm
 ```
 
 #### 1.FN_AFTER_INSERT_AUTO_WORD ####
@@ -89,10 +87,18 @@ You can implement codes about auto-Complete word list view.
 
 After receiving Ajax response data, you can implement codes as follows codes.
 
+(e.g. change stype of selected item and submit form to target URL)
+
 **[Example]**
 ```JAVASCRIPT
 	var fnSelectAutoCompleteWord = function(element) {
         element.className += "selectedLI";
+        var sQuery = element.innerText;
+
+        //send form.
+        myformsubmit();
+
+        return sQuery;
     }
 ```
 
@@ -101,24 +107,12 @@ After receiving Ajax response data, you can implement codes as follows codes.
 * element(HTMLElement) : element that fired an event.
 
 <br>
+**[Return]**
 
-#### 3. FN_AFTER_SUBMIT
-you can send queryString to the target URL.
-
-**[Example]**
-```JAVASCRIPT
-    var fnSubmitForm = function(sQuery) {
-        var url = "./SearchResult.html?q=" + sQuery;
-         location.href = url;
-    }
-```
-
-
-**[Arguments]**
-
-* sQuery(String) 	: search word
+* sQuery(String) : selected item.(search query)
 
 <br>
+
 ## Options 
 
 **[sAutoCompleteURL]**

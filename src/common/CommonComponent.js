@@ -63,10 +63,12 @@ class CommonComponent {
 
 	runCustomFn(type, eventname) {
 		let args = [].slice.call(arguments, 2);
+		let returnValue;
+
 		switch(type) {
 			case "USER" : 
 				if((typeof this.htUserFn ==="object") && (typeof this.htUserFn[eventname] ==="function")) {
-					this.htUserFn[eventname](...args);
+					returnValue = this.htUserFn[eventname](...args);
 				}
 				break
 			case "PLUGIN": 
@@ -78,6 +80,7 @@ class CommonComponent {
 				break
 			default : 
 		}
+		return returnValue;
 	}
 
 	_injectParentObject(oParent, oChild) {
