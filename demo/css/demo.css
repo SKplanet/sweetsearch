@@ -21,13 +21,13 @@ a:link {
     margin: 50px auto;
 }
 
-.toggleMenu {
+.toggle-menu {
     margin: 0px auto;
     float: right;
     margin-right: 10%;
 }
 
-.toggleMenu a:link {
+.toggle-menu a:link {
     color: darkOrange;
 }
 
@@ -49,13 +49,13 @@ a:link {
     padding-bottom: 3px;
 }
 
-.formContainer {overflow: hidden;}
+.form-container {overflow: hidden;}
 
-.formContainer > form {
+.form-container > form {
     position: relative;
 }
 
-.clearQuery {
+.clear-query {
     color: #E0D7D7;
     border: 1px solid #E0D7D7;
     border-radius: 50%;
@@ -68,23 +68,23 @@ a:link {
     margin-left: 10%;
 }
 
-.search-form div.inputWrap {
+.search-form div.input-wrap {
     width: 85%;
     border : 1px solid rgba(0, 0, 0, 0.3)
 }
 
-.inputWrap, .buttonWrap {
+.input-wrap, .button-wrap {
     height: 50px;
     float: left;
 }
 
-.buttonWrap {
+.button-wrap {
     margin-left: 2%;
     width: 5%;
     min-width: 40px;
 }
 
-.buttonWrap button {
+.button-wrap button {
     height: 50px;
     width: 100%;
 }
@@ -160,7 +160,7 @@ a:link {
     padding : 0.5em 0.3em;
 }
 
-.closeLayer, .deleteWord {
+.close-layer, .delete-word {
     font-size: 1em;
     color: #000;
     background-color: #fff;
@@ -168,12 +168,12 @@ a:link {
     padding: 0.5em 0.6em;
 }
 
-.closeLayer {
+.close-layer {
     float: right;
     margin-right: 5%;
 }
 
-.deleteWord {
+.delete-word {
     float: right;
     margin-right: 2%;
 }
@@ -190,7 +190,7 @@ a:link {
 }
 
 @media only screen and (max-width: 500px) {
-    .clearQuery{
+    .clear-query{
         margin-left: 0;
         width: 20px;
         height: 20px;
@@ -213,7 +213,7 @@ a:link {
         min-width: 300px;
     }
 
-    .buttonWrap {
+    .button-wrap {
         margin-left: 1%;
         width: 12%;
         min-width: 0px;

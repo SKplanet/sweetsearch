@@ -24,14 +24,14 @@
         }
 
         var _q = {
-            recentCloseLayer : ".recent-word-wrap .closeLayer",
-            autoCloseLayer   : ".auto-complete-wrap .closeLayer",
-            clearQuery       : ".clearQuery",
-            inputWrap        : ".inputWrap",
+            recentCloseLayer : ".recent-word-wrap .close-layer",
+            autoCloseLayer   : ".auto-complete-wrap .close-layer",
+            clearQuery       : ".clear-query",
+            inputWrap        : ".input-wrap",
             autoULWrap       : ".auto-complete-wrap .ul-wrap",
             recentULWrap     : ".recent-word-wrap .ul-wrap",
             realForm         : "#search-form",
-            clearRecentWordBtn  : ".recent-word-wrap .deleteWord"
+            clearRecentWordBtn  : ".recent-word-wrap .delete-word"
         }
 
         // Support Mouse Events.

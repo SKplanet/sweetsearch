@@ -10,11 +10,11 @@ class SweetSearch extends CommonComponent {
 		 return {
 			PLUGINS 				: ['RecentWordPlugin', 'TTViewPlugin'],
 			SELECTOR 				: {
-					inputFieldWrap 		: ".inputWrap",
+					inputFieldWrap 		: ".input-wrap",
 					inputField 			: ".input-field",
 					autoCompleteWrap 	: ".auto-complete-wrap",
-					closeLayer 			: ".closeLayer",
-					clearQueryBtn 		: ".clearQuery",
+					closeLayer 			: ".close-layer",
+					clearQueryBtn 		: ".clear-query",
 					autoULWrap			: ".auto-complete-wrap .ul-wrap",
 					realForm 			: "#search-form"
 			}, 

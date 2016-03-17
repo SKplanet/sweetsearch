@@ -294,8 +294,8 @@ var RecentWordPlugin = (function (_CommonComponent) {
 			return {
 				ELEMENT_SELECTOR: {
 					recentWordWrap: ".recent-word-wrap",
-					deleteWordBtn: ".deleteWord",
-					closeLayerBtn: ".closeLayer",
+					deleteWordBtn: ".delete-word",
+					closeLayerBtn: ".close-layer",
 					recentULWrap: ".ul-wrap"
 				},
 				DEFAULT_EVENT: ['FN_AFTER_INSERT_RECENT_WORD', 'FN_AFTER_SELECT_RECENT_WORD'],
@@ -502,7 +502,7 @@ var TTViewPlugin = (function (_CommonComponent2) {
 			return {
 				SELECTOR: {
 					TTWrap: ".tt-wrap",
-					TTWrapCloseBtn: ".tt-wrap .closeLayer"
+					TTWrapCloseBtn: ".tt-wrap .close-layer"
 				},
 				DEFAULT_EVENT: ['FN_AFTER_RECEIVE_DATA'],
 				OPTIONS: {
@@ -595,11 +595,11 @@ var SweetSearch = (function (_CommonComponent3) {
 			return {
 				PLUGINS: ['RecentWordPlugin', 'TTViewPlugin'],
 				SELECTOR: {
-					inputFieldWrap: ".inputWrap",
+					inputFieldWrap: ".input-wrap",
 					inputField: ".input-field",
 					autoCompleteWrap: ".auto-complete-wrap",
-					closeLayer: ".closeLayer",
-					clearQueryBtn: ".clearQuery",
+					closeLayer: ".close-layer",
+					clearQueryBtn: ".clear-query",
 					autoULWrap: ".auto-complete-wrap .ul-wrap",
 					realForm: "#search-form"
 				},

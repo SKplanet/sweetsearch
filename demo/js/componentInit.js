@@ -264,7 +264,7 @@ var Service = (function(){
         ]);
     }
 
-    document.querySelector(".toggleMenu").addEventListener("click", function(evt) {
+    document.querySelector(".toggle-menu").addEventListener("click", function(evt) {
         if(evt.target.innerText.indexOf("Amazon") > -1) {
             location.href = "./amazonSearch.html"
         }else {

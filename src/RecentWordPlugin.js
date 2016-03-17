@@ -10,8 +10,8 @@ class RecentWordPlugin extends CommonComponent {
 		 return {
 			ELEMENT_SELECTOR 	: {
 				recentWordWrap 		: ".recent-word-wrap",
-				deleteWordBtn 		: ".deleteWord",
-				closeLayerBtn 		: ".closeLayer",
+				deleteWordBtn 		: ".delete-word",
+				closeLayerBtn 		: ".close-layer",
 				recentULWrap 		: ".ul-wrap"
 			},
 			DEFAULT_EVENT : [	

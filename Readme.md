@@ -80,7 +80,7 @@ You can use two argument as follows.
 <br>
 **[Return]**
 
-* noting to return(undefined)
+* nothing to return
 
 <br>
 
@@ -200,4 +200,4 @@ You can code own's Ajax function as follows:
 * sQuery(String)        : search word
 * fnCallback(Function)  : callback
 
-You must execute the callback function,**fnCallback** after receiving data.
+You must execute the callback function after receiving data.
