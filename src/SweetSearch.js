@@ -90,8 +90,6 @@ class SweetSearch extends CommonComponent {
 
 		this.elAutoULWrap.addEventListener("touchstart", 	(evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
 		this.elAutoULWrap.addEventListener("touchend", 		(evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
-
-		//this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 	}
 
 	registerUserMethod(htFn) {

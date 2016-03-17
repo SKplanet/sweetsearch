@@ -691,8 +691,6 @@ var SweetSearch = (function (_CommonComponent3) {
 			this.elAutoULWrap.addEventListener("touchend", function (evt) {
 				return _this7.handlerSelectAutoCompletedWordTouchEnd(evt);
 			});
-
-			//this.elForm.addEventListener("submit", 				(evt) => this.handlerSubmitForm(evt));
 		}
 	}, {
 		key: "registerUserMethod",
