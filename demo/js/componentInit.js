@@ -102,7 +102,7 @@ var Service = (function(){
 
     //set submit custom url.
     var fnSubmitForm = function(sQuery) {
-        var url = "./SearchResult.html?q=" + sQuery;
+        var url = "./searchResult.html?q=" + sQuery;
          location.href = url;
     }
 
