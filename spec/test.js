@@ -41,7 +41,7 @@ describe("constructor", function() {
   it("touchEnd event on inputarea", function() {
     expect(oSS.elTarget).toBe(elTarget);
     expect(oSS.option.AjaxRequestType).toBe(htOption.AjaxRequestType);
-    expect(oSS.elClearQueryBtn.className).toBe("clearQuery");
+    expect(oSS.elClearQueryBtn.className).toBe("clear-query");
   });
 
   it("trigger touchend event after initialization ", function() {
