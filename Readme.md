@@ -13,7 +13,6 @@ SweetSearch is an Auto-Suggestion(Auto-Complete) component on mobile web.
 
 http://nigayo.github.io/..
 
-<br/>
 ## Install
 
 * npm init
@@ -40,6 +39,18 @@ Component initialization and callback registration.
         });
 
 ```
+
+You have to use a CSS classname or a ID as below:
+
+* .input-wrap
+* .input-field
+* .auto-complete-wrap
+* .close-layer
+* .clear-query
+* .auto-complete-wrap .ul-wrap
+* #search-form
+
+Details, You can refer to a demo page ( /demo/searchAmazon.html )
 
 ## Register callback
 
