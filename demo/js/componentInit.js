@@ -164,7 +164,7 @@ var Service = (function(){
     /*****************************/
 
 
-    function runSyrupSearch() { 
+    function runSearch() { 
         /*
         //custom ajax logic (AJAX)
         oSS = new SweetSearch(elFormComtainer, {
@@ -230,52 +230,13 @@ var Service = (function(){
             },
             { 
                 'name'      : 'TTViewPlugin',
-                'option'    : {
-                },
-                'userMethod' : {
-                }
+                'option'    : {},
+                'userMethod' : {}
             }
         ]);
     }
 
-     function runAmazonSearch() { 
-        oSS = new SweetSearch(elFormComtainer, {
-            'sAutoCompleteURL'    : sAutoCompleteURLAmazon,
-            'AjaxRequestType'         : 'jsonp',
-            'jsonp_callbackName'  : 'completion'
-        });
-
-        oSS.registerUserMethod({
-            'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
-            'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
-        });
-
-        oSS.onPlugins([
-            { 
-                'name'      : 'RecentWordPlugin',
-                'option'    : {
-                    'maxList' : 7,
-                },
-                'userMethod' : {
-                    'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
-                    'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord
-                }
-            }
-        ]);
-    }
-
-    document.querySelector(".toggle-menu").addEventListener("click", function(evt) {
-        if(evt.target.innerText.indexOf("Amazon") > -1) {
-            location.href = "./amazonSearch.html"
-        }else {
-            location.href = "./syrupSearch.html"
-        }
-    }); 
-
-    return  {
-        'runAmazon' : runAmazonSearch,
-        'runSyrup'  : runSyrupSearch
-    }
+    runSearch();
 
 })();
 
