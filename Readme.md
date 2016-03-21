@@ -16,7 +16,7 @@ http://nigayo.github.io/..
 ## Install
 
 * npm init
-* gulp buildJS
+* gulp buildJS (concatenation and ES6 -> ES5)
 * import script
 
 ```HTML
@@ -183,7 +183,7 @@ TTViewPlugin can show user defined message when response data is empty.
 
 To show error message write as below:
 
-You can't change three CSS classname.<br>(tt-wrap, tt-message, footer-button-wrap, close-layer)
+You don't change CSS classnames.<br>(tt-wrap, tt-message, footer-button-wrap, close-layer)
 
 ```HTML
     <section class="tt-wrap" style="display:none;">
@@ -221,7 +221,8 @@ You can add TTViewPlugin on Component with RecentWordPlugin as below:
 ## Other examples.
 
 #### 1. user custom Ajax.
-You can code your own Ajax function as follows:
+SweetSearch component support Ajax(JSONP) executing as default.
+but, You can write your own Ajax function as follows:
 
 ```JAVASCRIPT
 	var fnMyAjax = function(sQuery, fnCallback) {
@@ -233,7 +234,7 @@ You can code your own Ajax function as follows:
         xhr.addEventListener("load", function() {
           if (xhr.status === 200) {
             var sResult = JSON.parse(xhr.responseText);
-            //You must execute the callback function(fnCallback) after receiving data.
+            //You must call the callback function(fnCallback) after receiving data.
             if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this,sResult);
           }
         }.bind(this));
