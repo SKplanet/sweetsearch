@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+        <title></title>
+        <link rel="stylesheet" href="./css/demo.css">
+
+    </head>
+    <body>
+
+    <div id="wrapper">
+        <div class="search-form">
+            <div class="search-form-heading">Amazon product search</div>
+            <div class="form-container">
+                <form id="search-form" action="" method="post">
+                    <div class="input-wrap">
+                        <input type="text" class="input-field" name="field1" value="" 
+                            autocomplete="off"
+                            autocapitalize="off"
+                            autocorrect="off"
+                            placeholder="스파게티"
+                        />
+                        <div class="clear-query" style="display:none;">X</div>
+                    </div>
+                    <div class="button-wrap">
+                        <button type="submit" value="Submit" />go 
+                    </div>
+                </form>
+            </div>
+
+            <section class="auto-complete-wrap" style="display:none;">
+                <ul class="ul-wrap"></ul>
+                <div class="footer-button-wrap">
+                    <button class="close-layer">close</button>
+                </div>
+            </section>
+
+            <section class="recent-word-wrap" style="display:none;">
+                <ul class="ul-wrap"></ul>
+                 <div class="footer-button-wrap">
+                    <button class="close-layer">close</button>
+                    <button class="delete-word" style="display:none">delete all</button>
+                </div>
+            </section>
+
+            <section class="tt-wrap" style="display:none;">
+                <div class="tt-message">no result... ㅜ.ㅜ</div>
+                 <div class="footer-button-wrap">
+                    <button class="close-layer">close</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <script src="../dist/ss_merge_es5.js"></script>
+    <script src="./js/componentInit.js"></script>
+    <script src="./js/desktopSupport.js"></script>
+    <!-- for WEINRE test -->
+    <!-- script src="http://10.203.227.198:8081/target/target-script-min.js#anonymous"></script -->
+
+    </body>
+</html>
+
+
+
+
+
