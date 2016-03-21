@@ -1,6 +1,6 @@
 SweetSearch
 ============
-SweetSearch is Mobile Web Auto-Suggestion(Auto-Complete) component.
+SweetSearch is an Auto-Suggestion(Auto-Complete) component on mobile web.
 
 
 ## Feature
@@ -25,7 +25,7 @@ http://nigayo.github.io/..
 ```
 
 ## Usage
-Initialize Component and register callback.
+Component initialization and callback registration.
 
 ```JAVASCRIPT
 
@@ -43,7 +43,7 @@ Initialize Component and register callback.
 
 ## Register callback
 
-Arguments of registerUserMethod function used above are all callback function.
+Arguments of registerUserMethod function used above are all callback functions.
 
 ```JAVASCRIPT
         'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
@@ -51,10 +51,8 @@ Arguments of registerUserMethod function used above are all callback function.
 ```
 
 #### 1.FN_AFTER_INSERT_AUTO_WORD ####
-This callback function will be execute after Ajax response.
+This callback function will be executed after Ajax response.
 <img src="demo/img/sweetsearch_reference_desc_001.jpg" width="530">
-
-You can write function as making auto-Complete word list view.
 
 **[Example]**
 ```JAVASCRIPT
@@ -70,7 +68,7 @@ You can write function as making auto-Complete word list view.
     }
 ```
 
-You can use two argument as follows.
+You can use two argument as below.
 
 **[Arguments]**
 
@@ -80,17 +78,15 @@ You can use two argument as follows.
 <br>
 **[Return]**
 
-* nothing to return
+* no return value
 
 <br>
 
 #### 2.FN_AFTER_SELECT_AUTO_WORD
-This callback function will be execute after selecting auto-complete word list.
+This callback function will be executed after selecting auto-complete word list.
 <img src="demo/img/sweetsearch_reference_desc_002.jpg" width="530">
 
-You can implement codes about auto-Complete word list view.
-
-After receiving Ajax response data, you can implement codes as follows codes.
+After receiving Ajax response, you can implement codes as below.
 
 (e.g. change stype of selected item and submit form to target URL)
 
@@ -109,7 +105,7 @@ After receiving Ajax response data, you can implement codes as follows codes.
 
 **[Arguments]**
 
-* element(HTMLElement) : element that fired an event.
+* element(HTMLElement) : element that fires an event.
 
 <br>
 **[Return]**
@@ -126,18 +122,25 @@ After receiving Ajax response data, you can implement codes as follows codes.
 
 **[AjaxRequestType]**
 
-: 'ajax', 'jsonp', 'user'(you make a Ajax method yourself)
+: 'ajax', 'jsonp', 'user'(you make an Ajax method yourself)
 
 
 <br>
 ## Use Plugin
 
 Plugin is a child component that parent Component use.
+SweetSearch has two plugins.
 
-SweetSearch have plugin by the name of 'RecentWordPlugin'.
-RecentWordPlugin use Localstorage to save data.
+* 'RecentWordPlugin'
+* 'TTViewPlugin'
 
-You can add plugin on Component as follows :
+
+#### RecentWordPlugin
+
+RecentWordPlugin can show word lists that user searched ago.
+RecentWordPlugin uses Localstorage to save data.
+
+You can add a plugin on Component as below:
 
 ```javascript
 
@@ -163,10 +166,51 @@ FN_AFTER_SELECT_RECENT_WORD is similar to [FN_AFTER_SELECT_AUTO_WORD](#2fn_after
 
 <br>
 
+#### TTViewPlugin
+
+TTViewPlugin can show user defined message when response data is empty.
+
+To show error message write as below:
+
+You can't change three CSS classname.<br>(tt-wrap, tt-message, footer-button-wrap, close-layer)
+
+```HTML
+    <section class="tt-wrap" style="display:none;">
+        <div class="tt-message">no result... ㅜ.ㅜ</div>
+         <div class="footer-button-wrap">
+            <button class="close-layer">close</button>
+        </div>
+    </section>
+```
+
+You can add TTViewPlugin on Component with RecentWordPlugin as below:
+
+```javascript
+
+    oSS.onPlugins([
+        { 
+            'name'      : 'RecentWordPlugin',
+            'option'    : {
+                'maxList' : 7,
+            },
+            'userMethod' : {
+                'FN_AFTER_INSERT_RECENT_WORD'  : fnInsertRecentSearchWord,
+                'FN_AFTER_SELECT_RECENT_WORD'  : fnSelectRecentSearchWord
+            }
+        },
+        { 
+            'name'      : 'TTViewPlugin',
+            'option'    : {},
+            'userMethod' : {}
+        }
+    ]);
+
+```
+
 ## Other examples.
 
 #### 1. user custom Ajax.
-You can code own's Ajax function as follows:
+You can code your own Ajax function as follows:
 
 ```JAVASCRIPT
 	var fnMyAjax = function(sQuery, fnCallback) {
@@ -178,6 +222,7 @@ You can code own's Ajax function as follows:
         xhr.addEventListener("load", function() {
           if (xhr.status === 200) {
             var sResult = JSON.parse(xhr.responseText);
+            //You must execute the callback function(fnCallback) after receiving data.
             if(fnCallback && typeof fnCallback === 'function') fnCallback.call(this,sResult);
           }
         }.bind(this));
@@ -199,5 +244,3 @@ You can code own's Ajax function as follows:
 
 * sQuery(String)        : search word
 * fnCallback(Function)  : callback
-
-You must execute the callback function after receiving data.
