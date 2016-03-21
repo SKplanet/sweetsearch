@@ -14,10 +14,33 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/**
- * @nigayo. SKPlanet.
- * @utiliy
- */
+/*
+* The MIT License (MIT)
+* Copyright (c) 2016 SK PLANET. All Rights Reserved. *
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions: *
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software. *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE. */
+
+/*!
+* \CommonUtil.js
+* \utility source for UI Components.
+* \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
+* \license This project is released under the MIT License.
+* \contributor Jisu Youn (jisu.youn@gmail.com)
+* \warning dont'use this source in other library source.
+*/
 
 var _cu = {
 	getFnName: function getFnName(fn) {
@@ -171,11 +194,33 @@ var _cu = {
 		return Object.prototype.toString.call(fn) === '[object Function]';
 	}
 };
-/**
- * @nigayo. SKPlanet.
- * @v0.0.2.prefetch
- * @UIComponent common component
- */
+/*
+* The MIT License (MIT)
+* Copyright (c) 2016 SK PLANET. All Rights Reserved. *
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions: *
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software. *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE. */
+
+/*!
+* \CommonComonent.js
+* \core component source for Components UI .
+* \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
+* \license This project is released under the MIT License.
+* \contributor Jisu Youn (jisu.youn@gmail.com)
+* \warning dont'use this source in other library source.
+*/
 
 var CommonComponent = (function () {
 	function CommonComponent(htOption) {
@@ -279,11 +324,33 @@ var CommonComponent = (function () {
 	return CommonComponent;
 })();
 
-/**
- * @nigayo. SKPlanet.
- * @v0.0.6
- * @UIComponent RecentWordPlugin 
- */
+/*
+* The MIT License (MIT)
+* Copyright (c) 2016 SK PLANET. All Rights Reserved. *
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions: *
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software. *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE. */
+
+/*!
+* \RecentWordPlugin.js
+* \plugin source for SweetSearch.js
+* \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
+* \license This project is released under the MIT License.
+* \contributor Jisu Youn (jisu.youn@gmail.com)
+* \warning dont'use this source in other library source.
+*/
 
 var RecentWordPlugin = (function (_CommonComponent) {
 	_inherits(RecentWordPlugin, _CommonComponent);
@@ -428,11 +495,33 @@ var RecentWordPlugin = (function (_CommonComponent) {
 
 	return RecentWordPlugin;
 })(CommonComponent);
-/**
- * @nigayo. SKPlanet.
- * @v0.0.6
- * @RecentWordPluginLocalStorageAddOn - dependency:RecentWordPlugin. 
- */
+/*
+* The MIT License (MIT)
+* Copyright (c) 2016 SK PLANET. All Rights Reserved. *
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions: *
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software. *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE. */
+
+/*!
+* \RecentWordPluginLocalStorageAddOn.js
+* \Addon source for RecentWordPlugin.js
+* \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
+* \license This project is released under the MIT License.
+* \contributor Jisu Youn (jisu.youn@gmail.com)
+* \warning dont'use this source in other library source.
+*/
 
 var RecentWordPluginLocalStorageAddOn = (function () {
 	function RecentWordPluginLocalStorageAddOn(sKey, nMaxList) {
@@ -487,11 +576,33 @@ var RecentWordPluginLocalStorageAddOn = (function () {
 
 	return RecentWordPluginLocalStorageAddOn;
 })();
-/**
- * @nigayo. SKPlanet.
- * @v0.0.6
- * @UIComponent TTViewPlugin
- */
+/*
+* The MIT License (MIT)
+* Copyright (c) 2016 SK PLANET. All Rights Reserved. *
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions: *
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software. *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE. */
+
+/*!
+* \TTViewPlugin.js
+* \plugin source for SweetSearch.js
+* \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
+* \license This project is released under the MIT License.
+* \contributor Jisu Youn (jisu.youn@gmail.com)
+* \warning dont'use this source in other library source.
+*/
 
 var TTViewPlugin = (function (_CommonComponent2) {
 	_inherits(TTViewPlugin, _CommonComponent2);
@@ -580,11 +691,33 @@ var TTViewPlugin = (function (_CommonComponent2) {
 
 	return TTViewPlugin;
 })(CommonComponent);
-/**
- * @nigayo. SKPlanet.
- * @v0.0.6
- * @UIComponent SweetSearch
- */
+/*
+* The MIT License (MIT)
+* Copyright (c) 2016 SK PLANET. All Rights Reserved. *
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions: *
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software. *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE. */
+
+/*!
+* \SweetSearch.js
+* \core source for auto-complete UI
+* \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
+* \license This project is released under the MIT License.
+* \contributor Jisu Youn (jisu.youn@gmail.com)
+* \warning dont'use this source in other library source.
+*/
 
 var SweetSearch = (function (_CommonComponent3) {
 	_inherits(SweetSearch, _CommonComponent3);
