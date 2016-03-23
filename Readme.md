@@ -334,7 +334,7 @@ export default Sweetsearch;
 
 <br>
 ## Contributing
-See our [CONTRIBUTING.md](https://github.com/JedWatson/react-select/blob/master/CONTRIBUTING.md) for information on how to contribute.
+See our [CONTRIBUTING.md](https://github.com/skplanet/sweetsearch/blob/master/CONTRIBUTING.md) for information on how to contribute.
 
 <br>
 ## License
