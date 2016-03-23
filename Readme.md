@@ -1,6 +1,6 @@
 SweetSearch
 ============
-SweetSearch is an lightweight Auto-Suggestion(Auto-Complete) component on mobile web.
+SweetSearch is an lightweight Auto-Suggestion(Auto-Complete) WEB-UI component on mobile web.
 
 <br>
 
