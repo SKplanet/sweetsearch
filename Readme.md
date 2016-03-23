@@ -2,6 +2,10 @@ SweetSearch
 ============
 SweetSearch is an Auto-Suggestion(Auto-Complete) component on mobile web.
 
+<br>
+
+<img src="demo/img/sweetsearchscreen.png" width="330">
+
 
 ## Feature
 
@@ -11,7 +15,7 @@ SweetSearch is an Auto-Suggestion(Auto-Complete) component on mobile web.
 
 ## Demo
 
-http://nigayo.github.io/..
+http://nigayo.github.io/page/sweetsearch/demo/searchAmazon.html
 
 ## Install
 
