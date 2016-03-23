@@ -7,8 +7,8 @@ var
 	watch 			= require('gulp-watch'),
 	batch 			= require('gulp-batch'),
  	uglify 			= require('gulp-uglify'),
+ 	jshint 			= require('gulp-jshint'),
  	clean 			= require('gulp-clean');
-
 
 var allJS = ['src/common/commonUtil.js',
 	 			 'src/common/commonComponent.js',
@@ -41,6 +41,11 @@ gulp.task('compileBabelAMD', function() {
 	        .pipe(gulp.dest('dist'))
 });
 
+gulp.task('lint', function() {
+  return gulp.src('./src/*.js')
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'));
+});
 
 gulp.task('buildJS', function() {
 	runSequence(
