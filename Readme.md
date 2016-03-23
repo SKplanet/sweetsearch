@@ -30,7 +30,7 @@ http://nigayo.github.io/page/sweetsearch/demo/searchAmazon.html
 ## Usage
 Component initialization and callback registration.
 
-```JAVASCRIPT
+```javascript
 
         var oSS = new SweetSearch(elFormComtainer, {
             'sAutoCompleteURL'    : sAutoCompleteURLLocal,
@@ -60,7 +60,7 @@ Details, You can refer to a demo page ( /demo/searchAmazon.html )
 
 Arguments of registerUserMethod function used above are all callback functions.
 
-```JAVASCRIPT
+```javascript
         'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
         'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
 ```
@@ -70,7 +70,7 @@ This callback function will be executed after Ajax response.
 <img src="demo/img/sweetsearch_reference_desc_001.jpg" width="530">
 
 **[Example]**
-```JAVASCRIPT
+```javascript
 	var fnInsertAutoCompleteWordAjax = function(sQuery, aResultData) {
         var result  = "";
         var sHTML   = "";
@@ -106,7 +106,7 @@ After receiving Ajax response, you can implement codes as below.
 (e.g. change stype of selected item and submit form to target URL)
 
 **[Example]**
-```JAVASCRIPT
+```javascript
 	var fnSelectAutoCompleteWord = function(element) {
         element.className += "selectedLI";
         var sQuery = element.innerText;
@@ -228,7 +228,7 @@ You can add TTViewPlugin on Component with RecentWordPlugin as below:
 SweetSearch component support Ajax(JSONP) executing as default.
 but, You can write your own Ajax function as follows:
 
-```JAVASCRIPT
+```javascript
 	var fnMyAjax = function(sQuery, fnCallback) {
         let method = "get";
         let url = "../jsonMock/javascript.json?q="+sQuery;
@@ -266,7 +266,7 @@ but, You can write your own Ajax function as follows:
 #### 2. How to use Sweetsearch with React.js
 Sweetsearch can be easily used with SPA fraemworks like React.js
 
-```JAVASCRIPT
+```javascript
 
 import React from 'react';
 
@@ -332,5 +332,12 @@ export default Sweetsearch;
 ```
 
 
+<br>
+## Contributing
+See our [CONTRIBUTING.md](https://github.com/JedWatson/react-select/blob/master/CONTRIBUTING.md) for information on how to contribute.
+
+<br>
+## License
+MIT Licensed. Copyright (c) 2016 SK PLANET. All Rights Reserved.
 
 
