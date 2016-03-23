@@ -1,6 +1,6 @@
 SweetSearch
 ============
-SweetSearch is an Auto-Suggestion(Auto-Complete) component on mobile web.
+SweetSearch is an lightweight Auto-Suggestion(Auto-Complete) component on mobile web.
 
 <br>
 
@@ -52,7 +52,7 @@ You have to use a CSS classname or a ID as below:
 * .close-layer
 * .clear-query
 * .auto-complete-wrap .ul-wrap
-* #search-form
+* \#search-form
 
 Details, You can refer to a demo page ( /demo/searchAmazon.html )
 

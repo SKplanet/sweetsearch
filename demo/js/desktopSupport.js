@@ -52,7 +52,9 @@
         _u.on(_q.recentULWrap,      "mouseout", _h.clearSelectedGB);
 
         _u.on(_q.autoULWrap,        "mouseup", function(evt) {
-            oSS.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target)
+            var sQueryText = oSS.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target);
+            oSS.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQueryText);
+
         });
 
         _u.on(_q.recentULWrap,      "mouseup", function(evt) {
