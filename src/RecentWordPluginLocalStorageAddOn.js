@@ -27,48 +27,46 @@
 */
 
 class  RecentWordPluginLocalStorageAddOn {
-	
-	constructor(sKey, nMaxList) {
-		this.sKey = sKey;
-		this.nMaxList = nMaxList;
-	}
+  constructor(sKey, nMaxList) {
+    this.sKey = sKey;
+    this.nMaxList = nMaxList;
+  }
 
-	saveKeyword(sKeyword) {
-		if(this.validStorage()) return;
+  saveKeyword(sKeyword) {
+    if (this.validStorage()) return;
 
-		let aLegacy = this.getKeywords();
+    let aLegacy = this.getKeywords();
 
-		//to Array
-		if(aLegacy === null) aLegacy = []; 
-		else aLegacy = JSON.parse(aLegacy);
+    //to Array
+    if (aLegacy === null) aLegacy = []; 
+    else aLegacy = JSON.parse(aLegacy);
 
-		//save data 
-		let nIndex = aLegacy.indexOf(sKeyword);
-		if( nIndex > -1) {
-			if(nIndex === (aLegacy.length-1)) return;
-			aLegacy.splice(nIndex, 1);
-		} 
+    //save data 
+    let nIndex = aLegacy.indexOf(sKeyword);
+    if ( nIndex > -1) {
+      if(nIndex === (aLegacy.length-1)) return;
+      aLegacy.splice(nIndex, 1);
+    } 
 
-		aLegacy.unshift(sKeyword);
-		if(aLegacy.length >= this.nMaxList) aLegacy.length = this.nMaxList;
-		localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
-	}
+    aLegacy.unshift(sKeyword);
 
-	getKeywords(){ 
-		if(this.validStorage()) return;
+    if (aLegacy.length >= this.nMaxList) aLegacy.length = this.nMaxList;
 
-		let sResult = localStorage.getItem(this.sKey);
-		return sResult;
-	}
+    localStorage.setItem(this.sKey, JSON.stringify(aLegacy));
+  }
 
-	removeKeywords() {
-		if(this.validStorage()) return;
+  getKeywords(){ 
+    if (this.validStorage()) return;
+    let sResult = localStorage.getItem(this.sKey);
+      return sResult;
+  }
 
-		return localStorage.removeItem(this.sKey);
-	}
+  removeKeywords() {
+    if (this.validStorage()) return;
+    return localStorage.removeItem(this.sKey);
+  }
 
-	validStorage() {
-		if( typeof(Storage) === "undefined") return;
-	}
-
+  validStorage() {
+    if ( typeof(Storage) === "undefined") return;
+  }
 }
