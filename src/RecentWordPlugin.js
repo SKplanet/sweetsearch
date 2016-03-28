@@ -106,6 +106,7 @@ class RecentWordPlugin extends CommonComponent {
 	handlerSelectRecentWordTouchEnd(evt) {
 		let nowPageY = evt.changedTouches[0].pageY;
 		if(this.isExecuteTouchScroll(nowPageY)) return;
+		this.handlerCloseLayer();
 		super.runCustomFn("USER", 'FN_AFTER_SELECT_RECENT_WORD', evt.target);
 	}
 
