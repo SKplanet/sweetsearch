@@ -5,3 +5,4 @@ demo/js/goo.js
 dist/
 dist/ss_merge_es5.js
 dist/*.js
+build.sh
