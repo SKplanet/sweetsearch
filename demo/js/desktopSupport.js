@@ -11,7 +11,7 @@
         var _h = {
             toggleSelectedBG : function(evt) {
                 var _el = evt.target;
-                var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
+            var elCurrentLI = (_el.nodeName === "SPAN") ? _el.parentElement : _el;
                 var _oldSelectedLI = elCurrentLI.parentElement.querySelector(".selectedLI");
 
                 if(_oldSelectedLI) _oldSelectedLI.className = "";
@@ -31,7 +31,9 @@
             autoULWrap       : ".auto-complete-wrap .ul-wrap",
             recentULWrap     : ".recent-word-wrap .ul-wrap",
             realForm         : "#search-form",
-            clearRecentWordBtn  : ".recent-word-wrap .delete-word"
+            clearRecentWordBtn  : ".recent-word-wrap .delete-word",
+            inputField       :  ".input-field",
+            submitBtn        :  ".button-wrap button"
         }
 
         // Support Mouse Events.
@@ -65,5 +67,15 @@
             oSS.htPluginInstance["RecentWordPlugin"].handlerClearRecentWord(evt);
         });
 
+        _u.on(_q.submitBtn, "click", function(evt) {
+            evt.preventDefault();
+
+            var sText = document.querySelector(".input-field").value;
+
+            oSS.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sText);
+
+            var url = "./searchResult.html?q=" + sText;
+            location.href = url;
+        });
 
     })(document); 
