@@ -172,6 +172,7 @@ class SweetSearch extends CommonComponent {
 
 		let sQueryText = super.runCustomFn("USER", "FN_AFTER_SELECT_AUTO_WORD", evt.target);
 
+		_cu.closeLayer(this.elAutoCompleteLayer);
 		//if keyword is selected, save to storage.
 		super.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQueryText);
 	}
