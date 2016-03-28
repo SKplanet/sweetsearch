@@ -4,7 +4,7 @@ SweetSearch is an lightweight Auto-Suggestion(Auto-Complete) WEB-UI component on
 
 <br>
 
-<img src="demo/img/sweetsearchscreen.png" width="330">
+<img src="demo/img/sweetsearchscreen.png" width="250">
 
 
 ## Feature
