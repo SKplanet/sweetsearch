@@ -38,6 +38,7 @@ a:link {
     font: 13px Arial, Helvetica, sans-serif;
     min-width: 300px;
     clear:right;
+    margin-top: 20%;
 }
 
 .search-form-heading{
@@ -217,6 +218,10 @@ a:link {
         margin-left: 1%;
         width: 12%;
         min-width: 0px;
+    }
+
+    .fork-github {
+        width: 20%;
     }
 }
 

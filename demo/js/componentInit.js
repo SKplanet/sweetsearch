@@ -238,6 +238,16 @@ var Service = (function(){
 
     runSearch();
 
+    doc.querySelector(".button-wrap button").addEventListener("touchend" , function(evt) {
+        evt.preventDefault();
+
+        var sText = elInputField.value;
+
+        oSS.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sText);
+
+        fnSubmitForm(sText);
+    }, false);
+
 })();
 
 
