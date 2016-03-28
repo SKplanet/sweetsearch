@@ -2,5 +2,5 @@ node_modules/
 _test/
 _tar/
 demo/js/goo.js
-dist/
+dist/ss_merge_es5.js
 dist/*.js
