@@ -24,6 +24,7 @@
         }
 
         var _q = {
+            recentWordWrap   : ".recent-word-wrap",
             recentCloseLayer : ".recent-word-wrap .close-layer",
             autoCloseLayer   : ".auto-complete-wrap .close-layer",
             clearQuery       : ".clear-query",
@@ -38,7 +39,7 @@
 
         // Support Mouse Events.
         _u.on(_q.recentCloseLayer,  "mousedown", function(){
-            oSS.htPluginInstance["RecentWordPlugin"].handlerCloseLayer();
+            document.querySelector(_q.recentWordWrap).style.display = "none";
         });
 
         _u.on(_q.autoCloseLayer,    "mousedown", oSS.handlerCloseLayer.bind(oSS));
@@ -56,7 +57,6 @@
         _u.on(_q.autoULWrap,        "mouseup", function(evt) {
             var sQueryText = oSS.htUserFn['FN_AFTER_SELECT_AUTO_WORD'](evt.target);
             oSS.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sQueryText);
-
         });
 
         _u.on(_q.recentULWrap,      "mouseup", function(evt) {
@@ -64,7 +64,7 @@
         });
 
         _u.on(_q.clearRecentWordBtn,"mousedown", function(evt) {
-            oSS.htPluginInstance["RecentWordPlugin"].handlerClearRecentWord(evt);
+            //oSS.htPluginInstance["RecentWordPlugin"].handlerClearRecentWord(evt);
         });
 
         _u.on(_q.submitBtn, "click", function(evt) {
