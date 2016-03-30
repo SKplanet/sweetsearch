@@ -177,6 +177,7 @@ a:link {
 .delete-word {
     float: right;
     margin-right: 2%;
+    display: none;
 }
 
 .selectedLI {
