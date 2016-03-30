@@ -36,45 +36,28 @@ class TTViewPlugin extends CommonComponent {
       DEFAULT_EVENT: [	
         'FN_AFTER_RECEIVE_DATA',
       ],
-      OPTIONS: {
+      DEFAULT_OPTION: {
         'usage': true,
       }
     }
   }
 
   constructor(elTarget, htOption) {
-    super(htOption);
-    this.elTarget = elTarget;
-    this.init(htOption);
+   super(elTarget, htOption)
   }
 
-  init(htOption) {
-    this.setInitValue();
-    super.setOption(htOption, this.htDefaultOption, this.option);
-    this.registerEvents();
-  }
-
-  setInitValue() {
-    let _d = this.COMPONENT_CONFIG();
-    let s = _d.SELECTOR;
-    this.htDefaultOption = _d.OPTIONS;
-    this.htDefaultFn = super.getDefaultCallbackList(_d.DEFAULT_EVENT);
+  initValue() {
+    let s = this.COMPONENT_CONFIG().SELECTOR;
     this.elTTWrap = this.elTarget.querySelector(s.TTWrap);
     this.elTTWrapCloseBtn = this.elTarget.querySelector(s.TTWrapCloseBtn);
-    this.htUserFn = {};
-    this.option = {};
-  }
-
-  registerUserMethod(htFn) {
-    super.setOption(htFn, this.htDefaultFn, this.htUserFn);
-  }
-
-  closeLayer() {
-    this.closeTTView();
   }
 
   registerEvents() {
     this.elTTWrapCloseBtn.addEventListener("click", this.closeLayer.bind(this), false);
+  }
+
+  closeLayer() {
+    this.closeTTView();
   }
 
   showTTView() {

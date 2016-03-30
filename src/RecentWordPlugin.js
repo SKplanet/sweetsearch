@@ -29,17 +29,17 @@
 class RecentWordPlugin extends CommonComponent {
   COMPONENT_CONFIG() {
     return {
-	  ELEMENT_SELECTOR: {
+	    ELEMENT_SELECTOR: {
         recentWordWrap: ".recent-word-wrap",
         deleteWordBtn: ".delete-word",
         closeLayerBtn: ".close-layer",
         recentULWrap: ".ul-wrap"
       },
-	  DEFAULT_EVENT : [	
+	    DEFAULT_EVENT : [	
         'FN_AFTER_INSERT_RECENT_WORD',
         'FN_AFTER_SELECT_RECENT_WORD',
       ],
-      OPTIONS : {
+      DEFAULT_OPTION : {
         'usage' : true,
         'maxList' : 5
       }
@@ -47,34 +47,17 @@ class RecentWordPlugin extends CommonComponent {
   }
 
   constructor(elTarget, htOption) {
-    super(htOption);
-    this.elTarget = elTarget;
-    this.init(htOption);
+    super(elTarget, htOption)
   }
 
-  init(htOption) {
-    this.setInitValue();
-    super.setOption(htOption, this.htDefaultOption, this.option);
-    this.registerEvents();
+  initValue(htOption) {
     this.oStorage = new RecentWordPluginLocalStorageAddOn("searchQuery", this.option.maxList);
-  }
-
-  setInitValue() {
-    let _d = this.COMPONENT_CONFIG();
-    let s = _d.ELEMENT_SELECTOR;
+    let s = this.COMPONENT_CONFIG().ELEMENT_SELECTOR;
     let _el = this.elTarget;
-    this.htDefaultFn = super.getDefaultCallbackList(_d.DEFAULT_EVENT);
-    this.htDefaultOption = _d.OPTIONS;
     this.elRecentWordLayer = _el.querySelector(s.recentWordWrap);
     this.elClearRecentWordBtn = _el.querySelector(s.deleteWordBtn);
     this.elCloseButtonRWL = this.elRecentWordLayer.querySelector(s.closeLayerBtn);
     this.elRecentULWrap	= this.elRecentWordLayer.querySelector(s.recentULWrap);
-    this.htUserFn = {};
-    this.option = {};
-  }
-
-  registerUserMethod(htFn) {
-    super.setOption(htFn, this.htDefaultFn, this.htUserFn);
   }
 
   registerEvents() {

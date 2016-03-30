@@ -61,28 +61,13 @@ class SweetSearch extends CommonComponent {
   }
 
   constructor(elTarget, htOption) {
-    super(htOption)
-    this.elTarget = elTarget;
-    this.init(htOption);
+    super(elTarget, htOption);
   }
 
-  init(htOption) {
-    this.setInitValue();
-    super.setOption(htOption, this._htDefaultOption, this.option);
-    this.registerEvents();
-  }
-
-  setInitValue() {
+  initValue(htOption) {
     let _el = this.elTarget;
-    let _d = this.COMPONENT_CONFIG();
-    let s = _d.SELECTOR;
+    let s = this.COMPONENT_CONFIG().SELECTOR;
 
-    this._htDefaultOption = _d.DEFAULT_OPTION;
-    this.aMyPluginName = _d.PLUGINS;
-    this.htDefaultFn = super.getDefaultCallbackList(_d.DEFAULT_EVENT);
-    this.htDefaultPluginFn = super.getDefaultCallbackList(_d.DEFAULT_PLUGIN_EVENT);
-
-    this.option = {};
     this.elInputFieldWrap = _el.querySelector(s.inputFieldWrap);
     this.elInputField = _el.querySelector(s.inputField);
     this.elAutoCompleteLayer = _el.querySelector(s.autoCompleteWrap);
@@ -91,8 +76,6 @@ class SweetSearch extends CommonComponent {
     this.elCloseButton = this.elAutoCompleteLayer.querySelector(s.closeLayer);
     this.elAutoULWrap = this.elAutoCompleteLayer.querySelector(s.autoULWrap);
     this.htCachedData = {};
-    this.htUserFn = {};
-    this.htPluginFn = {};
   }
 
   registerEvents() {
@@ -104,18 +87,6 @@ class SweetSearch extends CommonComponent {
     this.elClearQueryBtn.addEventListener('touchend',   (evt) => this.handlerClearInputValue(evt));
     this.elAutoULWrap.addEventListener('touchstart',    (evt) => this.handlerSelectAutoCompletedWordTouchStart(evt));
     this.elAutoULWrap.addEventListener('touchend',      (evt) => this.handlerSelectAutoCompletedWordTouchEnd(evt));
-  }
-
-  registerUserMethod(htFn) {
-    super.setOption(htFn, this.htDefaultFn, this.htUserFn);
-  }
-
-  registerPluginMethod(htFn) {
-    super.appendPluginMethod(htFn, this.htDefaultPluginFn, this.htPluginFn);
-  }
-
-  onPlugins(aPluginList) {
-    super.initPlugins(this.aMyPluginName, aPluginList,  this.elTarget);
   }
 
   /***** START EventHandler *****/
