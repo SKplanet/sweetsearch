@@ -238,15 +238,21 @@ var Service = (function(){
 
     runSearch();
 
+    function _formSubmitHandler() {
+        var sText = elInputField.value;
+        oSS.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sText);
+        fnSubmitForm(sText);
+    }
+
     doc.querySelector(".button-wrap button").addEventListener("touchend" , function(evt) {
         evt.preventDefault();
-
-        var sText = elInputField.value;
-
-        oSS.runCustomFn("PLUGIN", "FN_AFTER_SUBMIT", sText);
-
-        fnSubmitForm(sText);
+        _formSubmitHandler();
     }, false);
+
+    elForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+        _formSubmitHandler();
+    });
 
 })();
 
