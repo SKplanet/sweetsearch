@@ -105,7 +105,10 @@ class SweetSearch extends CommonComponent {
   handlerInputKeyInput(evt) {
     let sInputData = this.elInputField.value;
     if (sInputData.length > 0 ) _cu.setCSS(this.elClearQueryBtn, 'display', 'inline-block');
-    else _cu.closeLayer(this.elClearQueryBtn);
+    else {
+	    _cu.closeLayer(this.elClearQueryBtn);
+	    _cu.closeLayer(this.elAutoCompleteLayer);
+	}
 
     super.runCustomFn('PLUGIN', 'FN_AFTER_INPUT');
 
