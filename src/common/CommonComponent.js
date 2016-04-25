@@ -18,7 +18,7 @@
 * THE SOFTWARE. */
 
 /*!
-* \CommonComonent.js
+* \CommonComonent.js v0.2.1
 * \core component source for Components UI .
 * \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved. 
 * \license This project is released under the MIT License.
@@ -42,14 +42,15 @@ class CommonComponent {
   }
 
   setInitValue() {
+    let DEFAULT_CORE_EVENT = ['FN_COMPONENT_DID_LOAD'];
     let _d = this.COMPONENT_CONFIG();
     this.bMainComponent = !!_d.PLUGINS;
     this._htDefaultOption = _d.DEFAULT_OPTION;
     this.aMyPluginName = _d.PLUGINS;
-    this.htDefaultFn = this.getDefaultCallbackList(_d.DEFAULT_EVENT);
+    this.htDefaultFn = this.getDefaultCallbackList(DEFAULT_CORE_EVENT.concat(_d.DEFAULT_COMPONENT_EVENT));
 
     if (this.bMainComponent) {
-      this.htDefaultPluginFn = this.getDefaultCallbackList(_d.DEFAULT_PLUGIN_EVENT);
+      this.htDefaultPluginFn = this.getDefaultCallbackList(DEFAULT_CORE_EVENT.concat(_d.DEFAULT_PLUGIN_EVENT));
     }
     this.htUserFn = {};
     this.htPluginFn = {};
@@ -59,7 +60,7 @@ class CommonComponent {
   //TODO. move to super Class.
   registerUserMethod(htFn) {
     this.setOption(htFn, this.htDefaultFn, this.htUserFn);
-  }	
+  } 
 
   registerPluginMethod(htFn) {
     this.appendPluginMethod(htFn, this.htDefaultPluginFn, this.htPluginFn);
@@ -67,6 +68,7 @@ class CommonComponent {
 
   onPlugins(aPluginList) {
     this.initPlugins(this.aMyPluginName, aPluginList,  this.elTarget);
+    this.componentDidLoaded();
   }
 
   setOption (htValue, htDefaultValue, htStorage) {
@@ -115,6 +117,11 @@ class CommonComponent {
     });
   }
 
+  componentDidLoaded() {
+    this.runCustomFn('USER', 'FN_COMPONENT_DID_LOAD');
+    this.runCustomFn('PLUGIN', 'FN_COMPONENT_DID_LOAD');
+  }
+
   runCustomFn(type, eventname) {
     let args = [].slice.call(arguments, 2);
     let returnValue;
@@ -129,7 +136,7 @@ class CommonComponent {
       case "PLUGIN": {
         if( (typeof this.htPluginFn ==="object") && (typeof this.htPluginFn[eventname] ==="object")) {
           this.htPluginFn[eventname].forEach((fn) => {
-          	 fn(...args);
+             fn(...args);
           });
         }
         break;
