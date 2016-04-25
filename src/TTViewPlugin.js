@@ -33,7 +33,7 @@ class TTViewPlugin extends CommonComponent {
         TTWrap: ".tt-wrap",
         TTWrapCloseBtn: ".tt-wrap .close-layer"
       },
-      DEFAULT_EVENT: [	
+      DEFAULT_COMPONENT_EVENT: [	
         'FN_AFTER_RECEIVE_DATA',
       ],
       DEFAULT_OPTION: {

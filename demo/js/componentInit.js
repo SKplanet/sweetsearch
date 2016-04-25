@@ -215,6 +215,7 @@ var Service = (function(){
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAmazonProduct,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_COMPONENT_DID_LOAD'        : function() {console.log("component loaded")}
         });
 
         oSS.onPlugins([

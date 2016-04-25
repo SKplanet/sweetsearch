@@ -39,7 +39,7 @@ class SweetSearch extends CommonComponent {
 		  autoULWrap: '.auto-complete-wrap .ul-wrap',
 		  realForm: '#search-form'
 		}, 
-		DEFAULT_EVENT: [	
+		DEFAULT_COMPONENT_EVENT: [	
 		  'FN_AFTER_INSERT_AUTO_WORD',
 		  'FN_AFTER_SELECT_AUTO_WORD', 
 		  'FN_AFTER_FOCUS',

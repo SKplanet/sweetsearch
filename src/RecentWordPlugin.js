@@ -35,7 +35,7 @@ class RecentWordPlugin extends CommonComponent {
         closeLayerBtn: ".close-layer",
         recentULWrap: ".ul-wrap"
       },
-	    DEFAULT_EVENT : [	
+	    DEFAULT_COMPONENT_EVENT : [	
         'FN_AFTER_INSERT_RECENT_WORD',
         'FN_AFTER_SELECT_RECENT_WORD',
       ],
