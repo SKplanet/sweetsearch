@@ -40,6 +40,7 @@ Component initialization and callback registration.
         oSS.registerUserMethod({
             'FN_AFTER_INSERT_AUTO_WORD'    : fnInsertAutoCompleteWordAjax,
             'FN_AFTER_SELECT_AUTO_WORD'    : fnSelectAutoCompleteWord,
+            'FN_COMPONENT_DID_LOAD'        : function() {console.log("component loaded")}
         });
 
 ```
@@ -126,6 +127,12 @@ After receiving Ajax response, you can implement codes as below.
 **[Return]**
 
 * sQuery(String) : selected item.(search query)
+
+
+<br>
+
+#### 2.FN_COMPONENT_DID_LOAD
+This callback function will be executed after SweetSearch Component loading.
 
 <br>
 
